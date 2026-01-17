@@ -317,14 +317,59 @@ undefined4 FUN_8005d6e0(undefined4 param_1, undefined4 param_2) {
     return 0;
 }
 
-void VSyncCallback(func *callbackFunction) {
+int VSyncCallback(func *callbackFunction) {
     STUB_LOG("VSyncCallback(callback=%p)", (void*)callbackFunction);
     if (callbackFunction != NULL) {
         (*callbackFunction)();
     }
+    return 0;
 }
 
 int PadInitDirect(void *padStructure1, void *padStructure2) {
     STUB_LOG("PadInitDirect(pad1=%p, pad2=%p)", padStructure1, padStructure2);
     return 0;
+}
+
+// ============================================================================
+// GTE (Geometry Transform Engine) Functions
+// ============================================================================
+
+void setCopReg(int copNumber, undefined4 registerNumber, undefined4 value, undefined4 unused) {
+    STUB_LOG("setCopReg(cop=%d, reg=%u, value=%u)", copNumber, registerNumber, value);
+    // Stub implementation - GTE registers would be set here on real PS1
+}
+
+void gte_ldZSF3(undefined4 value) {
+    STUB_LOG("gte_ldZSF3(value=%u)", value);
+    // Stub implementation - GTE ZSF3 register would be set here
+}
+
+void gte_ldZSF4(undefined4 value) {
+    STUB_LOG("gte_ldZSF4(value=%u)", value);
+    // Stub implementation - GTE ZSF4 register would be set here
+}
+
+void gte_ldH(undefined4 value) {
+    STUB_LOG("gte_ldH(value=%u)", value);
+    // Stub implementation - GTE H register would be set here
+}
+
+void gte_ldDQA(undefined4 value) {
+    STUB_LOG("gte_ldDQA(value=%u)", value);
+    // Stub implementation - GTE DQA register would be set here
+}
+
+void gte_ldDQB(undefined4 value) {
+    STUB_LOG("gte_ldDQB(value=%u)", value);
+    // Stub implementation - GTE DQB register would be set here
+}
+
+void gte_ldOFX(undefined4 value) {
+    STUB_LOG("gte_ldOFX(value=%u)", value);
+    // Stub implementation - GTE OFX register would be set here
+}
+
+void gte_ldOFY(undefined4 value) {
+    STUB_LOG("gte_ldOFY(value=%u)", value);
+    // Stub implementation - GTE OFY register would be set here
 }

@@ -23,7 +23,7 @@ void FUN_overlay0__8002743c(int param_1,int param_2);
 void FUN_overlay0__800274d4(int param_1);
 void FUN_overlay0__800275e8(int param_1,undefined4 param_2);
 void FUN_overlay0__8002797c(int param_1);
-void FUN_overlay0__80027c1c(int param_1,int *param_2);
+int FUN_overlay0__80027c1c(int param_1,int *param_2);
 void FUN_overlay0__80027fc4(int param_1,int *param_2);
 
 #endif /* SCUS_944_88_PART_018_H */

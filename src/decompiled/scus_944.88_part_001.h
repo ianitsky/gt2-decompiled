@@ -137,7 +137,7 @@ void FUN_80010c20(void);
 void FUN_80010c68(void);
 void FUN_80010cec(void);
 void FUN_80010e14(void);
-void FUN_8001146c(undefined4 param_1);
+int FUN_8001146c(char *param_1);
 void FUN_80011494(undefined4 param_1);
 void FUN_800116ac(void);
 void FUN_80011708(void);

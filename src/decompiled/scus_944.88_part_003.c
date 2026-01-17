@@ -1,3 +1,21 @@
+// Include common types
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include <stdint.h>
+
+// Forward declarations for GTE (Geometry Transformation Engine) functions
+void gte_ldVXY0(undefined4 value);
+void gte_ldVZ0(undefined4 value);
+void gte_rtps_b(void);
+uint gte_stFLAG(void);
+void gte_stSXY0(void);
+void gte_stSXY2(void);
+undefined4 gte_stSXY1(void);
+void gte_nclip_b(void);
+uint gte_stMAC0(void);
+
+// Forward declaration for read_sz_fifo4
+void read_sz_fifo4(uint param_1, uint param_2, uint param_3, uint param_4);
 
 void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
 {
@@ -29,10 +47,10 @@ void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
 
   iVar12 = *param_2;
   param_2 = param_2 + 1;
-  iVar18 = *(int *)(param_1 + 0x68);
-  uVar2 = *(ushort *)(param_1 + 0x98);
-  iVar5 = *(int *)(param_1 + 100);
-  cVar1 = *(char *)(param_1 + 0x398);
+  iVar18 = *(int *)((intptr_t)param_1 + 0x68);
+  uVar2 = *(ushort *)((intptr_t)param_1 + 0x98);
+  iVar5 = *(int *)((intptr_t)param_1 + 100);
+  cVar1 = *(char *)((intptr_t)param_1 + 0x398);
 
   do {
 
@@ -48,7 +66,7 @@ void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
     gte_ldVZ0(uVar8);
     uVar16 = 0;
     gte_rtps_b();
-    uVar22 = *(uint *)(param_1 + 0x3b0);
+    uVar22 = *(uint *)((intptr_t)param_1 + 0x3b0);
 
     gte_ldVXY0(uVar11);
     gte_ldVZ0(uVar19);
@@ -67,8 +85,8 @@ void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
       read_sz_fifo4(uVar8,uVar10,uVar11,param_4);
       gte_rtps_b();
       iVar14 = piVar17[2];
-      *(undefined4 *)(iVar18 + 8) = uVar24;
-      *(undefined4 *)(iVar18 + 0x10) = uVar7;
+      *(undefined4 *)((intptr_t)iVar18 + 8) = uVar24;
+      *(undefined4 *)((intptr_t)iVar18 + 0x10) = uVar7;
 
       uVar13 = uVar16 >> 0x1f;
       if ((int)uVar8 < (int)uVar10 == uVar13) {
@@ -98,19 +116,19 @@ void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
       uVar8 = iVar9 + iVar5 + 4;
 
       uVar11 = uVar8 + 2 & 3;
-      uVar10 = *(int *)((uVar8 + 2) - uVar11) << (3 - uVar11) * 8 |
+      uVar10 = *(int *)((intptr_t)((uVar8 + 2) - uVar11)) << (3 - uVar11) * 8 |
                uVar10 & 0xffffffffU >> (uVar11 + 1) * 8;
-      *(uint *)(iVar18 + 4) = (uint)((int)uVar16 >> 0x1f) >> 8 & uVar22 | 0x28000000;
-      *(undefined *)(iVar18 + 3) = 5;
+      *(uint *)((intptr_t)iVar18 + 4) = (uint)((int)uVar16 >> 0x1f) >> 8 & uVar22 | 0x28000000;
+      *(undefined *)((intptr_t)iVar18 + 3) = 5;
       uVar11 = gte_stFLAG();
       gte_nclip_b();
 
       if (-1 < (int)uVar20) {
-        uVar16 = iVar18 + 2U & 3;
-        puVar3 = (uint *)((iVar18 + 2U) - uVar16);
+        uVar16 = (iVar18 + 2U) & 3;
+        puVar3 = (uint *)((intptr_t)((iVar18 + 2U) - uVar16));
         *puVar3 = *puVar3 & -1 << (uVar16 + 1) * 8 | uVar10 >> (3 - uVar16) * 8;
-        uVar16 = uVar8 + 2 & 3;
-        puVar3 = (uint *)((uVar8 + 2) - uVar16);
+        uVar16 = (uVar8 + 2) & 3;
+        puVar3 = (uint *)((intptr_t)((uVar8 + 2) - uVar16));
         *puVar3 = *puVar3 & -1 << (uVar16 + 1) * 8 | (uint)(iVar18 << 8) >> (3 - uVar16) * 8;
         iVar18 = iVar18 + 0x18;
       }
@@ -131,7 +149,7 @@ void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
 
     iVar12 = *piVar17;
     param_2 = piVar17 + 1;
-    *(int *)(param_1 + 0x68) = iVar18;
+    *(int *)((intptr_t)param_1 + 0x68) = iVar18;
   } while (iVar12 != 0);
 
   return;

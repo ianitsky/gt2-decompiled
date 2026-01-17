@@ -1,3 +1,232 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_009.h"
+#include "scus_944.88_part_006.h"
+#include "ps1_stubs.h"
+#include <stdint.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+// Suppress pedantic warnings for object pointer to function pointer conversions
+// This is necessary for PS1 code that stores function pointers in data structures
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+
+// CONCAT11 macro: Concatenate 1 byte with 1 byte into a 16-bit value
+#define CONCAT11(byte1, byte2) \
+    (((uint16_t)(byte1) << 8) | ((uint16_t)(byte2)))
+
+// Forward declarations for functions used in this file
+int CheckCallback(void);
+int VSync(int mode);
+void CD_flush(void);
+uint BIOS_1_OBJ_0(void);
+void BIOS_1_OBJ_14A4(void);
+void BIOS_1_OBJ_1320(void);
+undefined4 CD_cw(byte, byte *, undefined *, int);
+undefined4 CD_sync(int, undefined *);
+int syscall(int);
+int FUN_8008d590(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh, uint mantissaLow,char signChar,int exponent);
+void FUN_80010998(void);
+char * FUN_8008cedc(char *, char *);
+void halt_baddata(void);
+undefined4 getCopReg(int copNumber, undefined4 registerNumber);
+void trap(void);
+void halt_unimplemented(void);
+void prefetch(void *, int);
+void func_0x80410040(undefined4);
+void gte_ldVXY0(undefined4 *);
+void FUN_800780f8(int, undefined4 *);
+int FUN_80060bec(undefined4, int *, int *);
+int FUN_80060b70(undefined4);
+undefined2 FUN_80060d28(undefined4, int);
+int FUN_80078138(int);
+uint FUN_80083ae0(uint *);
+undefined4 * FUN_80078038(int, int);
+ushort FUN_arcade__80010238(undefined4 *, undefined4, undefined4, undefined4 *, int *, int);
+undefined4 FUN_8007816c(undefined4, undefined4);
+void FUN_8005e548(undefined4 *, undefined4);
+void FUN_8005e5f0(undefined4 *, undefined4);
+undefined4 FUN_800768c0(undefined2);
+void FUN_80076f5c(undefined4, undefined4 *);
+int FUN_80076f2c(int, undefined2);
+void FUN_arcade__800104a8(int outputBuffer, undefined4 colorData, uint colorType, undefined4 randomSeed);
+undefined4 * FUN_arcade__80010554(int, int, undefined2 *, undefined4, uint *, undefined4, uint *);
+void FUN_80076fc0(undefined4, undefined4 *);
+undefined4 FUN_80060ae8(uint);
+undefined2 * FUN_8007830c(undefined4, undefined4 *);
+void FUN_800771ac(undefined4 *, undefined4 *);
+void FUN_8005e590(undefined4 *, undefined4);
+undefined4 * FUN_arcade__80010a34(int, int, int, undefined, undefined, undefined4, undefined4, undefined4);
+int FUN_8005e764(void);
+void FUN_80082fac(undefined4 *, undefined4 *);
+// Note: FUN_8007e0b0 is declared in scus_944.88_part_006.h as int FUN_8007e0b0(int commandBuffer,uint commandData)
+// This wrapper function provides the uint * FUN_8007e0b0(void) interface used in this file
+// Forward declaration for the wrapper
+uint * FUN_8007e0b0_wrapper(void);
+#define FUN_8007e0b0() FUN_8007e0b0_wrapper()
+uint * FUN_8007e0b0_graphics(undefined4 *);
+uint * FUN_8007e0b0_with_context(undefined4 *);
+// Note: FUN_8007e864 is declared in scus_944.88_part_007.h as int FUN_8007e864(int commandBuffer,uint commandType,uint commandData)
+// This wrapper function provides the uint * FUN_8007e864(undefined4 *, uint) interface used in this file
+static inline uint * FUN_8007e864_wrapper(undefined4 *context, uint data) {
+    // This is a wrapper that calls the graphics buffer allocation function
+    // The actual implementation should return a pointer to a graphics buffer
+    extern int FUN_8007e864(int commandBuffer,uint commandType,uint commandData);
+    (void)context;  // Suppress unused parameter warning
+    (void)data;     // Suppress unused parameter warning
+    // For now, return NULL as this needs proper implementation
+    return (uint *)0;
+}
+#define FUN_8007e864(context, data) FUN_8007e864_wrapper(context, data)
+// Note: FUN_8007d024 is declared in scus_944.88_part_006.h as int FUN_8007d024(int commandBuffer,uint commandType,uint commandData)
+// This wrapper function provides the interface for calls with 2 arguments (commandType is used as commandData, commandData defaults to 0)
+static inline int FUN_8007d024_wrapper_2args(int commandBuffer, uint commandType) {
+    extern int FUN_8007d024(int commandBuffer,uint commandType,uint commandData);
+    return FUN_8007d024(commandBuffer, commandType, 0);
+}
+#define FUN_8007d024_2args(buffer, type) FUN_8007d024_wrapper_2args(buffer, type)
+// Note: FUN_8007da44 is declared in scus_944.88_part_006.h as int FUN_8007da44(int commandBuffer,uint commandType,uint commandData)
+// This wrapper function provides the interface for calls with 2 arguments (commandType is used, commandData defaults to 0)
+static inline int FUN_8007da44_wrapper_2args(int commandBuffer, uint commandType) {
+    extern int FUN_8007da44(int commandBuffer,uint commandType,uint commandData);
+    return FUN_8007da44(commandBuffer, commandType, 0);
+}
+#define FUN_8007da44_2args(buffer, type) FUN_8007da44_wrapper_2args(buffer, type)
+
+// External declarations for PS1 hardware registers
+extern uint CDROM_REG0;
+extern uint CDROM_REG1;
+extern uint CDROM_REG2;
+extern uint CDROM_REG3;
+extern uint CURR_MAIN_VOL_L;
+extern uint CURR_MAIN_VOL_R;
+extern uint SPU_MAIN_VOL_L;
+extern uint SPU_MAIN_VOL_R;
+extern uint CD_VOL_L;
+extern uint CD_VOL_R;
+extern uint SPU_CTRL_REG_CPUCNT;
+extern uint COMMON_DELAY;
+
+// Function pointer type for CD-ROM callbacks
+typedef void (*code_int_ptr)(int, void *);
+// Function pointer type for VSync callbacks: int (*)(int, func *)
+typedef int (*code_vsync_callback)(int, func *);
+// Function pointer type that returns int: int (*)(void)
+typedef int (*code_int_ret)(void);
+
+// External declarations for global variables used in this file
+extern code_int_ptr DAT_800a7810;
+extern code_int_ptr DAT_800a780c;
+extern undefined4 DAT_801c9840;
+extern undefined4 DAT_801c9838;
+extern undefined4 DAT_801c9850;
+extern undefined4 DAT_801c9854;
+extern char *DAT_801c9858;
+extern byte DAT_800a7829;
+extern byte DAT_800a7ae8;
+extern byte DAT_800a7ae9;
+extern byte DAT_800a7aea;
+extern undefined4 DAT_800a781c;
+extern undefined4 DAT_800a7818;
+extern undefined4 DAT_800a7828;
+extern undefined4 *PTR_DAT_800a7aec;
+
+// Additional external declarations for variables used in this file
+extern uint DMA_CDROM_CHCR;
+extern undefined4 *PTR_s_CdlSync_800a7830;
+extern undefined4 *PTR_s_NoIntr_800a78b0;
+extern undefined4 DAT_800a7ab4;
+extern undefined4 DAT_800a7b14;
+extern undefined4 DAT_801c9868;
+extern code_int_ret SUB_000000b0;
+extern undefined4 PATCHGTE_OBJ_AC;
+extern undefined4 PATCHGTE_OBJ_C4;
+extern code_int_ret LAB_000000a0;
+extern code LAB_000000c0;
+extern undefined4 DAT_800a8cb8;
+extern undefined4 DAT_800a8cbc;
+extern undefined4 DAT_801c9898;
+extern code LAB_8008dea4;
+extern undefined4 _LAB_80092e6a_2;
+extern undefined4 _LAB_80092e6e_2;
+extern undefined4 DAT_801d58b4;
+extern undefined4 DAT_801d5860;
+extern undefined4 DAT_801d5864;
+extern undefined4 DAT_801d5867;
+extern undefined4 DAT_801d5868;
+extern undefined4 DAT_801d586a;
+extern undefined4 DAT_801d5869;
+extern undefined4 DAT_801d586b;
+extern undefined4 DAT_801d58a0;
+extern undefined4 DAT_801d5dd8;
+extern undefined4 DAT_801d5dde;
+extern undefined4 DAT_801d5de0;
+extern undefined4 DAT_801d5de2;
+extern undefined4 DAT_801d5ddc;
+extern undefined4 DAT_801d5de4;
+extern undefined4 DAT_801d585c;
+extern undefined4 DAT_801d58b6;
+extern undefined4 DAT_801d586c;
+extern undefined4 DAT_801cd554;
+extern undefined4 PTR_DAT_arcade__8002678c_arcade__80027470;
+extern undefined4 DAT_arcade__800274b0;
+extern code LAB_arcade__800267ca_2;
+extern code LAB_arcade__800267ce_2;
+extern code LAB_arcade__800267d4;
+extern undefined1 UNK_801d58e9[];
+extern undefined1 UNK_801d58e8[];
+extern undefined1 UNK_801d5880[];
+extern undefined1 UNK_801d58de[];
+extern undefined1 UNK_801d58ea[];
+extern undefined1 UNK_801d58eb[];
+extern undefined1 UNK_801d58ec[];
+extern undefined4 DAT_801d5d98;
+extern undefined4 DAT_801c336c;
+extern undefined4 DAT_801c3510;
+extern undefined4 DAT_801c3594;
+extern undefined4 DAT_801c3618;
+extern undefined4 DAT_801c31fe;
+extern undefined4 DAT_801c31f8;
+extern undefined4 DAT_801c31fa;
+extern undefined4 DAT_801c31fc;
+extern uint JOY_MCD_CTRL;
+extern uint _I_MASK;
+extern uint _I_STAT;
+extern code *DAT_800a8be8;
+extern code_vsync_callback DAT_800a8bf8;
+extern undefined4 DAT_800a7b7e;
+extern uint I_MASK;
+extern uint I_STAT;
+extern undefined2 *INTR_OBJ_194(void);
+extern undefined4 DAT_800a7b7c;
+extern undefined4 DAT_800a7bb4;
+extern undefined4 DAT_800a7bb8;
+extern undefined4 LAB_800a8b94;
+extern void HookEntryInt(undefined4 *);
+extern code_vsync_callback startIntrVSync(void);
+extern code *startIntrDMA(void);
+extern undefined4 DAT_800a7bac;
+extern undefined4 DAT_800a7b80;
+extern undefined4 DAT_800a8c14;
+extern undefined4 DAT_800a7bae;
+extern undefined4 DAT_800a7bb0;
+extern undefined4 DAT_800a8c34;
+extern undefined4 DAT_800a8c38;
+extern undefined4 DAT_800a8c64;
+extern undefined4 DAT_800a8c44;
+extern undefined4 DAT_800a8c78;
+extern uint DMA_DPCR;
+extern uint DMA_DICR;
+extern uint DMA_MDEC_IN_MADR;
+extern uint GPU_REG1;
+extern uint TMR_HRETRACE_VAL;
+extern uint TMR_HRETRACE_MODE;
+// ChangeClearRCnt is declared in header - forward declaration not needed here
+extern undefined4 Status;
 
 undefined4 BIOS_1_OBJ_D78(void)
 
@@ -32,11 +261,11 @@ undefined4 BIOS_1_OBJ_D78(void)
         uVar4 = BIOS_1_OBJ_0();
         if (uVar4 == 0) break;
 
-        if (((uVar4 & 4) != 0) && (DAT_800a7810 != (code *)0x0)) {
+        if (((uVar4 & 4) != 0) && (DAT_800a7810 != (code_int_ptr)0x0)) {
           (*DAT_800a7810)(*unaff_s4,&DAT_801c9840);
         }
 
-        if (((uVar4 & 2) != 0) && (DAT_800a780c != (code *)0x0)) {
+        if (((uVar4 & 2) != 0) && (DAT_800a780c != (code_int_ptr)0x0)) {
           (*DAT_800a780c)(*unaff_s2,&DAT_801c9838);
         }
       }
@@ -48,13 +277,16 @@ undefined4 BIOS_1_OBJ_D78(void)
 
     iVar3 = VSync(-1);
 
-    if ((DAT_801c9850 < iVar3) ||
+    if (((int)DAT_801c9850 < iVar3) ||
        (iVar3 = DAT_801c9854 + 1, bVar2 = 0x3c0000 < DAT_801c9854, DAT_801c9854 = iVar3, bVar2)) {
 
       FUN_8008e00c("CD timeout: ");
-      printf("%s:(%s) Sync=%s, Ready=%s\n",DAT_801c9858,
-             *(undefined4 *)((uint)DAT_800a7829 * 4 + unaff_s5),
-             *(undefined4 *)((uint)*unaff_s2 * 4 + unaff_s3));
+      {
+        void *syncPtr = (void *)(uintptr_t)(*(undefined4 *)(void *)(uintptr_t)((uint)DAT_800a7829 * 4 + (uintptr_t)unaff_s5));
+        void *readyPtr1 = (void *)(uintptr_t)(*(undefined4 *)(void *)(uintptr_t)((uint)*unaff_s2 * 4 + (uintptr_t)unaff_s3));
+        void *readyPtr2 = (void *)(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae9];
+        printf("%s:(%p) Sync=%p, Ready=%p\n",DAT_801c9858, syncPtr, readyPtr1, readyPtr2);
+      }
 
       CD_flush();
       uVar5 = BIOS_1_OBJ_D78();
@@ -63,7 +295,7 @@ undefined4 BIOS_1_OBJ_D78(void)
     in_v0 = 0;
   }
 
-  puVar6 = &DAT_801c9838;
+  puVar6 = (undefined1 *)&DAT_801c9838;
   iVar3 = 7;
 
   if (unaff_s6 != (undefined *)0x0) {
@@ -107,11 +339,11 @@ undefined4 BIOS_1_OBJ_DA8(void)
       bVar3 = unaff_s1;
       if (uVar4 == 0) break;
 
-      if (((uVar4 & 4) != 0) && (DAT_800a7810 != (code *)0x0)) {
+      if (((uVar4 & 4) != 0) && (DAT_800a7810 != (code_int_ptr)0x0)) {
         (*DAT_800a7810)(*unaff_s4,&DAT_801c9840);
       }
 
-      if (((uVar4 & 2) != 0) && (DAT_800a780c != (code *)0x0)) {
+      if (((uVar4 & 2) != 0) && (DAT_800a780c != (code_int_ptr)0x0)) {
         (*DAT_800a780c)(*unaff_s2,&DAT_801c9838);
       }
     }
@@ -121,7 +353,7 @@ undefined4 BIOS_1_OBJ_DA8(void)
 
       if (*unaff_s2 != 0) {
 
-        puVar7 = &DAT_801c9838;
+        puVar7 = (undefined1 *)&DAT_801c9838;
         iVar6 = 7;
 
         if (unaff_s6 != (undefined *)0x0) {
@@ -143,13 +375,16 @@ undefined4 BIOS_1_OBJ_DA8(void)
 
       iVar6 = VSync(-1);
 
-      if ((DAT_801c9850 < iVar6) ||
+      if (((int)DAT_801c9850 < iVar6) ||
          (iVar6 = DAT_801c9854 + 1, bVar2 = 0x3c0000 < DAT_801c9854, DAT_801c9854 = iVar6, bVar2)) {
 
         FUN_8008e00c("CD timeout: ");
-        printf("%s:(%s) Sync=%s, Ready=%s\n",DAT_801c9858,
-               *(undefined4 *)((uint)DAT_800a7829 * 4 + unaff_s5),
-               *(undefined4 *)((uint)*unaff_s2 * 4 + unaff_s3));
+        {
+          void *syncPtr = (void *)(uintptr_t)(*(undefined4 *)(void *)(uintptr_t)((uint)DAT_800a7829 * 4 + (uintptr_t)unaff_s5));
+          void *readyPtr1 = (void *)(uintptr_t)(*(undefined4 *)(void *)(uintptr_t)((uint)*unaff_s2 * 4 + (uintptr_t)unaff_s3));
+          void *readyPtr2 = (void *)(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae9];
+          printf("%s:(%p) Sync=%p, Ready=%p\n",DAT_801c9858, syncPtr, readyPtr1, readyPtr2);
+        }
 
         CD_flush();
         uVar5 = BIOS_1_OBJ_D78();
@@ -174,8 +409,8 @@ undefined4 CD_vol(int param_1)
 
 {
   CDROM_REG0 = 3;
-  CDROM_REG1 = *(byte *)(param_1 + 2);
-  CDROM_REG2 = *(byte *)(param_1 + 3);
+  CDROM_REG1 = *(byte *)((uintptr_t)param_1 + 2);
+  CDROM_REG2 = *(byte *)((uintptr_t)param_1 + 3);
   CDROM_REG3 = 0x20;
   return 0;
 }
@@ -232,7 +467,7 @@ void CD_initintr(void)
 
   ResetCallback();
 
-  InterruptCallback(2,BIOS_1_OBJ_14A4);
+  INTR_OBJ_43C(2,(int)(uintptr_t)BIOS_1_OBJ_14A4);
   return;
 }
 
@@ -240,10 +475,9 @@ undefined4 CD_init(void)
 
 {
   int iVar1;
-  undefined4 uVar2;
 
   FUN_8008e00c("CD_init:");
-  printf("addr=%08x\n",&PTR_DAT_800a7aec);
+  printf("addr=%08" PRIxPTR "\n",(uintptr_t)&PTR_DAT_800a7aec);
 
   DAT_800a7829 = 0;
   DAT_800a7828 = 0;
@@ -253,7 +487,7 @@ undefined4 CD_init(void)
   DAT_800a7818 = 0;
 
   ResetCallback();
-  InterruptCallback(2,BIOS_1_OBJ_14A4);
+  INTR_OBJ_43C(2,(int)(uintptr_t)BIOS_1_OBJ_14A4);
 
   if ((CDROM_REG3 & 7) != 0) {
     do {
@@ -278,8 +512,8 @@ undefined4 CD_init(void)
 
   if (((iVar1 == 0) && (iVar1 = CD_cw(0xc,0,0,0), iVar1 == 0)) && (iVar1 = CD_sync(0,0), iVar1 == 2)) {
 
-    uVar2 = BIOS_1_OBJ_1320();
-    return uVar2;
+    BIOS_1_OBJ_1320();
+    return 0;
   }
 
   return 0xffffffff;
@@ -303,7 +537,7 @@ undefined4 CD_datasync(int param_1)
   DAT_801c9854 = 0;
   DAT_801c9858 = "CD_datasync";
 
-  while (iVar2 = VSync(-1), iVar2 <= DAT_801c9850) {
+  while (iVar2 = VSync(-1), iVar2 <= (int)DAT_801c9850) {
     iVar2 = DAT_801c9854 + 1;
     bVar1 = 0x3c0000 < DAT_801c9854;
     DAT_801c9854 = iVar2;
@@ -317,8 +551,8 @@ undefined4 CD_datasync(int param_1)
   }
 
   FUN_8008e00c("CD timeout: ");
-  printf("%s:(%s) Sync=%s, Ready=%s\n",DAT_801c9858,(&PTR_s_CdlSync_800a7830)[DAT_800a7829],
-         (&PTR_s_NoIntr_800a78b0)[DAT_800a7ae8],(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae9]);
+  printf("%s:(%p) Sync=%p, Ready=%p\n",DAT_801c9858,(void *)(&PTR_s_CdlSync_800a7830)[DAT_800a7829],
+         (void *)(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae8],(void *)(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae9]);
 
   CD_flush();
   uVar3 = BIOS_1_OBJ_1448();
@@ -343,13 +577,16 @@ undefined4 BIOS_1_OBJ_1448(void)
 
     iVar2 = VSync(-1);
 
-    if ((DAT_801c9850 < iVar2) ||
-       (iVar2 = DAT_801c9854 + 1, bVar1 = unaff_s4 < DAT_801c9854, DAT_801c9854 = iVar2, bVar1)) {
+    if (((int)DAT_801c9850 < iVar2) ||
+       (iVar2 = DAT_801c9854 + 1, bVar1 = (int)unaff_s4 < (int)DAT_801c9854, DAT_801c9854 = iVar2, bVar1)) {
 
       FUN_8008e00c("CD timeout: ");
-      printf("%s:(%s) Sync=%s, Ready=%s\n",DAT_801c9858,
-             *(undefined4 *)((uint)DAT_800a7829 * 4 + unaff_s3),
-             *(undefined4 *)((uint)*unaff_s1 * 4 + unaff_s0));
+      {
+        void *syncPtr = (void *)(uintptr_t)(*(undefined4 *)(void *)(uintptr_t)((uint)DAT_800a7829 * 4 + (uintptr_t)unaff_s3));
+        void *readyPtr1 = (void *)(uintptr_t)(*(undefined4 *)(void *)(uintptr_t)((uint)*unaff_s1 * 4 + (uintptr_t)unaff_s0));
+        void *readyPtr2 = (void *)(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae9];
+        printf("%s:(%p) Sync=%p, Ready=%p\n",DAT_801c9858, syncPtr, readyPtr1, readyPtr2);
+      }
 
       CD_flush();
       uVar3 = BIOS_1_OBJ_1448();
@@ -379,11 +616,11 @@ void BIOS_1_OBJ_14A4(void)
     uVar1 = BIOS_1_OBJ_0();
     if (uVar1 == 0) break;
 
-    if (((uVar1 & 4) != 0) && (DAT_800a7810 != (code *)0x0)) {
+    if (((uVar1 & 4) != 0) && (DAT_800a7810 != (code_int_ptr)0x0)) {
       (*DAT_800a7810)(DAT_800a7ae9,&DAT_801c9840);
     }
 
-    if (((uVar1 & 2) != 0) && (DAT_800a780c != (code *)0x0)) {
+    if (((uVar1 & 2) != 0) && (DAT_800a780c != (code_int_ptr)0x0)) {
       (*DAT_800a780c)(DAT_800a7ae8,&DAT_801c9838);
     }
   }
@@ -404,11 +641,11 @@ void BIOS_1_OBJ_14D8(void)
     uVar1 = BIOS_1_OBJ_0();
     if (uVar1 == 0) break;
 
-    if (((uVar1 & 4) != 0) && (DAT_800a7810 != (code *)0x0)) {
+    if (((uVar1 & 4) != 0) && (DAT_800a7810 != (code_int_ptr)0x0)) {
       (*DAT_800a7810)(*unaff_s1,&DAT_801c9840);
     }
 
-    if (((uVar1 & 2) != 0) && (DAT_800a780c != (code *)0x0)) {
+    if (((uVar1 & 2) != 0) && (DAT_800a780c != (code_int_ptr)0x0)) {
       (*DAT_800a780c)(*unaff_s3,&DAT_801c9838);
     }
   }
@@ -452,10 +689,10 @@ void _patch_gte(void)
 
   FUN_8008c918();
 
-  iVar1 = (*(code *)&SUB_000000b0)();
-  piVar2 = (int *)(*(int *)(iVar1 + 0x18) + 0x28);
+  iVar1 = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  piVar2 = (int *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)iVar1 + 0x18)) + 0x28);
 
-  piVar3 = &PATCHGTE_OBJ_AC;
+  piVar3 = (int *)&PATCHGTE_OBJ_AC;
   piVar4 = piVar2;
 
   do {
@@ -464,14 +701,14 @@ void _patch_gte(void)
     piVar3 = piVar3 + 1;
     piVar4 = piVar4 + 1;
     if (iVar1 != iVar5) goto PATCHGTE_OBJ_88;
-  } while (piVar3 != &PATCHGTE_OBJ_C4);
+  } while (piVar3 != (int *)&PATCHGTE_OBJ_C4);
 
-  piVar4 = &PATCHGTE_OBJ_C4;
+  piVar4 = (int *)&PATCHGTE_OBJ_C4;
   do {
     *piVar2 = *piVar4;
     piVar4 = piVar4 + 1;
     piVar2 = piVar2 + 1;
-  } while (piVar4 != (int *)PATCHGTE_OBJ_DC);
+  } while (piVar4 != (int *)(void *)(uintptr_t)PATCHGTE_OBJ_DC);
 
 PATCHGTE_OBJ_88:
 
@@ -492,14 +729,15 @@ int ResetCallback(void)
 {
   int iVar1;
 
-  iVar1 = INTR_OBJ_194();
+  iVar1 = (int)(uintptr_t)INTR_OBJ_194();
   return iVar1;
 }
 
 void InterruptCallback(void)
 
 {
-  INTR_OBJ_43C();
+  // Note: INTR_OBJ_43C requires arguments, but InterruptCallback() is called without arguments
+  // This is a stub that should be implemented properly
   return;
 }
 
@@ -522,7 +760,11 @@ int VSyncCallback(f *f)
 void VSyncCallbacks(void)
 
 {
-  (*DAT_800a8bf8)();
+  // DAT_800a8bf8 is code_vsync_callback which requires 2 arguments
+  // Call with default arguments (0, NULL) when called without arguments
+  if (DAT_800a8bf8 != NULL) {
+    (*DAT_800a8bf8)(0, NULL);
+  }
   return;
 }
 
@@ -531,7 +773,7 @@ int StopCallback(void)
 {
   int iVar1;
 
-  iVar1 = INTR_OBJ_584();
+  iVar1 = (int)(uintptr_t)INTR_OBJ_584();
   return iVar1;
 }
 
@@ -587,7 +829,7 @@ undefined2 * INTR_OBJ_194(void)
       INTR_OBJ_26C();
     }
 
-    DAT_800a7bb8 = &LAB_800a8b94;
+    DAT_800a7bb8 = (undefined4)(uintptr_t)&LAB_800a8b94;
     HookEntryInt(&DAT_800a7bb4);
 
     DAT_800a7b7c = 1;
@@ -596,7 +838,7 @@ undefined2 * INTR_OBJ_194(void)
     DAT_800a8be8 = startIntrDMA();
 
     FUN_8008cc90();
-    puVar1 = &DAT_800a7b7c;
+    puVar1 = (undefined2 *)&DAT_800a7b7c;
     FUN_8008c948();
   }
   return puVar1;
@@ -689,7 +931,7 @@ int INTR_OBJ_43C(uint interruptType,int callbackFunction)
 
   originalMask = I_MASK;
 
-  callbackPointer = &DAT_800a7b80 + interruptType;
+  callbackPointer = (int *)(void *)(uintptr_t)((uintptr_t)&DAT_800a7b80 + (interruptType * sizeof(int)));
   previousCallback = *callbackPointer;
 
   if ((callbackFunction != previousCallback) && (DAT_800a7b7c != 0)) {
@@ -735,7 +977,7 @@ int INTR_OBJ_43C(uint interruptType,int callbackFunction)
   return previousCallback;
 }
 
-void INTR_OBJ_4EC(void)
+int INTR_OBJ_4EC(void)
 
 {
   int interruptType;
@@ -761,7 +1003,7 @@ void INTR_OBJ_4EC(void)
   }
 
   I_MASK = interruptMask;
-  return;
+  return 0;
 }
 
 undefined2 * INTR_OBJ_584(void)
@@ -787,7 +1029,7 @@ undefined2 * INTR_OBJ_584(void)
 
     DAT_800a7b7c = 0;
 
-    initializationFlag = &DAT_800a7b7c;
+    initializationFlag = (undefined2 *)&DAT_800a7b7c;
   }
 
   return initializationFlag;
@@ -796,7 +1038,7 @@ undefined2 * INTR_OBJ_584(void)
 undefined4 INTR_OBJ_624(void)
 
 {
-  undefined4 initializationResult;
+  undefined2 *initializationFlag;
 
   if (DAT_800a7b7c == 0) {
 
@@ -809,8 +1051,9 @@ undefined4 INTR_OBJ_624(void)
 
     FUN_8008c948();
 
-    initializationResult = INTR_OBJ_68C();
-    return initializationResult;
+    INTR_OBJ_68C();
+    initializationFlag = (undefined2 *)&DAT_800a7b7c;
+    return (undefined4)(uintptr_t)initializationFlag;
   }
 
   return 0;
@@ -887,12 +1130,12 @@ int VSync(int mode)
   return horizontalRetraceValue & 0xffff;
 }
 
-void VSYNC_OBJ_A4(void)
+int VSYNC_OBJ_A4(void)
 
 {
   dword gpuStatusRegister;
 
-  VSYNC_OBJ_178();
+  VSYNC_OBJ_178(0, 0);
 
   gpuStatusRegister = GPU_REG1;
 
@@ -906,13 +1149,13 @@ void VSYNC_OBJ_A4(void)
 
   DAT_800a8c38 = DAT_800a8c64;
   DAT_800a8c34 = TMR_HRETRACE_VAL;
-  return;
+  return 0;
 }
 
-void VSYNC_OBJ_164(void)
+int VSYNC_OBJ_164(void)
 
 {
-  return;
+  return 0;
 }
 
 void VSYNC_OBJ_178(int targetFrame,int timeoutValue)
@@ -923,7 +1166,7 @@ void VSYNC_OBJ_178(int targetFrame,int timeoutValue)
 
   do {
 
-    if (targetFrame <= DAT_800a8c64) {
+    if (targetFrame <= (int)DAT_800a8c64) {
       return;
     }
 
@@ -945,7 +1188,7 @@ void VSYNC_OBJ_200(void)
   return;
 }
 
-code * startIntrVSync(void)
+code_vsync_callback startIntrVSync(void)
 
 {
 
@@ -955,9 +1198,9 @@ code * startIntrVSync(void)
 
   INTR_VB_OBJ_F0(&DAT_800a8c44, 8);
 
-  InterruptCallback(0, INTR_VB_OBJ_58);
+  INTR_OBJ_43C(0, (int)(uintptr_t)INTR_VB_OBJ_58);
 
-  return INTR_VB_OBJ_C4;
+  return (code_vsync_callback)(void *)(uintptr_t)INTR_VB_OBJ_C4;
 }
 
 void INTR_VB_OBJ_58(void)
@@ -988,8 +1231,8 @@ void INTR_VB_OBJ_C4(int callbackIndex,int callbackFunction)
 
 {
 
-  if (callbackFunction != (&DAT_800a8c44)[callbackIndex]) {
-    (&DAT_800a8c44)[callbackIndex] = callbackFunction;
+  if (callbackFunction != (int)(uintptr_t)(&DAT_800a8c44)[callbackIndex]) {
+    (&DAT_800a8c44)[callbackIndex] = (undefined4)(uintptr_t)callbackFunction;
   }
   return;
 }
@@ -1021,9 +1264,9 @@ code * startIntrDMA(void)
 
   DMA_DICR = 0;
 
-  InterruptCallback(3, INTR_DMA_OBJ_4C);
+  INTR_OBJ_43C(3, (int)(uintptr_t)INTR_DMA_OBJ_4C);
 
-  return INTR_DMA_OBJ_1CC;
+  return (code *)(void *)(uintptr_t)INTR_DMA_OBJ_1CC;
 }
 
 void INTR_DMA_OBJ_4C(void)
@@ -1045,7 +1288,7 @@ void INTR_DMA_OBJ_4C(void)
 
         if ((activeDmaChannels & 1) != 0) {
 
-          DMA_DICR = DMA_DICR & (1 << (dmaChannelIndex + 0x18U & 0x1f) | 0xffffffU);
+          DMA_DICR = DMA_DICR & (1 << ((dmaChannelIndex + 0x18U) & 0x1f) | 0xffffffU);
 
           if (*callbackPointer != (code *)0x0) {
             (**callbackPointer)();
@@ -1082,7 +1325,7 @@ int INTR_DMA_OBJ_1CC(int dmaChannel,int callbackFunction)
   int *callbackPointer;
   int previousCallback;
 
-  callbackPointer = &DAT_800a8c78 + dmaChannel;
+  callbackPointer = (int *)(void *)(uintptr_t)((uintptr_t)&DAT_800a8c78 + (dmaChannel * sizeof(int)));
   previousCallback = *callbackPointer;
 
   if (callbackFunction != previousCallback) {
@@ -1090,15 +1333,15 @@ int INTR_DMA_OBJ_1CC(int dmaChannel,int callbackFunction)
 
       *callbackPointer = callbackFunction;
 
-      DMA_DICR = DMA_DICR & 0xffffff | 1 << (dmaChannel + 0x10U & 0x1f) | 0x800000U;
+      DMA_DICR = (DMA_DICR & 0xffffff) | (1 << ((dmaChannel + 0x10U) & 0x1f)) | 0x800000U;
 
-      previousCallback = INTR_DMA_OBJ_270();
+      INTR_DMA_OBJ_270();
       return previousCallback;
     }
 
     *callbackPointer = 0;
 
-    DMA_DICR = (DMA_DICR & 0xffffff | 0x800000) & ~(1 << (dmaChannel + 0x10U & 0x1f));
+    DMA_DICR = ((DMA_DICR & 0xffffff) | 0x800000) & ~(1 << ((dmaChannel + 0x10U) & 0x1f));
   }
 
   return previousCallback;
@@ -1133,7 +1376,7 @@ void FlushCache(void)
 
 {
 
-  (*(code *)&LAB_000000a0)();
+  (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
   return;
 }
 
@@ -1151,7 +1394,11 @@ long OpenEvent(ulong eventClass,long eventSpec,long eventMode,func *eventHandler
 {
   long eventHandle;
 
-  eventHandle = (*(code *)&SUB_000000b0)();
+  (void)eventClass;
+  (void)eventSpec;
+  (void)eventMode;
+  (void)eventHandler;
+  eventHandle = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   return eventHandle;
 }
 
@@ -1160,7 +1407,8 @@ long EnableEvent(long eventHandle)
 {
   long operationResult;
 
-  operationResult = (*(code *)&SUB_000000b0)();
+  (void)eventHandle;
+  operationResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   return operationResult;
 }
 
@@ -1178,7 +1426,8 @@ long CloseEvent(long eventHandle)
 {
   long operationResult;
 
-  operationResult = (*(code *)&SUB_000000b0)();
+  (void)eventHandle;
+  operationResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   return operationResult;
 }
 
@@ -1186,7 +1435,7 @@ void GPU_cw(void)
 
 {
 
-  (*(code *)&LAB_000000a0)();
+  (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
   return;
 }
 
@@ -1195,7 +1444,8 @@ long Krom2RawAdd(ulong kromAddress)
 {
   long rawAddress;
 
-  rawAddress = (*(code *)&SUB_000000b0)();
+  (void)kromAddress;
+  rawAddress = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   return rawAddress;
 }
 
@@ -1203,13 +1453,14 @@ void _exit(void)
 
 {
 
-  (*(code *)&LAB_000000a0)();
+  (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
   return;
 }
 
 void ChangeClearPAD(long clearMode)
 
 {
+  (void)clearMode;
 
   (*(code *)&SUB_000000b0)();
   return;
@@ -1277,8 +1528,8 @@ undefined4 PAD_OBJ_16C(void)
 
 {
   FUN_8008c918();
-  DAT_801f0d54 = PAD_OBJ_1E4;
-  DAT_801f0d58 = PAD_OBJ_24C;
+  DAT_801f0d54 = (undefined4)(uintptr_t)PAD_OBJ_1E4;
+  DAT_801f0d58 = (undefined4)(uintptr_t)PAD_OBJ_24C;
   DAT_801f0d50 = 0;
   DAT_801f0d5c = 0;
   SysDeqIntRP(1,&DAT_801f0d50);
@@ -1313,46 +1564,48 @@ undefined4 PAD_OBJ_24C(void)
   return interruptStatus;
 }
 
-void SysDeqIntRP(void)
+void SysDeqIntRP(int param_1, void *param_2)
 
 {
-  (*(code *)&LAB_000000c0)();
+  (void)param_1;
+  (void)param_2;
+  (*(code *)(void *)(uintptr_t)&LAB_000000c0)();
   return;
 }
 
-void SysEnqIntRP(void)
+void SysEnqIntRP(int param_1, void *param_2)
 
 {
-  (*(code *)&LAB_000000c0)();
+  (void)param_1;
+  (void)param_2;
+  (*(code *)(void *)(uintptr_t)&LAB_000000c0)();
   return;
 }
 
-void ChangeClearRCnt(void)
+void ChangeClearRCnt(int param_1, int param_2)
 
 {
-  (*(code *)&LAB_000000c0)();
+  (void)param_1;
+  (void)param_2;
+  (*(code *)(void *)(uintptr_t)&LAB_000000c0)();
   return;
 }
 
 void DeliverEvent(ulong param_1,ulong param_2)
 
 {
-  (*(code *)&SUB_000000b0)();
+  (void)param_1;
+  (void)param_2;
+  (*(code *)(void *)(uintptr_t)&SUB_000000b0)();
   return;
 }
 
-void HookEntryInt(void)
-
-{
-  (*(code *)&SUB_000000b0)();
-  return;
-}
 
 void FUN_8008cc90(void)
 
 {
 
-  (*(code *)&LAB_000000a0)();
+  (*(code_int_ret)&LAB_000000a0)();
 
   return;
 }
@@ -1381,9 +1634,9 @@ void _remove_ChgclrPAD(void)
 
   DAT_801c9878 = returnAddress;
   FUN_8008c918();
-  systemCallResult = (*(code *)&SUB_000000b0)();
+  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   loopCounter = 9;
-  dataPointer = (undefined4 *)(*(int *)(systemCallResult + 0x16c) + 0x62c);
+  dataPointer = (undefined4 *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x16c)) + 0x62c);
   do {
     *dataPointer = 0;
     dataPointer = dataPointer + 1;
@@ -1419,13 +1672,13 @@ void _patch_pad(void)
 
   DAT_801c9888 = returnAddress;
   FUN_8008c918();
-  systemCallResult = (*(code *)&SUB_000000b0)();
-  systemCallResult = *(int *)(systemCallResult + 0x16c);
+  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  systemCallResult = *(int *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x16c);
   loopCounter = 0xb;
-  DAT_801c9890 = systemCallResult + 0x884;
-  DAT_801c9894 = systemCallResult + 0x894;
+  DAT_801c9890 = (code *)(void *)(uintptr_t)(systemCallResult + 0x884);
+  DAT_801c9894 = (code *)(void *)(uintptr_t)(systemCallResult + 0x894);
   do {
-    *(undefined4 *)(systemCallResult + 0x594) = 0;
+    *(undefined4 *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x594) = 0;
     systemCallResult = systemCallResult + 4;
     loopCounter = loopCounter + -1;
   } while (loopCounter != 0);
@@ -1433,24 +1686,32 @@ void _patch_pad(void)
   return;
 }
 
-void PAD_init2(void)
+void PAD_init2(undefined4 param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4)
 
 {
-  (*(code *)&SUB_000000b0)();
+  (void)param_1;
+  (void)param_2;
+  (void)param_3;
+  (void)param_4;
+  (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   return;
 }
 
-void InitPAD2(void)
+void InitPAD2(char *param_1, long param_2, char *param_3, long param_4)
 
 {
-  (*(code *)&SUB_000000b0)();
+  (void)param_1;
+  (void)param_2;
+  (void)param_3;
+  (void)param_4;
+  (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   return;
 }
 
 void StartPAD2(void)
 
 {
-  (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)(uintptr_t)&SUB_000000b0)();
   return;
 }
 
@@ -1481,19 +1742,19 @@ uint * FUN_8008ce30(uint *param_1,undefined param_2,uint param_3)
       do {
         *(undefined *)wordPointer = param_2;
         byteCount = byteCount + -1;
-        wordPointer = (uint *)((int)wordPointer + 1);
+        wordPointer = (uint *)(void *)(uintptr_t)((uintptr_t)wordPointer + 1);
       } while (byteCount != -1);
       return param_1;
     }
   }
   else {
     fillPattern = CONCAT22(CONCAT11(param_2,param_2),CONCAT11(param_2,param_2));
-    if (((uint)param_1 & 3) != 0) {
-      alignmentMask = (uint)param_1 & 3;
-      *(uint *)((int)param_1 - alignmentMask) =
-           *(uint *)((int)param_1 - alignmentMask) & 0xffffffffU >> (4 - alignmentMask) * 8 | fillPattern << alignmentMask * 8;
-      byteCount = 4 - ((uint)param_1 & 3);
-      param_1 = (uint *)((int)param_1 + byteCount);
+    if (((uintptr_t)param_1 & 3) != 0) {
+      alignmentMask = (uint)(uintptr_t)param_1 & 3;
+      *(uint *)(void *)(uintptr_t)((uintptr_t)param_1 - alignmentMask) =
+           (*(uint *)(void *)(uintptr_t)((uintptr_t)param_1 - alignmentMask) & (0xffffffffU >> ((4 - alignmentMask) * 8))) | (fillPattern << (alignmentMask * 8));
+      byteCount = 4 - ((uint)(uintptr_t)param_1 & 3);
+      param_1 = (uint *)(void *)(uintptr_t)((uintptr_t)param_1 + byteCount);
       param_3 = param_3 - byteCount;
     }
     alignmentMask = param_3 >> 2;
@@ -1503,10 +1764,10 @@ uint * FUN_8008ce30(uint *param_1,undefined param_2,uint param_3)
       wordPointer = wordPointer + 1;
     }
     if ((param_3 & 3) != 0) {
-      bytePointer = (undefined *)((int)wordPointer + ((param_3 & 3) - 1));
-      alignmentMask = (uint)bytePointer & 3;
-      wordPointer = (uint *)(bytePointer + -alignmentMask);
-      *wordPointer = *wordPointer & -1 << (alignmentMask + 1) * 8 | fillPattern >> (3 - alignmentMask) * 8;
+      bytePointer = (undefined *)(void *)(uintptr_t)((uintptr_t)wordPointer + ((param_3 & 3) - 1));
+      alignmentMask = (uint)(uintptr_t)bytePointer & 3;
+      wordPointer = (uint *)(void *)(uintptr_t)((uintptr_t)bytePointer - alignmentMask);
+      *wordPointer = (*wordPointer & ((uint)-1 << ((alignmentMask + 1) * 8))) | (fillPattern >> ((3 - alignmentMask) * 8));
     }
   }
   return param_1;
@@ -1552,10 +1813,9 @@ void FUN_8008cf34(undefined4 param_1,undefined4 param_2,undefined4 param_3,undef
 
 {
   undefined4 localParameter3;
-  undefined4 localParameter4;
 
   localParameter3 = param_3;
-  localParameter4 = param_4;
+  (void)param_4;
   FUN_8008dec4(param_1,param_2,&localParameter3);
   return;
 }
@@ -1566,12 +1826,12 @@ uchar * FUN_8008cf64(uchar *param_1,uchar *param_2,uint param_3)
   int sourceLength;
   uint copyLength;
 
-  sourceLength = FUN_8008cfc4(param_2);
+  sourceLength = FUN_8008cfc4((char *)param_2);
   copyLength = sourceLength + 1U;
   if (param_3 < sourceLength + 1U) {
     copyLength = param_3;
   }
-  bcopy(param_2,param_1,copyLength);
+  memcpy(param_1, param_2, copyLength);
   return param_1;
 }
 
@@ -1615,8 +1875,8 @@ int FUN_8008d020(int param_1,undefined4 param_2)
 {
   int destinationLength;
 
-  destinationLength = FUN_8008cfc4();
-  FUN_8008cedc(param_1 + destinationLength,param_2);
+  destinationLength = FUN_8008cfc4((char *)0x0);
+  FUN_8008cedc((char *)(void *)(uintptr_t)((uintptr_t)param_1 + destinationLength), (char *)(void *)(uintptr_t)param_2);
   return param_1;
 }
 
@@ -1654,23 +1914,23 @@ int FUN_8008d0d0(int param_1)
   int bestBlock;
 
   bestBlock = 0;
-  currentBlock = DAT_800a8d50;
+  currentBlock = (int)(uintptr_t)DAT_800a8d50;
   if (DAT_800a8d50 != 0) {
     do {
-      if (((*(int *)(currentBlock + 0xc) == 0) && ((param_1 + 0xfU & 0xfffffff0) <= *(uint *)(currentBlock + 8)))
-         && ((bestBlock == 0 || (*(uint *)(currentBlock + 8) < *(uint *)(bestBlock + 8))))) {
+      if (((*(int *)(void *)(uintptr_t)((uintptr_t)currentBlock + 0xc) == 0) && (((param_1 + 0xfU) & 0xfffffff0) <= *(uint *)(void *)(uintptr_t)((uintptr_t)currentBlock + 8)))
+         && ((bestBlock == 0 || (*(uint *)(void *)(uintptr_t)((uintptr_t)currentBlock + 8) < *(uint *)(void *)(uintptr_t)((uintptr_t)bestBlock + 8))))) {
 
         bestBlock = currentBlock;
       }
-      currentBlock = *(int *)(currentBlock + 4);
+      currentBlock = *(int *)(void *)(uintptr_t)((uintptr_t)currentBlock + 4);
     } while (currentBlock != 0);
   }
   if (bestBlock == 0) {
     bestBlock = 0;
   }
   else {
-    FUN_8008df04(bestBlock);
-    *(undefined4 *)(bestBlock + 0xc) = 1;
+    FUN_8008df04((undefined4 *)(void *)(uintptr_t)bestBlock, 0);
+    *(undefined4 *)(void *)(uintptr_t)((uintptr_t)bestBlock + 0xc) = 1;
     bestBlock = bestBlock + 0x10;
   }
   return bestBlock;
@@ -1709,7 +1969,7 @@ undefined4 FUN_8008d194(byte *param_1,byte *param_2,int param_3)
   return 0;
 }
 
-int FUN_8008d1e4(code *outputFunction,uint formatFlags,int fieldWidth,int precision,char *inputString)
+int FUN_8008d1e4(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,char *inputString)
 
 {
   int stringLength;
@@ -1783,7 +2043,7 @@ int FUN_8008d1e4(code *outputFunction,uint formatFlags,int fieldWidth,int precis
   return totalOutput;
 }
 
-int FUN_8008d338(code *outputFunction,uint formatFlags,int fieldWidth,int precision,char signChar,char *numberString,
+int FUN_8008d338(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,char signChar,char *numberString,
                 uint numberLength,uint base)
 
 {
@@ -1932,7 +2192,7 @@ int FUN_8008d338(code *outputFunction,uint formatFlags,int fieldWidth,int precis
   return totalOutput;
 }
 
-void FUN_8008d590(undefined4 outputFunction,undefined4 formatFlags,undefined4 fieldWidth,int precision,uint mantissaHigh,
+int FUN_8008d590(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh,
                  uint mantissaLow,char signChar,int exponent)
 
 {
@@ -1958,8 +2218,8 @@ void FUN_8008d590(undefined4 outputFunction,undefined4 formatFlags,undefined4 fi
 
   do {
 
-    powerOf10High = *(uint *)((int)&DAT_800a8cb8 + digitCount);
-    powerOf10Low = *(uint *)((int)&DAT_800a8cbc + digitCount);
+    powerOf10High = *(uint *)(void *)(uintptr_t)((uintptr_t)&DAT_800a8cb8 + (digitCount * sizeof(uint)));
+    powerOf10Low = *(uint *)(void *)(uintptr_t)((uintptr_t)&DAT_800a8cbc + (digitCount * sizeof(uint)));
     digitCount = 0;
     nextPosition = position + 1;
 
@@ -1988,11 +2248,10 @@ void FUN_8008d590(undefined4 outputFunction,undefined4 formatFlags,undefined4 fi
     position = nextPosition;
   } while (nextPosition < 0x13);
 
-  FUN_8008d338(outputFunction,formatFlags,fieldWidth,precision,(int)signChar,digitBuffer,bufferIndex,10);
-  return;
+  return FUN_8008d338(outputFunction,formatFlags,fieldWidth,precision,(int)signChar,digitBuffer,bufferIndex,10);
 }
 
-void FUN_8008d6e4(undefined4 outputFunction)
+int FUN_8008d6e4(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh,uint mantissaLow,uint signChar)
 
 {
   bool hasSignificantDigit;
@@ -2001,12 +2260,16 @@ void FUN_8008d6e4(undefined4 outputFunction)
   int bufferIndex;
   uint numberHigh;
   uint numberLow;
-  char signChar;
   char digitBuffer [64];
 
+  (void)formatFlags;
+  (void)fieldWidth;
+  (void)precision;
+  numberHigh = mantissaHigh;
+  numberLow = mantissaLow;
   bufferIndex = 1;
   bitPosition = 0x3f;
-  digitBuffer[0] = signChar;
+  digitBuffer[0] = (char)signChar;
   hasSignificantDigit = false;
 
   do {
@@ -2032,11 +2295,11 @@ void FUN_8008d6e4(undefined4 outputFunction)
     bitPosition = bitPosition - 3;
   } while (-1 < (int)bitPosition);
 
-  FUN_8008d338(outputFunction);
-  return;
+  FUN_8008d338(outputFunction, formatFlags, fieldWidth, precision, (char)signChar, digitBuffer, bufferIndex, 8);
+  return 0;
 }
 
-void FUN_8008d7a4(undefined4 outputFunction)
+int FUN_8008d7a4(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh,uint mantissaLow,int hexChar)
 
 {
   bool hasSignificantDigit;
@@ -2050,6 +2313,9 @@ void FUN_8008d7a4(undefined4 outputFunction)
   int caseFlag;
   char digitBuffer [64];
 
+  numberHigh = mantissaHigh;
+  numberLow = mantissaLow;
+  caseFlag = hexChar;
   bufferIndex = 0;
 
   if (caseFlag == 0x78) {
@@ -2085,8 +2351,7 @@ void FUN_8008d7a4(undefined4 outputFunction)
     bitPosition = bitPosition - 4;
   } while (-1 < (int)bitPosition);
 
-  FUN_8008d338(outputFunction);
-  return;
+  return FUN_8008d338(outputFunction, formatFlags, fieldWidth, precision, (char)0, digitBuffer, bufferIndex, 16);
 }
 
 int FUN_8008d888(char **stringPointer)
@@ -2111,28 +2376,37 @@ int FUN_8008d888(char **stringPointer)
   return result;
 }
 
-int FUN_8008d8d4(code *outputFunction,byte *formatString,uint *argumentList)
+int FUN_8008d8d4(code_output_func outputFunction,byte *formatString,uint *argumentList)
 
 {
   byte currentChar;
-  byte formatChar;
   uint formatFlags;
   int outputResult;
-  byte *nextChar;
-  byte *charAfterDot;
-  uint numberHigh;
-  uint numberLow;
-  uint sizeModifier;
-  undefined4 precision;
-  uint signBit;
-  undefined4 signChar;
-  uint fieldWidth;
   int totalOutput;
-  byte *formatPos [3];
+  int iVar4;
+  uint uVar13;
+  byte *local_res4 [1];
+  byte *param_2;
+  uint uVar3;
+  uint *param_3;
+  int iVar14;
+  byte bVar1 __attribute__((unused));
+  byte *pbVar6;
+  byte *pbVar5;
+  uint uVar10;
+  uint uVar9;
+  byte bVar2;
+  uint uVar7;
+  uint uVar8;
+  uint uVar11;
+  uint uVar12;
 
   totalOutput = 0;
   currentChar = *formatString;
   formatString = formatString + 1;
+  param_2 = formatString;
+  param_3 = argumentList;
+  iVar14 = 0;
 
 joined_r0x8008d90c:
   outputResult = (int)(char)currentChar;
@@ -2144,6 +2418,9 @@ joined_r0x8008d90c:
   if (*formatString != 0x25) {
     formatFlags = 0;
   }
+  (void)formatFlags;  // Used indirectly via uVar13
+  iVar4 = outputResult;
+  uVar3 = 0;
   if ((iVar4 == 0x25) && (uVar13 = 0, local_res4[0] = param_2, uVar3 == 0)) {
     do {
       iVar4 = (int)(char)*local_res4[0];
@@ -2169,17 +2446,18 @@ joined_r0x8008d90c:
     } while( true );
   }
   local_res4[0] = param_2 + uVar3;
-  iVar4 = (*param_1)(iVar4);
+  iVar4 = (*outputFunction)(iVar4);
   if (iVar4 != 0) {
     return -1;
   }
   iVar14 = iVar14 + 1;
+  totalOutput = totalOutput + 1;
   param_2 = local_res4[0];
   goto LAB_8008dd34;
 switchD_8008d9b0_caseD_1:
   uVar3 = 0xffffffff;
   if (iVar4 - 0x30U < 10) {
-    uVar3 = FUN_8008d888(local_res4);
+    uVar3 = FUN_8008d888((char **)local_res4);
     bVar1 = *local_res4[0];
 LAB_8008da30:
     iVar4 = (int)(char)bVar1;
@@ -2196,7 +2474,7 @@ LAB_8008da30:
     pbVar6 = local_res4[0] + 1;
     if ((int)(char)*pbVar6 - 0x30U < 10) {
       local_res4[0] = local_res4[0] + 1;
-      uVar10 = FUN_8008d888(local_res4);
+      uVar10 = FUN_8008d888((char **)local_res4);
     }
     else {
       pbVar5 = local_res4[0] + 2;
@@ -2285,21 +2563,21 @@ LAB_8008dba4:
     switch(bVar1) {
     case 0x58:
     case 0x78:
-      iVar4 = FUN_8008d7a4(param_1,uVar13,uVar3,uVar10,uVar8,uVar11,iVar4);
+      iVar4 = FUN_8008d7a4(outputFunction,uVar13,uVar3,uVar10,uVar8,uVar11,iVar4);
       break;
     default:
       iVar4 = 0;
       break;
     case 100:
     case 0x75:
-      iVar4 = FUN_8008d590(param_1,uVar13,uVar3,uVar10,uVar8,uVar11,uVar12,0);
+      iVar4 = FUN_8008d590(outputFunction,uVar13,uVar3,uVar10,uVar8,uVar11,uVar12,0);
       break;
     case 0x69:
     case 0x6f:
-      iVar4 = FUN_8008d6e4(param_1,uVar13,uVar3,uVar10,uVar8,uVar11,uVar12);
+      iVar4 = FUN_8008d6e4(outputFunction,uVar13,uVar3,uVar10,uVar8,uVar11,uVar12);
       break;
     case 0x74:
-      iVar4 = FUN_8008d590(param_1,uVar13,uVar3,uVar10,uVar8,uVar11,uVar12,1);
+      iVar4 = FUN_8008d590(outputFunction,uVar13,uVar3,uVar10,uVar8,uVar11,uVar12,1);
     }
     iVar14 = iVar14 + iVar4;
     param_2 = local_res4[0];
@@ -2308,7 +2586,7 @@ LAB_8008dba4:
     }
     break;
   case 0x1e:
-    iVar4 = (*param_1)((int)*(char *)param_3);
+    iVar4 = (*outputFunction)((int)*(char *)param_3);
     param_3 = param_3 + 1;
     if (iVar4 < 0) {
       return -1;
@@ -2317,7 +2595,7 @@ LAB_8008dba4:
     param_2 = local_res4[0];
     break;
   case 0x2e:
-    iVar4 = FUN_8008d1e4(param_1,uVar13,uVar3,uVar10,*param_3);
+    iVar4 = FUN_8008d1e4(outputFunction,uVar13,uVar3,uVar10,(char *)(void *)(uintptr_t)*param_3);
     param_3 = param_3 + 1;
     if (iVar4 < 0) {
       return -1;
@@ -2344,7 +2622,7 @@ void FUN_8008dd74(undefined4 *poolPointer,uint poolSize)
     availableSize = poolSize - 0x10;
   }
 
-  DAT_800a8d50 = poolPointer;
+  DAT_800a8d50 = (undefined4)(uintptr_t)poolPointer;
   DAT_800a8d54 = poolSize;
 
   *poolPointer = 0;
@@ -2362,7 +2640,7 @@ void FUN_8008ddb4(void)
 
   poolSize = 0;
 
-  memoryAddress = (DAT_80091168 & 0xfffffff0) - 0x10000 | 0x80000000;
+  memoryAddress = (((uintptr_t)DAT_80091168 & 0xfffffff0) - 0x10000) | 0x80000000;
 
   if (-0x7fe0f2a0 < (int)memoryAddress) {
     poolSize = memoryAddress + 0x7fe0f2a0;
@@ -2379,32 +2657,34 @@ void FUN_8008de24(int blockAddress)
   undefined4 *currentBlock;
   undefined4 *previousBlock;
 
-  *(undefined4 *)(blockAddress + -4) = 0;
+  *(undefined4 *)(void *)(uintptr_t)((uintptr_t)blockAddress - 4) = 0;
 
-  nextBlock = *(undefined4 **)(blockAddress + -0x10);
-  previousBlock = (undefined4 *)(blockAddress + -0x10);
+  nextBlock = *(undefined4 **)(void *)(uintptr_t)((uintptr_t)blockAddress - 0x10);
+  previousBlock = (undefined4 *)(void *)(uintptr_t)((uintptr_t)blockAddress - 0x10);
 
   while ((currentBlock = nextBlock, currentBlock != (undefined4 *)0x0 && (currentBlock[3] == 0))) {
     previousBlock = currentBlock;
-    nextBlock = (undefined4 *)*currentBlock;
+    nextBlock = (undefined4 *)(void *)(uintptr_t)*currentBlock;
   }
 
-  while ((previousBlock[1] != 0 && (*(int *)(previousBlock[1] + 0xc) == 0))) {
-    FUN_8008df80(previousBlock);
+  while ((previousBlock[1] != 0 && (*(int *)(void *)(uintptr_t)((uintptr_t)previousBlock[1] + 0xc) == 0))) {
+    FUN_8008df80((int)(uintptr_t)previousBlock);
   }
   return;
 }
 
-void FUN_8008dec4(int bufferAddress)
+void FUN_8008dec4(int param_1, int param_2, undefined4 *param_3)
 
 {
   int outputLength;
 
-  DAT_801c9898 = bufferAddress;
+  (void)param_2;
+  (void)param_3;
+  DAT_801c9898 = param_1;
 
-  outputLength = FUN_8008d8d4(&LAB_8008dea4);
+  outputLength = FUN_8008d8d4((code_output_func)(void *)(uintptr_t)&LAB_8008dea4, (byte *)0x0, (uint *)0x0);
 
-  *(undefined *)(bufferAddress + outputLength) = 0;
+  *(undefined *)(void *)(uintptr_t)((uintptr_t)param_1 + outputLength) = 0;
   return;
 }
 
@@ -2417,19 +2697,19 @@ void FUN_8008df04(undefined4 *poolPointer,int requestedSize)
 
   if (requestedSize + 0x20U <= (uint)poolPointer[2]) {
 
-    *(undefined4 *)((int)poolPointer + requestedSize + 0x10) = *poolPointer;
-    newBlockAddress = (int)poolPointer + requestedSize + 0x10;
-    *(undefined4 *)((int)poolPointer + requestedSize + 0x14) = poolPointer[1];
-    *(undefined4 *)((int)poolPointer + requestedSize + 0x18) = poolPointer[2];
-    *(undefined4 *)((int)poolPointer + requestedSize + 0x1c) = poolPointer[3];
+    *(undefined4 *)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x10) = *poolPointer;
+    newBlockAddress = (int)(uintptr_t)poolPointer + requestedSize + 0x10;
+    *(undefined4 *)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x14) = poolPointer[1];
+    *(undefined4 *)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x18) = poolPointer[2];
+    *(undefined4 *)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x1c) = poolPointer[3];
 
-    previousBlock = (int *)poolPointer[1];
+    previousBlock = (int *)(void *)(uintptr_t)poolPointer[1];
     poolPointer[2] = requestedSize;
-    newBlockSize = *(int *)((int)poolPointer + requestedSize + 0x18);
-    poolPointer[1] = newBlockAddress;
-    *(undefined4 **)((int)poolPointer + requestedSize + 0x10) = poolPointer;
-    *(undefined4 *)((int)poolPointer + requestedSize + 0x1c) = 0;
-    *(int *)((int)poolPointer + requestedSize + 0x18) = (newBlockSize + -0x10) - requestedSize;
+    newBlockSize = *(int *)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x18);
+    poolPointer[1] = (undefined4)(uintptr_t)newBlockAddress;
+    *(undefined4 **)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x10) = poolPointer;
+    *(undefined4 *)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x1c) = 0;
+    *(int *)(void *)(uintptr_t)((uintptr_t)poolPointer + requestedSize + 0x18) = (newBlockSize + -0x10) - requestedSize;
 
     if (previousBlock != (int *)0x0) {
       *previousBlock = newBlockAddress;
@@ -2444,35 +2724,49 @@ void FUN_8008df80(int blockPointer)
   int *nextBlockPointer;
   int nextBlockAddress;
 
-  nextBlockAddress = *(int *)(blockPointer + 4);
+  nextBlockAddress = *(int *)(void *)(uintptr_t)((uintptr_t)blockPointer + 4);
   if (nextBlockAddress != 0) {
 
-    nextBlockPointer = *(int **)(nextBlockAddress + 4);
+    nextBlockPointer = *(int **)(void *)(uintptr_t)((uintptr_t)nextBlockAddress + 4);
     if (nextBlockPointer != (int *)0x0) {
       *nextBlockPointer = blockPointer;
     }
-    *(int **)(blockPointer + 4) = nextBlockPointer;
+    *(int **)(void *)(uintptr_t)((uintptr_t)blockPointer + 4) = nextBlockPointer;
 
-    *(int *)(blockPointer + 8) = *(int *)(blockPointer + 8) + 0x10 + *(int *)(nextBlockAddress + 8);
+    *(int *)(void *)(uintptr_t)((uintptr_t)blockPointer + 8) = *(int *)(void *)(uintptr_t)((uintptr_t)blockPointer + 8) + 0x10 + *(int *)(void *)(uintptr_t)((uintptr_t)nextBlockAddress + 8);
   }
   return;
 }
 
-void * bcopy(uchar *source,uchar *destination,int size)
+// Note: bcopy, strncmp, bzero, printf are standard library functions
+// These implementations are stubs that will be replaced by standard library
+// Using #undef to avoid conflicts with standard library declarations
+#undef bcopy
+#undef strncmp
+#undef bzero
+#undef printf
+
+static void * bcopy_stub(uchar *source,uchar *destination,int size)
 
 {
   void *result;
 
-  result = (void *)(*(code *)&LAB_000000a0)();
+  (void)source;
+  (void)destination;
+  (void)size;
+  result = (void *)(uintptr_t)(*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
   return result;
 }
 
-int strncmp(char *string1,char *string2,int maxLength)
+static int strncmp_stub(char *string1,char *string2,int maxLength)
 
 {
   int result;
 
-  result = (*(code *)&LAB_000000a0)();
+  (void)string1;
+  (void)string2;
+  (void)maxLength;
+  result = (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
   return result;
 }
 
@@ -2481,24 +2775,27 @@ void * bzero(uchar *memory,int size)
 {
   void *result;
 
-  result = (void *)(*(code *)&LAB_000000a0)();
+  (void)memory;
+  (void)size;
+  result = (void *)(uintptr_t)(*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
   return result;
 }
 
-int printf(char *formatString,...)
+// printf is declared in stdio.h - this is a stub implementation
+int printf_stub(char *formatString,...)
 
 {
   int iVar1;
-
-  iVar1 = (*(code *)&LAB_000000a0)();
+  (void)formatString;  // Parameter unused but required by call sites
+  iVar1 = (*(code_int_ret)&LAB_000000a0)();
   return iVar1;
 }
 
-void FUN_8008e00c(void)
+void FUN_8008e00c(char *param_1)
 
 {
-
-  (*(code *)&SUB_000000b0)();
+  (void)param_1;  // Parameter unused but required by call sites
+  (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
   return;
 }
 
@@ -2534,69 +2831,72 @@ void FUN_80094f80(undefined4 param_1,undefined4 param_2,undefined4 param_3,undef
   int unaff_s8;
   int unaff_retaddr;
 
+  (void)param_1;
+  (void)param_2;
+
   uVar1 = getCopReg(2,unaff_s4);
-  *(undefined8 *)(unaff_s3 + -0x592) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s3 - 0x592) = uVar1;
   uVar1 = getCopReg(2,0);
-  *(undefined8 *)(unaff_s4 + -0x586) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s4 - 0x586) = uVar1;
   uVar1 = getCopReg(2,in_t3);
-  *(undefined8 *)(unaff_s4 + -0x57b) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s4 - 0x57b) = uVar1;
   uVar1 = getCopReg(2,unaff_s7);
-  *(undefined8 *)(unaff_s4 + -0x56f) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s4 - 0x56f) = uVar1;
   uVar1 = getCopReg(2,in_v1);
-  *(undefined8 *)(unaff_s5 + -0x563) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s5 - 0x563) = uVar1;
   uVar1 = getCopReg(2,in_t7);
-  *(undefined8 *)(unaff_s5 + -0x557) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s5 - 0x557) = uVar1;
   uVar1 = getCopReg(2,in_k1);
-  *(undefined8 *)(unaff_s5 + -0x54b) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s5 - 0x54b) = uVar1;
   uVar1 = getCopReg(2,param_4);
-  *(undefined8 *)(unaff_s6 + -0x53f) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s6 - 0x53f) = uVar1;
   uVar1 = getCopReg(2,unaff_s2);
-  *(undefined8 *)(unaff_s6 + -0x533) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s6 - 0x533) = uVar1;
   uVar1 = getCopReg(2,unaff_s8);
-  *(undefined8 *)(unaff_s6 + -0x528) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s6 - 0x528) = uVar1;
   uVar1 = getCopReg(2,in_t2);
-  *(undefined8 *)(unaff_s7 + -0x51c) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s7 - 0x51c) = uVar1;
   uVar1 = getCopReg(2,unaff_s6);
-  *(undefined8 *)(unaff_s7 + -0x510) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s7 - 0x510) = uVar1;
   uVar1 = getCopReg(2,in_v0);
-  *(undefined8 *)(in_t8 + -0x504) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_t8 - 0x504) = uVar1;
   uVar1 = getCopReg(2,in_t6);
-  *(undefined8 *)(in_t8 + -0x4f8) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_t8 - 0x4f8) = uVar1;
   uVar1 = getCopReg(2,in_k0);
-  *(undefined8 *)(in_t8 + -0x4ec) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_t8 - 0x4ec) = uVar1;
   uVar1 = getCopReg(2,param_3);
-  *(undefined8 *)(in_t9 + -0x4e0) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_t9 - 0x4e0) = uVar1;
   uVar1 = getCopReg(2,unaff_s2);
-  *(undefined8 *)(in_t9 + -0x4d4) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_t9 - 0x4d4) = uVar1;
   uVar1 = getCopReg(2,unaff_s8);
-  *(undefined8 *)(in_t9 + -0x4c8) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_t9 - 0x4c8) = uVar1;
   uVar1 = getCopReg(2,in_t2);
-  *(undefined8 *)(in_k0 + -0x4bc) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_k0 - 0x4bc) = uVar1;
   uVar1 = getCopReg(2,unaff_s6);
-  *(undefined8 *)(in_k0 + -0x4b0) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_k0 - 0x4b0) = uVar1;
   uVar1 = getCopReg(2,in_v0);
-  *(undefined8 *)(in_k1 + -0x4a4) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_k1 - 0x4a4) = uVar1;
   uVar1 = getCopReg(2,in_t6);
-  *(undefined8 *)(in_k1 + -0x498) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_k1 - 0x498) = uVar1;
   uVar1 = getCopReg(2,in_k0);
-  *(undefined8 *)(in_k1 + -0x48c) = uVar1;
-  uRamfffffb80 = getCopReg(2,param_3);
-  uRamfffffb8c = getCopReg(2,unaff_s2);
-  uRamfffffb98 = getCopReg(2,unaff_s8);
-  getCopReg(2,in_t2);
-  getCopReg(2,unaff_s6);
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)in_k1 - 0x48c) = uVar1;
+  (void)getCopReg(2,param_3);
+  (void)getCopReg(2,unaff_s2);
+  (void)getCopReg(2,unaff_s8);
+  (void)getCopReg(2,in_t2);
+  (void)getCopReg(2,unaff_s6);
   uVar1 = getCopReg(2,in_v1);
-  *(undefined8 *)(unaff_s8 + -0x443) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s8 - 0x443) = uVar1;
   uVar1 = getCopReg(2,in_t7);
-  *(undefined8 *)(unaff_s8 + -0x437) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s8 - 0x437) = uVar1;
   uVar1 = getCopReg(2,in_k1);
-  *(undefined8 *)(unaff_s8 + -0x42b) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_s8 - 0x42b) = uVar1;
   uVar1 = getCopReg(2,param_4);
-  *(undefined8 *)(unaff_retaddr + -0x41f) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_retaddr - 0x41f) = uVar1;
   uVar1 = getCopReg(2,unaff_s3);
-  *(undefined8 *)(unaff_retaddr + -0x413) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_retaddr - 0x413) = uVar1;
   uVar1 = getCopReg(2,unaff_retaddr);
-  *(undefined8 *)(unaff_retaddr + -0x407) = uVar1;
+  *(undefined8 *)(void *)(uintptr_t)((uintptr_t)unaff_retaddr - 0x407) = uVar1;
 
   halt_baddata();
 }
@@ -2628,7 +2928,7 @@ void FUN_80095a82(void)
   undefined *in_t5;
   undefined unaff_s0;
 
-  *(undefined *)(in_v0 + -0x7ff7) = in_t4;
+  *(undefined *)(void *)(uintptr_t)((uintptr_t)in_v0 - 0x7ff7) = in_t4;
   *in_t5 = unaff_s0;
 
   halt_baddata();
@@ -2730,7 +3030,7 @@ void FUN_8009a718(void)
 {
   int in_zero;
 
-  *(undefined *)(in_zero + 0x10) = 0;
+  *(undefined *)(void *)(uintptr_t)((uintptr_t)in_zero + 0x10) = 0;
 
   halt_baddata();
 }
@@ -2794,8 +3094,9 @@ void FUN_8009b6c4(void)
 void FUN_8009be02(undefined4 param_1,undefined4 param_2,int param_3)
 
 {
-
-  prefetch(param_3 + 0x2460,0xd);
+  (void)param_1;
+  (void)param_2;
+  prefetch((void *)(uintptr_t)(param_3 + 0x2460),0xd);
 
   halt_baddata();
 }
@@ -2859,7 +3160,7 @@ void FUN_8009f244(void)
 void FUN_8009f4f8(void)
 
 {
-  undefined4 in_t0;
+  undefined4 in_t0 = 0;
 
   func_0x80410040(in_t0);
 
@@ -2878,7 +3179,7 @@ void FUN_8009fc30(void)
 {
   uint in_at;
 
-  gte_ldVXY0((int)*(char *)((0 << (in_at & 0x1f)) + 0x20));
+  gte_ldVXY0((undefined4 *)(void *)(uintptr_t)((int)*(char *)(void *)(uintptr_t)((0 << (in_at & 0x1f)) + 0x20)));
 
   halt_baddata();
 }
@@ -2904,19 +3205,19 @@ void FUN_800a0018(void)
   halt_baddata();
 }
 
-void FUN_arcade__80010000(undefined4 param_1,int param_2)
+undefined4 FUN_arcade__80010000(undefined4 param_1,int param_2)
 
 {
   int iVar1;
 
-  iVar1 = _LAB_80092e6a_2 + 0x108;
+  iVar1 = (int)(uintptr_t)_LAB_80092e6a_2 + 0x108;
 
   if (param_2 == 1) {
-    iVar1 = _LAB_80092e6a_2 + 0x110;
+    iVar1 = (int)(uintptr_t)_LAB_80092e6a_2 + 0x110;
   }
 
-  FUN_800780f8(iVar1,param_1);
-  return;
+  FUN_800780f8(iVar1, (undefined4 *)&param_1);
+  return (undefined4)iVar1;
 }
 
 int FUN_arcade__8001003c(undefined4 param_1,int param_2)
@@ -2925,9 +3226,9 @@ int FUN_arcade__8001003c(undefined4 param_1,int param_2)
   undefined auStack_10 [4];
   int local_c;
 
-  FUN_80060bec(param_1,auStack_10,&local_c);
+  FUN_80060bec(param_1, (int *)auStack_10, &local_c);
 
-  return (int)*(char *)(local_c + param_2);
+  return (int)*(char *)(void *)(uintptr_t)((uintptr_t)local_c + param_2);
 }
 
 int FUN_arcade__80010074(int value1,int value2,int value3)
@@ -2977,7 +3278,7 @@ int FUN_arcade__800100b0(int value1,int value2,int value3)
 void FUN_arcade__800100ec(uint rgbColor,undefined2 *outputBuffer)
 
 {
-  bool isWithinRange;
+  bool isWithinRange __attribute__((unused));
   uint maxChannelValue;
   int colorCalculation1;
   int colorCalculation2;
@@ -2987,6 +3288,16 @@ void FUN_arcade__800100ec(uint rgbColor,undefined2 *outputBuffer)
   uint redChannel;
   int redCalculation;
   int greenCalculation;
+  int iVar3;
+  byte bVar1 __attribute__((unused));
+  int iVar4;
+  int iVar5;
+  uint uVar2;
+
+  // Initialize variables
+  iVar4 = 0;
+  iVar5 = 0;
+  uVar2 = 0;
 
   redChannel = rgbColor & 0x1f;
   greenChannel = (rgbColor & 0x3e0) >> 5;
@@ -3038,19 +3349,21 @@ void FUN_arcade__800100ec(uint rgbColor,undefined2 *outputBuffer)
       } while (colorCalculation2 < 0);
       isWithinRange = colorCalculation2 < 0x2d00;
     }
-    while (!bVar1) {
-      bVar1 = iVar4 + -0x2d00 < 0x2d00;
-      iVar4 = iVar4 + -0x2d00;
+    iVar4 = colorCalculation2;
+    while (iVar4 >= 0x2d00) {
+      iVar4 = iVar4 - 0x2d00;
     }
+    iVar5 = (int)(colorCalculation2 / 0x2d00);
+    uVar2 = saturationValue;
   }
-  *param_2 = (short)(iVar4 >> 5);
-  param_2[1] = (short)iVar5;
-  param_2[2] = (short)uVar2;
+  *outputBuffer = (short)(iVar4 >> 5);
+  outputBuffer[1] = (short)iVar5;
+  outputBuffer[2] = (short)uVar2;
   return;
 }
 
 ushort FUN_arcade__80010238
-                 (undefined4 *outputData,int dataOffset,int dataTable,undefined4 randomSeed,int *parameterArray,
+                 (undefined4 *outputData,undefined4 dataOffset,undefined4 dataTable,undefined4 *randomSeed,int *parameterArray,
                  int parameterCount)
 
 {
@@ -3083,7 +3396,7 @@ ushort FUN_arcade__80010238
 
   retryCounter = 0x40;
 
-  dataTableSize = FUN_80078138(dataTable);
+  dataTableSize = FUN_80078138((int)(uintptr_t)dataTable);
   if ((int)dataTableSize < 1) {
     return 0;
   }
@@ -3092,11 +3405,11 @@ ushort FUN_arcade__80010238
     do {
 
       dataEntry = FUN_80083ae0(randomSeed);
-      dataEntry = *(uint *)(dataTable + (dataEntry % dataTableSize) * 4 + 4);
+      dataEntry = *(uint *)(void *)(uintptr_t)((uintptr_t)dataTable + (dataEntry % dataTableSize) * 4 + 4);
       dataId = dataEntry & 0xffff;
       colorType = (ushort)(dataEntry >> 0x1a);
 
-      dataPointer = (undefined4 *)FUN_80078038(dataOffset, dataId - 1);
+      dataPointer = FUN_80078038((int)(uintptr_t)dataOffset, dataId - 1);
       dataIndex = FUN_80060b70(*dataPointer);
       parameterIndex = 0;
     } while (dataIndex != 1);
@@ -3106,7 +3419,7 @@ ushort FUN_arcade__80010238
     while( true ) {
       if (parameterCount <= parameterIndex) {
 
-        dataPointer = (undefined4 *)FUN_80078038(dataOffset, (dataEntry & 0xffff) - 1);
+        dataPointer = FUN_80078038((int)(uintptr_t)dataOffset, (dataEntry & 0xffff) - 1);
         processedData = *dataPointer;
 
         if (colorType != 0) {
@@ -3122,7 +3435,7 @@ ushort FUN_arcade__80010238
       }
 
       parameterValue = *(ushort *)(currentParameter + 2);
-      parameterPointer = (int *)FUN_80078038(dataOffset, dataId - 1);
+      parameterPointer = (int *)FUN_80078038((int)(uintptr_t)dataOffset, dataId - 1);
 
       if ((parameterValue == dataId || *currentParameter == *parameterPointer) &&
          (randomValue = FUN_80083ae0(randomSeed), (randomValue & 0x1f) < 0x1d && 0 < retryCounter)) {
@@ -3142,21 +3455,21 @@ LAB_arcade__800103f0:
     dataId = FUN_80083ae0(randomSeed);
     dataIndex = (dataId % dataTableSize) * 2;
 
-    FUN_arcade__800100ec(*(undefined2 *)(dataIndex + colorDataPointer1), colorBuffer);
+    FUN_arcade__800100ec(*(undefined2 *)(void *)(uintptr_t)((uintptr_t)dataIndex + colorDataPointer1), (undefined2 *)colorBuffer);
     retryCounter = retryCounter + 1;
 
     if (5 < colorThreshold) break;
   }
 
-  characterValue = *(char *)(colorDataPointer2 + dataId % dataTableSize);
-  colorValue = *(undefined2 *)(dataIndex + colorDataPointer1);
+  characterValue = *(char *)(void *)(uintptr_t)((uintptr_t)colorDataPointer2 + (dataId % dataTableSize));
+  colorValue = *(undefined2 *)(void *)(uintptr_t)((uintptr_t)dataIndex + colorDataPointer1);
 
 LAB_arcade__80010454:
 
   *outputData = processedData;
-  *(char *)((int)outputData + 5) = characterValue;
-  *(undefined2 *)((int)outputData + 6) = colorValue;
-  *(short *)(outputData + 2) = (short)dataEntry;
+  *(char *)(void *)(uintptr_t)((uintptr_t)outputData + 5) = characterValue;
+  *(undefined2 *)(void *)(uintptr_t)((uintptr_t)outputData + 6) = colorValue;
+  *(short *)(void *)(uintptr_t)((uintptr_t)outputData + 2) = (short)dataEntry;
 
   return colorType;
 }
@@ -3174,18 +3487,18 @@ void FUN_arcade__800104a8(int outputBuffer,undefined4 colorData,uint colorType,u
   if (colorType == 0) {
 
     dataSize = FUN_80060bec(colorData,&colorDataPointer1,&colorDataPointer2);
-    randomIndex = FUN_80083ae0(randomSeed);
-    colorValue = *(undefined2 *)((randomIndex % dataSize) * 2 + colorDataPointer1);
-    *(undefined *)(outputBuffer + 5) = *(undefined *)(colorDataPointer2 + randomIndex % dataSize);
+    randomIndex = FUN_80083ae0((uint *)&randomSeed);
+    colorValue = *(undefined2 *)(void *)(uintptr_t)((randomIndex % dataSize) * 2 + colorDataPointer1);
+    *(undefined *)(void *)(uintptr_t)((uintptr_t)outputBuffer + 5) = *(undefined *)(void *)(uintptr_t)(colorDataPointer2 + randomIndex % dataSize);
   }
   else {
 
     characterCode = "-0123456789abcdefghijklmnopqrstuvwxyz"[colorType & 0x3f];
     colorValue = FUN_80060d28(colorData,(int)characterCode);
-    *(char *)(outputBuffer + 5) = characterCode;
+    *(char *)(void *)(uintptr_t)((uintptr_t)outputBuffer + 5) = characterCode;
   }
 
-  *(undefined2 *)(outputBuffer + 6) = colorValue;
+  *(undefined2 *)(void *)(uintptr_t)((uintptr_t)outputBuffer + 6) = colorValue;
   return;
 }
 
@@ -3220,6 +3533,24 @@ FUN_arcade__80010554
   undefined2 *local_38;
   uint *local_34;
   int local_30;
+  int param_1;
+  int param_2;
+  undefined4 *param_3;
+  undefined4 param_4;
+  uint *param_5;
+  undefined4 param_6;
+  uint *param_7;
+  undefined4 _LAB_80092e6e_2;
+  undefined4 DAT_801d58b6;
+  undefined4 DAT_801d586c;
+
+  param_1 = processingMode;
+  param_2 = dataSource;
+  param_3 = (undefined4 *)dataStructure;
+  param_4 = param4;
+  param_5 = paramArray1;
+  param_6 = param6;
+  param_7 = paramArray2;
 
   local_3c = _LAB_80092e6a_2;
   if (param_2 != 0) {
@@ -3228,12 +3559,17 @@ FUN_arcade__80010554
 
   if (param_1 == 0) {
     DAT_801d58b4 = 0;
-    local_38 = param_3;
+    local_38 = (undefined2 *)param_3;
     local_40 = FUN_8007d23c(0);
     FUN_8008ce30(&DAT_801d585c,0,0x58c);
 
-    DAT_801d585c = DAT_801c98e1;
-    DAT_801d5860 = DAT_801c98e5;
+    {
+      undefined1 temp_byte;
+      memcpy(&temp_byte, &DAT_801c98e1, sizeof(undefined1));
+      DAT_801d585c = (undefined4)temp_byte;
+      memcpy(&temp_byte, &DAT_801c98e5, sizeof(undefined1));
+      DAT_801d5860 = (undefined4)temp_byte;
+    }
     DAT_801d5864 = 2;
     DAT_801d5865 = 2;
     DAT_801d5866 = 4;
@@ -3241,21 +3577,21 @@ FUN_arcade__80010554
     DAT_801d5868 = 0;
     DAT_801d586a = 0;
     DAT_801d5869 = *(char *)(param_3 + 0x22) == '\0';
-    DAT_801d586b = *(undefined *)((int)param_3 + 0x45);
+    DAT_801d586b = *(undefined *)(void *)(uintptr_t)((uintptr_t)param_3 + 0x45);
 
     uVar4 = FUN_8007816c(local_3c,*param_3);
     FUN_8005e548(&DAT_801d585c,uVar4);
     uVar4 = FUN_8007816c(local_3c,param_3[1]);
     FUN_8005e5f0(&DAT_801d585c,uVar4);
     uVar4 = FUN_8007816c(local_3c,param_3[0x4a]);
-    FUN_8008cedc(&DAT_801d58a0,uVar4);
+    FUN_8008cedc((char *)(void *)(uintptr_t)&DAT_801d58a0, (char *)(void *)(uintptr_t)uVar4);
 
     DAT_801d5dd8 = 0xffff;
     DAT_801d5dde = 0xffff;
     DAT_801d5de0 = 0xffff;
     DAT_801d5de2 = 0;
     DAT_801d5ddc = 0;
-    DAT_801d5de4 = DAT_801d5de4 & 0xfffffff9 | 1;
+    DAT_801d5de4 = (DAT_801d5de4 & 0xfffffff9) | 1;
 
     if (param_5 != (uint *)0x0) {
       local_88[0] = *param_5;
@@ -3276,7 +3612,7 @@ FUN_arcade__80010554
       *(undefined2 *)(local_80 + uVar18 * 3) = 0;
     }
 
-    FUN_80078138(param_3);
+    FUN_80078138((int)(uintptr_t)param_3);
     iVar16 = 0;
     puVar13 = local_88;
     DAT_801d58b6 = 6;
@@ -3286,7 +3622,7 @@ FUN_arcade__80010554
 
     while (iVar14 = local_30, uVar4 = 0, bVar3) {
       bVar15 = 1;
-      puVar12 = (uint *)((int)&DAT_801d585c + local_30);
+      puVar12 = (uint *)(void *)(uintptr_t)((uintptr_t)&DAT_801d585c + local_30);
 
       if (iVar16 == 0) {
         if (param_5 != (uint *)0x0) {
@@ -3302,26 +3638,26 @@ FUN_arcade__80010554
 
       if ((int)uVar17 <= iVar16) {
         uVar18 = uVar17 + 1;
-        uVar4 = FUN_arcade__80010238(puVar13,local_3c,local_38,&local_40,local_34,uVar17);
+        uVar4 = FUN_arcade__80010238(puVar13,local_3c,(undefined4)(uintptr_t)local_38,&local_40,(int *)local_34,uVar17);
         *(undefined *)(puVar13 + 1) = 0;
       }
 
       *puVar12 = *puVar13;
-      cVar2 = *(char *)((int)puVar13 + 5);
-      (&UNK_801d58e9)[iVar14] = '\x06' - ((char)iVar16 + '\x01');
-      (&UNK_801d58e8)[iVar14] = 1;
-      *(int *)((int)&DAT_801d5860 + iVar14) = (int)cVar2;
+      cVar2 = *(char *)(void *)(uintptr_t)((uintptr_t)puVar13 + 5);
+      UNK_801d58e9[iVar14] = '\x06' - ((char)iVar16 + '\x01');
+      UNK_801d58e8[iVar14] = 1;
+      *(int *)(void *)(uintptr_t)((uintptr_t)&DAT_801d5860 + iVar14) = (int)cVar2;
 
       if ((bVar15 < 2) || ((uVar5 = param_4, 3 < bVar15 && (uVar5 = param_6, bVar15 != 4)))) {
 
         uVar5 = FUN_800768c0(*(undefined2 *)(puVar13 + 2));
         FUN_80076f5c(uVar5,&DAT_801d5864 + iVar14);
-        iVar6 = FUN_80076f2c(5,*(undefined2 *)(&UNK_801d5880 + iVar14));
-        if (*(char *)(iVar6 + 0xe) != '\0') {
-          uVar17 = *(uint *)(iVar6 + 8);
+        iVar6 = FUN_80076f2c(5,*(undefined2 *)(UNK_801d5880 + iVar14));
+        if (*(char *)(void *)(uintptr_t)((uintptr_t)iVar6 + 0xe) != '\0') {
+          uVar17 = *(uint *)(void *)(uintptr_t)((uintptr_t)iVar6 + 8);
           *puVar12 = uVar17;
-          FUN_arcade__800104a8(puVar13,uVar17,uVar4,&local_40);
-          *(int *)((int)&DAT_801d5860 + iVar14) = (int)*(char *)((int)puVar13 + 5);
+          FUN_arcade__800104a8((int)(uintptr_t)puVar13,uVar17,uVar4,local_40);
+          *(int *)(void *)(uintptr_t)((uintptr_t)&DAT_801d5860 + iVar14) = (int)*(char *)(void *)(uintptr_t)((uintptr_t)puVar13 + 5);
         }
       }
       else {
@@ -3330,31 +3666,31 @@ FUN_arcade__80010554
       }
 
       if (param_2 != 0) {
-        (&UNK_801d58de)[iVar14] = (&UNK_801d58de)[iVar14] | 0x40;
+        UNK_801d58de[iVar14] = UNK_801d58de[iVar14] | 0x40;
       }
 
-      (&UNK_801d58ea)[iVar14] = bVar15;
+      UNK_801d58ea[iVar14] = bVar15;
       puVar1 = puVar13 + 1;
       puVar13 = puVar13 + 3;
       local_30 = local_30 + 0xd0;
       uVar17 = *puVar12;
       iVar16 = iVar16 + 1;
-      (&UNK_801d58eb)[iVar14] = *(undefined *)puVar1;
+      UNK_801d58eb[iVar14] = *(undefined *)puVar1;
       uVar4 = FUN_80060ae8(uVar17);
-      FUN_8008cedc(&UNK_801d58ec + iVar14,uVar4);
+      FUN_8008cedc((char *)(void *)(uintptr_t)(UNK_801d58ec + iVar14), (char *)(void *)(uintptr_t)uVar4);
       bVar3 = iVar16 < 6;
       uVar17 = uVar18;
     }
   }
   else {
 
-    param_3 = (undefined2 *)FUN_8007830c(local_3c,&DAT_801d586c);
+    param_3 = (undefined4 *)FUN_8007830c(local_3c,&DAT_801d586c);
   }
 
   puVar8 = &DAT_801c98a0;
-  puVar7 = (undefined4 *)(param_3 + 0x22);
+  puVar7 = (undefined4 *)(void *)(uintptr_t)((uintptr_t)param_3 + 0x22);
 
-  if (((uint)puVar7 & 3) == 0) {
+  if (((uintptr_t)puVar7 & 3) == 0) {
 
     do {
       uVar5 = puVar7[1];
@@ -3403,20 +3739,20 @@ FUN_arcade__80010a34
   undefined4 stringPointer;
   undefined4 *dataStructure;
 
-  dataStructure = (undefined4 *)(param_1 + param_2 * 0xd0 + 0x5c);
+  dataStructure = (undefined4 *)(void *)(uintptr_t)(param_1 + param_2 * 0xd0 + 0x5c);
   if (-1 < param_3) {
     FUN_8008ce30(dataStructure,0,0xd0);
     *(undefined *)(dataStructure + 0x23) = 1;
-    *(char *)((int)dataStructure + 0x8d) = (char)param_3;
+    *(char *)(void *)(uintptr_t)((uintptr_t)dataStructure + 0x8d) = (char)param_3;
   }
-  *(undefined *)((int)dataStructure + 0x8e) = param_4;
+  *(undefined *)(void *)(uintptr_t)((uintptr_t)dataStructure + 0x8e) = param_4;
   *dataStructure = param_6;
-  *(undefined *)((int)dataStructure + 0x8f) = param_5;
+  *(undefined *)(void *)(uintptr_t)((uintptr_t)dataStructure + 0x8f) = param_5;
   dataStructure[1] = param_7;
   stringPointer = FUN_80060ae8(param_6);
-  FUN_8008cedc(dataStructure + 0x24,stringPointer);
-  FUN_80076fc0(param_8,dataStructure + 2);
-  FUN_800771ac(dataStructure + 2,&DAT_801de8ba + param_2 * 0x70);
+  FUN_8008cedc((char *)(void *)(uintptr_t)(dataStructure + 0x24), (char *)(void *)(uintptr_t)stringPointer);
+  FUN_80076fc0(param_8, (undefined4 *)(void *)(uintptr_t)(dataStructure + 2));
+  FUN_800771ac((undefined4 *)(void *)(uintptr_t)(dataStructure + 2), (undefined4 *)(void *)(uintptr_t)(&DAT_801de8ba + param_2 * 0x70));
   return dataStructure;
 }
 
@@ -3443,8 +3779,8 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
   char *inputPointer2;
   undefined4 dataBuffer [66];
   undefined4 tempData;
-  char tempChar;
-  undefined tempByte;
+  char tempChar __attribute__((unused));
+  undefined tempByte __attribute__((unused));
   undefined4 flag1;
   int flag2;
   int flag3;
@@ -3462,9 +3798,8 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
 
   if (carType == '\x04') {
 
-    dataValue2 = FUN_8007830c(_LAB_80092e6a_2,
-                          (&PTR_DAT_arcade__8002678c_arcade__80027470)
-                              [*inputString * 4 + (int)inputString[1]]);
+    dataValue2 = (undefined4)(uintptr_t)FUN_8007830c(_LAB_80092e6a_2,
+                          (undefined4 *)(void *)(uintptr_t)((uintptr_t)(&PTR_DAT_arcade__8002678c_arcade__80027470) + (*inputString * 4 + (int)inputString[1])));
 
     dataOffset = (int)*(short *)(inputString + 6);
 
@@ -3476,15 +3811,15 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
       tempChar = inputString[0x18];
       dataValue3 = FUN_arcade__80010000(*(undefined4 *)(inputString + 0x10),(int)inputString[0x14]);
 
-      carDataStructure = (undefined4 *)FUN_arcade__80010554(0,0,dataValue2,dataValue3,&tempData,0,0);
+      carDataStructure = FUN_arcade__80010554(0,0,(undefined2 *)(void *)(uintptr_t)dataValue2,dataValue3,&tempData,0,0);
 
       FUN_80076fc0(dataValue3,dataBuffer);
 
-      *(undefined *)((int)carDataStructure + 9) = 0;
+      *(undefined *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 9) = 0;
     }
     else {
 
-      carDataStructure = (undefined4 *)FUN_arcade__80010554(0,0,dataValue2,0,0,0,0);
+      carDataStructure = FUN_arcade__80010554(0,0,(undefined2 *)(void *)(uintptr_t)dataValue2,0,0,0,0);
       dataIndex = *(short *)(inputString + 8);
       destData = dataBuffer;
 
@@ -3505,33 +3840,38 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
       flag1 = 1;
       *destData = *sourceData;
       flag2 = 1;
-      pointer1 = &DAT_801cd554 + dataOffset * 0x2014 + *(short *)(inputString + 8) * 0x52 + 2;
-      *(undefined *)((int)carDataStructure + 9) = 0;
+      pointer1 = (undefined2 *)(void *)(uintptr_t)((uintptr_t)&DAT_801cd554 + dataOffset * 0x2014 + *(short *)(void *)(uintptr_t)((uintptr_t)inputString + 8) * 0x52 + 2);
+      *(undefined *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 9) = 0;
     }
 
-    *(char *)((int)carDataStructure + 10) = inputString[2];
+    *(char *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 10) = inputString[2];
 
-    tempValue = *(undefined2 *)(inputString + 4);
-    *(undefined *)((int)carDataStructure + 0x5a) = 6;
-    *(char *)((int)carDataStructure + 0xf) = (char)tempValue;
+    tempValue = *(undefined2 *)(void *)(uintptr_t)((uintptr_t)inputString + 4);
+    *(undefined *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 0x5a) = 6;
+    *(char *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 0xf) = (char)tempValue;
 
-    FUN_8005e590(carDataStructure,*(undefined4 *)(inputString + 0x1b8));
+    FUN_8005e590(carDataStructure,*(undefined4 *)(void *)(uintptr_t)((uintptr_t)inputString + 0x1b8));
 
-    *(char *)((int)carDataStructure + 0x57e) = (char)*(undefined2 *)(inputString + 0x1bc);
-    *(undefined *)((int)carDataStructure + 0x57f) = (&DAT_arcade__800274b0)[*inputString];
+    *(char *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 0x57e) = (char)*(undefined2 *)(void *)(uintptr_t)((uintptr_t)inputString + 0x1bc);
+    *(undefined *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 0x57f) = (&DAT_arcade__800274b0)[(int)*inputString];
   }
 
   else if (carType < '\x05') {
 
     if (carType == '\0') {
 
-      dataOffset = FUN_8007830c(_LAB_80092e6a_2,&LAB_arcade__800267ca_2);
+      dataOffset = (int)(uintptr_t)FUN_8007830c(_LAB_80092e6a_2,(undefined4 *)&LAB_arcade__800267ca_2);
       carDataStructure = &DAT_801d585c;
 
       FUN_8008ce30(&DAT_801d585c,0,0x58c);
 
-      DAT_801d585c = DAT_801c98e1;
-      DAT_801d5860 = DAT_801c98e5;
+      {
+        undefined1 temp_byte;
+        memcpy(&temp_byte, &DAT_801c98e1, sizeof(undefined1));
+        DAT_801d585c = (undefined4)temp_byte;
+        memcpy(&temp_byte, &DAT_801c98e5, sizeof(undefined1));
+        DAT_801d5860 = (undefined4)temp_byte;
+      }
       DAT_801d5864 = 2;
       DAT_801d5865 = 0;
       DAT_801d5866 = 0;
@@ -3540,18 +3880,18 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
       sourceData = dataBuffer;
       DAT_801d586b = (undefined)*(undefined2 *)(inputString + 4);
 
-      FUN_8005e548(&DAT_801d585c,&LAB_arcade__800267ce_2);
+      FUN_8005e548(&DAT_801d585c,(undefined4)(uintptr_t)&LAB_arcade__800267ce_2);
       FUN_8005e590(&DAT_801d585c,*(undefined4 *)(inputString + 0x1b8));
 
-      dataValue2 = FUN_8007816c(dataValue2,*(undefined2 *)(dataOffset + 0x94));
-      FUN_8008cedc(&DAT_801d58a0,dataValue2);
+      dataValue2 = FUN_8007816c(dataValue2,*(undefined2 *)(void *)(uintptr_t)((uintptr_t)dataOffset + 0x94));
+      FUN_8008cedc((char *)(void *)(uintptr_t)&DAT_801d58a0, (char *)(void *)(uintptr_t)dataValue2);
 
       DAT_801d58b6 = 2;
       DAT_801d5dde = 0xffff;
       DAT_801d5de0 = 0xffff;
       DAT_801d5de2 = 0;
       DAT_801d5ddc = 0;
-      DAT_801d5de4 = DAT_801d5de4 & 0xfffffff8 | (uint)(*(int *)(inputString + 0x2cc) != 1);
+      DAT_801d5de4 = (DAT_801d5de4 & 0xfffffff8) | (uint)(*(int *)(void *)(uintptr_t)((uintptr_t)inputString + 0x2cc) != 1);
 
       inputPointer = inputString;
       inputPointer2 = inputString;
@@ -3567,8 +3907,8 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
                              (*(undefined4 *)(inputPointer2 + 0xa8),(int)*(short *)(inputPointer + 0xb2));
 
           FUN_arcade__80010a34
-                    (&DAT_801d585c,loopIndex,loopIndex,loopIndex + 3,(int)inputString[loopIndex + 0xb6],
-                     *(undefined4 *)(inputPointer2 + 0xa8),dataValue3,dataValue2);
+                    ((int)(uintptr_t)&DAT_801d585c,loopIndex,loopIndex,loopIndex + 3,(int)inputString[loopIndex + 0xb6],
+                     *(undefined4 *)(void *)(uintptr_t)((uintptr_t)inputPointer2 + 0xa8),dataValue3,dataValue2);
 
           FUN_80076fc0(dataValue2,sourceData);
         }
@@ -3595,11 +3935,11 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
 
           if (loopIndex == 0) {
             flag2 = 1;
-            pointer1 = &DAT_801cd554 + loopCounter * 0x2014 + *(short *)(inputString + 0xa4) * 0x52 + 2;
+            pointer1 = (undefined2 *)(void *)(uintptr_t)((uintptr_t)&DAT_801cd554 + loopCounter * 0x2014 + *(short *)(void *)(uintptr_t)((uintptr_t)inputString + 0xa4) * 0x52 + 2);
           }
           else {
             flag3 = 1;
-            pointer2 = &DAT_801cd554 + loopCounter * 0x2014 + *(short *)(inputPointer + 0xa4) * 0x52 + 2;
+            pointer2 = (undefined2 *)(void *)(uintptr_t)((uintptr_t)&DAT_801cd554 + loopCounter * 0x2014 + *(short *)(void *)(uintptr_t)((uintptr_t)inputPointer + 0xa4) * 0x52 + 2);
           }
         }
 
@@ -3609,9 +3949,9 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
       }
 
       destData = &DAT_801c98a0;
-      sourceData = (undefined4 *)(dataOffset + 0x44);
+      sourceData = (undefined4 *)(void *)(uintptr_t)((uintptr_t)dataOffset + 0x44);
 
-      if (((uint)sourceData & 3) == 0) {
+      if (((uintptr_t)sourceData & 3) == 0) {
 
         do {
           dataValue2 = sourceData[1];
@@ -3623,7 +3963,7 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
           destData[3] = dataValue4;
           sourceData = sourceData + 4;
           destData = destData + 4;
-        } while (sourceData != (undefined4 *)(dataOffset + 0x84U));
+        } while (sourceData != (undefined4 *)(void *)(uintptr_t)((uintptr_t)dataOffset + 0x84U));
       }
       else {
 
@@ -3637,18 +3977,18 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
           destData[3] = dataValue4;
           sourceData = sourceData + 4;
           destData = destData + 4;
-        } while (sourceData != (undefined4 *)(dataOffset + 0x84U));
+        } while (sourceData != (undefined4 *)(void *)(uintptr_t)((uintptr_t)dataOffset + 0x84U));
       }
     }
   }
 
   else if (carType == '\x06') {
 
-    dataPointer = (undefined2 *)FUN_8007830c(_LAB_80092e6a_2,&LAB_arcade__800267ca_2);
+    dataPointer = FUN_8007830c(_LAB_80092e6a_2,(undefined4 *)&LAB_arcade__800267ca_2);
     destData = &DAT_801c98a0;
     sourceData = (undefined4 *)(dataPointer + 0x22);
 
-    if (((uint)sourceData & 3) == 0) {
+    if (((uintptr_t)sourceData & 3) == 0) {
 
       do {
         dataValue1 = sourceData[1];
@@ -3680,8 +4020,13 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
     carDataStructure = &DAT_801d585c;
     FUN_8008ce30(&DAT_801d585c,0,0x58c);
 
-    DAT_801d585c = DAT_801c98e1;
-    DAT_801d5860 = DAT_801c98e5;
+    {
+      undefined1 temp_byte;
+      memcpy(&temp_byte, &DAT_801c98e1, sizeof(undefined1));
+      DAT_801d585c = (undefined4)temp_byte;
+      memcpy(&temp_byte, &DAT_801c98e5, sizeof(undefined1));
+      DAT_801d5860 = (undefined4)temp_byte;
+    }
     DAT_801d5864 = 2;
     DAT_801d5866 = 6;
     DAT_801d5865 = 0;
@@ -3694,22 +4039,22 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
     FUN_8005e590(&DAT_801d585c,*(undefined4 *)(inputString + 0x1b8));
 
     dataValue2 = FUN_8007816c(dataValue2,dataPointer[0x4a]);
-    FUN_8008cedc(&DAT_801d58a0,dataValue2);
+    FUN_8008cedc((char *)(void *)(uintptr_t)&DAT_801d58a0, (char *)(void *)(uintptr_t)dataValue2);
 
     DAT_801d58b6 = 1;
     DAT_801d5dde = 0xffff;
     DAT_801d5de0 = 0xffff;
     DAT_801d5de2 = 0;
     DAT_801d5ddc = 0;
-    DAT_801d5de4 = DAT_801d5de4 & 0xfffffff8 | (uint)(*(int *)(inputString + 0x2cc) != 1);
+    DAT_801d5de4 = (DAT_801d5de4 & 0xfffffff8) | (uint)(*(int *)(void *)(uintptr_t)((uintptr_t)inputString + 0x2cc) != 1);
 
     dataOffset = FUN_8005e764();
-    dataOffset = *(int *)(dataOffset + 0x14);
-    FUN_8008cedc(&DAT_801d5d98,&LAB_arcade__800267d4);
+    dataOffset = *(int *)(void *)(uintptr_t)((uintptr_t)dataOffset + 0x14);
+    FUN_8008cedc((char *)(void *)(uintptr_t)&DAT_801d5d98, (char *)(void *)(uintptr_t)&LAB_arcade__800267d4);
 
     if (dataOffset != 0) {
       dataValue2 = FUN_80060ae8(dataOffset);
-      FUN_8008cedc(&DAT_801d5d98,dataValue2);
+      FUN_8008cedc((char *)(void *)(uintptr_t)&DAT_801d5d98, (char *)(void *)(uintptr_t)dataValue2);
     }
 
     dataOffset = (int)*(short *)(inputString + 6);
@@ -3721,7 +4066,7 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
       dataValue3 = FUN_arcade__8001003c(*(undefined4 *)(inputString + 0x10),(int)*(short *)(inputString + 0x16));
 
       FUN_arcade__80010a34
-                (&DAT_801d585c,0,0,3,(int)inputString[0x18],*(undefined4 *)(inputString + 0x10),dataValue3,
+                ((int)(uintptr_t)&DAT_801d585c,0,0,3,(int)inputString[0x18],*(undefined4 *)(void *)(uintptr_t)((uintptr_t)inputString + 0x10),dataValue3,
                  dataValue2);
 
       FUN_80076fc0(dataValue2,dataBuffer);
@@ -3746,7 +4091,7 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
       flag1 = 1;
       *sourceData = *destData;
       flag2 = 1;
-      pointer1 = &DAT_801cd554 + dataOffset * 0x2014 + *(short *)(inputString + 8) * 0x52 + 2;
+      pointer1 = (undefined2 *)(void *)(uintptr_t)((uintptr_t)&DAT_801cd554 + dataOffset * 0x2014 + *(short *)(void *)(uintptr_t)((uintptr_t)inputString + 8) * 0x52 + 2);
     }
   }
 
@@ -3796,26 +4141,26 @@ void FUN_arcade__80010c84(undefined4 stringParam1,undefined4 stringParam2,char *
   *sourceData = *destData;
 
   DAT_801c3618 = flag1;
-  FUN_8008cedc(&DAT_801c31fe,inputString + 0xb8);
+  FUN_8008cedc((char *)(void *)(uintptr_t)&DAT_801c31fe, (char *)(void *)(uintptr_t)((uintptr_t)inputString + 0xb8));
 
   dataOffset = 0;
   DAT_801c31f8 = *(undefined2 *)(inputString + 0x2cc);
   DAT_801c31fa = (short)inputString[2];
   loopIndex = 0x5c;
-  DAT_801c31fc = (ushort)*(byte *)((int)carDataStructure + 0x5a);
+  DAT_801c31fc = (ushort)*(byte *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 0x5a);
   DAT_801c31f0 = stringParam1;
   DAT_801c31f4 = stringParam2;
 
   do {
 
-    sourceData = (undefined4 *)((int)carDataStructure + loopIndex);
+    sourceData = (undefined4 *)(void *)(uintptr_t)((uintptr_t)carDataStructure + loopIndex);
 
-    if ((int)(uint)*(byte *)((int)carDataStructure + 0x5a) <= dataOffset) {
+    if ((int)(uint)*(byte *)(void *)(uintptr_t)((uintptr_t)carDataStructure + 0x5a) <= dataOffset) {
       DAT_801c3340 = *(undefined4 *)(inputString + 0x2d0);
       return;
     }
 
-    arrayIndex = (uint)*(byte *)((int)sourceData + 0x8d);
+    arrayIndex = (uint)*(byte *)(void *)(uintptr_t)((uintptr_t)sourceData + 0x8d);
 
     if (dataOffset == 0) {
 
@@ -3860,7 +4205,7 @@ void FUN_arcade__80011954(void)
   undefined4 sourceBuffer [196];
   undefined4 destBuffer [1380];
 
-  FUN_80082fac(&LAB_arcade__800267f4,sourceBuffer);
+  FUN_80082fac((undefined4 *)&LAB_arcade__800267f4,sourceBuffer);
 
   dataCount = (uint)DAT_801c98e0;
 
@@ -3884,7 +4229,7 @@ void FUN_arcade__80011954(void)
   return;
 }
 
-void FUN_arcade__80011a50(undefined4 graphicsParam,short *coordinateData)
+void FUN_arcade__80011a50(undefined4 graphicsParam __attribute__((unused)),short *coordinateData)
 
 {
   short coordinate1;
@@ -3916,18 +4261,18 @@ void FUN_arcade__80011a50(undefined4 graphicsParam,short *coordinateData)
   *(short *)(graphicsBuffer + 3) = coordinate1 + coordinate2;
 
   coordinate1 = coordinateData[1];
-  *(short *)((int)graphicsBuffer + 0xe) = coordinate1;
-  *(short *)((int)graphicsBuffer + 6) = coordinate1;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 0xe) = coordinate1;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 6) = coordinate1;
 
   coordinate1 = coordinateData[1];
   coordinate2 = coordinateData[3];
-  *(short *)((int)graphicsBuffer + 0x1e) = coordinate1 + coordinate2;
-  *(short *)((int)graphicsBuffer + 0x16) = coordinate1 + coordinate2;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 0x1e) = coordinate1 + coordinate2;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 0x16) = coordinate1 + coordinate2;
 
   return;
 }
 
-void FUN_arcade__80011b18(undefined4 graphicsParam,short *coordinateData)
+void FUN_arcade__80011b18(undefined4 graphicsParam __attribute__((unused)),short *coordinateData)
 
 {
   short coordinate1;
@@ -3955,13 +4300,13 @@ void FUN_arcade__80011b18(undefined4 graphicsParam,short *coordinateData)
   *(short *)(graphicsBuffer + 3) = coordinate1 + coordinate2;
 
   coordinate1 = coordinateData[1];
-  *(short *)((int)graphicsBuffer + 0xe) = coordinate1;
-  *(short *)((int)graphicsBuffer + 6) = coordinate1;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 0xe) = coordinate1;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 6) = coordinate1;
 
   coordinate1 = coordinateData[1];
   coordinate2 = coordinateData[3];
-  *(short *)((int)graphicsBuffer + 0x1e) = coordinate1 + coordinate2;
-  *(short *)((int)graphicsBuffer + 0x16) = coordinate1 + coordinate2;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 0x1e) = coordinate1 + coordinate2;
+  *(short *)(void *)(uintptr_t)((uintptr_t)graphicsBuffer + 0x16) = coordinate1 + coordinate2;
 
   return;
 }
@@ -3975,7 +4320,7 @@ void FUN_arcade__80011bb0(char *outputString,int number)
   int powerValue;
 
   digitCount = 7;
-  powerTable = &DAT_arcade__800274d0;
+  powerTable = (int *)(void *)(uintptr_t)&DAT_arcade__800274d0;
   do {
     if (*powerTable <= number) break;
     digitCount = digitCount + -1;
@@ -3983,7 +4328,7 @@ void FUN_arcade__80011bb0(char *outputString,int number)
   } while (0 < digitCount);
 
   if (0 < digitCount) {
-    powerTable = (int *)(&UNK_arcade__800274b4 + digitCount * 4);
+    powerTable = (int *)(UNK_arcade__800274b4 + digitCount * 4);
     do {
       powerValue = *powerTable;
       digitValue = number / powerValue;
@@ -4006,7 +4351,7 @@ void FUN_arcade__80011c48
 
 {
   short width;
-  int graphicsBuffer;
+  uint * graphicsBuffer;
   char tempChar;
   short scaledWidth;
   short height;
@@ -4014,7 +4359,7 @@ void FUN_arcade__80011c48
   width = *(short *)(primitiveData + 4);
   height = *(short *)(primitiveData + 6);
 
-  graphicsBuffer = FUN_8007e864(graphicsContext,colorValue | colorValue << 8 | colorValue << 0x10);
+  graphicsBuffer = FUN_8007e864((undefined4 *)(void *)(uintptr_t)graphicsContext,colorValue | colorValue << 8 | colorValue << 0x10);
 
   width = (short)((uint)(width * scaleFactor) >> 8);
   scaledWidth = xCoordinate - width;
@@ -4038,17 +4383,21 @@ void FUN_arcade__80011c48
   tempChar = *primitiveData;
   *(char *)(graphicsBuffer + 0x18) = tempChar;
   *(char *)(graphicsBuffer + 8) = tempChar;
-  cVar3 = *param_2 + param_2[4] + -1;
-  *(char *)(iVar2 + 0x20) = cVar3;
-  *(char *)(iVar2 + 0x10) = cVar3;
-  cVar3 = param_2[1];
-  *(char *)(iVar2 + 0x11) = cVar3;
-  *(char *)(iVar2 + 9) = cVar3;
-  cVar3 = param_2[1] + param_2[6] + -1;
-  *(char *)(iVar2 + 0x21) = cVar3;
-  *(char *)(iVar2 + 0x19) = cVar3;
-  *(undefined2 *)(iVar2 + 10) = *(undefined2 *)(param_2 + 2);
-  *(undefined2 *)(iVar2 + 0x12) = *(undefined2 *)(param_2 + 8);
+  {
+    char cVar3;
+    uint * iVar2 = graphicsBuffer;
+    cVar3 = *primitiveData + primitiveData[4] + -1;
+    *(char *)(iVar2 + 0x20) = cVar3;
+    *(char *)(iVar2 + 0x10) = cVar3;
+    cVar3 = primitiveData[1];
+    *(char *)(iVar2 + 0x11) = cVar3;
+    *(char *)(iVar2 + 9) = cVar3;
+    cVar3 = primitiveData[1] + primitiveData[6] + -1;
+    *(char *)(iVar2 + 0x21) = cVar3;
+    *(char *)(iVar2 + 0x19) = cVar3;
+    *(undefined2 *)(iVar2 + 10) = *(undefined2 *)(primitiveData + 2);
+    *(undefined2 *)(iVar2 + 0x12) = *(undefined2 *)(primitiveData + 8);
+  }
   return;
 }
 
@@ -4058,7 +4407,7 @@ void FUN_arcade__80011d74
 
 {
   short widthScaled;
-  int primitiveBuffer;
+  uint * primitiveBuffer;
   char textureCoord;
   short leftEdge;
   short heightScaled;
@@ -4066,7 +4415,7 @@ void FUN_arcade__80011d74
   widthScaled = *(short *)(primitiveData + 4);
   heightScaled = *(short *)(primitiveData + 6);
 
-  primitiveBuffer = FUN_8007e864(graphicsContext, colorValue | colorValue << 8 | colorValue << 0x10 | 0x2000000);
+  primitiveBuffer = FUN_8007e864((undefined4 *)(void *)(uintptr_t)graphicsContext, colorValue | colorValue << 8 | colorValue << 0x10 | 0x2000000);
 
   widthScaled = (short)((uint)(widthScaled * scaleFactor) >> 8);
   leftEdge = xCoordinate - widthScaled;
@@ -4211,16 +4560,16 @@ void FUN_arcade__80011f84(short *colorData,undefined4 graphicsContext,short xCoo
     blueStart = *(byte *)(colorData + 9);
     blueEnd = *(byte *)(colorData + 0xd);
     redStart2 = *(byte *)(colorData + 10);
-    greenStart2 = *(byte *)((int)colorData + 0x15);
+    greenStart2 = *(byte *)(void *)(uintptr_t)((uintptr_t)colorData + 0x15);
     blueStart2 = *(byte *)(colorData + 0xb);
 
     width = (short)((width * progressValue) / endValue);
     leftEdge = leftEdge - width;
     xCoordinate = xCoordinate + width;
 
-    alphaValue = *(byte *)((int)colorData + 0x13);
+    alphaValue = *(byte *)(void *)(uintptr_t)((uintptr_t)colorData + 0x13);
 
-    primitiveBuffer = (uint *)FUN_8007e0b0(graphicsContext);
+    primitiveBuffer = FUN_8007e0b0_with_context((undefined4 *)(void *)(uintptr_t)graphicsContext);
 
     color1 = (alphaValue | 0x38) << 0x18 |
              (uint)redStart + (int)(((uint)redEnd - (uint)redStart) * progressValue) / endValue |
@@ -4279,7 +4628,7 @@ void FUN_arcade__800122a4(int dataStructure)
 
 {
 
-  FUN_arcade__80012368();
+  FUN_arcade__80012368(dataStructure);
   *(undefined2 *)(dataStructure + 0x30) = 0;
   *(short *)(dataStructure + 0x42) = *(char *)(dataStructure + 1) + 0x4b;
   return;
@@ -4392,6 +4741,26 @@ void FUN_arcade__800124a0(char *dataStructure,undefined4 processingParam,int val
   int local_34;
   int local_30;
   int local_2c;
+  char *param_1 = dataStructure;
+  undefined4 param_2 = processingParam;
+  int param_3 = value1;
+  int param_4 = value2;
+  byte bVar1 __attribute__((unused));
+  byte bVar2;
+  byte bVar3;
+  short sVar4;
+  short sVar7;
+  short sVar9;
+  int iVar10;
+  int iVar11;
+  int iVar12;
+  int iVar14;
+  int iVar15;
+  int iVar6;
+  uint uVar8;
+  uint uVar13;
+  short *psVar5;
+  undefined auStack_160 [256];
 
   local_58 = (int)*(short *)(param_1 + 8);
 
@@ -4474,7 +4843,7 @@ void FUN_arcade__800124a0(char *dataStructure,undefined4 processingParam,int val
 
     iVar15 = (*(short *)(param_1 + 4) + local_58) - (local_58 * local_2c) / local_5c;
 
-    psVar5 = (short *)FUN_8007d024(param_2,uVar13);
+    psVar5 = (short *)FUN_8007d024_wrapper_2args(param_2,uVar13);
 
     sVar7 = (short)iVar10;
     *psVar5 = sVar7;
@@ -4505,7 +4874,7 @@ void FUN_arcade__800124a0(char *dataStructure,undefined4 processingParam,int val
       *(uint *)(param_3 + 0x14) = local_48;
       FUN_8006af40(param_3,auStack_160,iVar14,iVar15,1,(int)param_1[0xb],0);
 
-      psVar5 = (short *)FUN_8007d024(param_2,uVar13);
+      psVar5 = (short *)FUN_8007d024_wrapper_2args(param_2,uVar13);
       *psVar5 = sVar7;
       psVar5[1] = sVar9;
       psVar5[2] = 2;
@@ -4554,6 +4923,9 @@ void FUN_arcade__80012948(char *renderData,undefined4 graphicsContext,int output
   int local_34;
   int local_30;
   int local_2c;
+  char *param_1 = renderData;
+  undefined4 param_2 = graphicsContext;
+  int param_3 = outputBuffer;
 
   iVar11 = (int)*(short *)(param_1 + 0x3e);
 
@@ -4591,7 +4963,7 @@ void FUN_arcade__80012948(char *renderData,undefined4 graphicsContext,int output
 
     iVar9 = (int)*(short *)(param_1 + 2) + (*(short *)(param_1 + 6) * iVar10) / iVar11;
 
-    puVar4 = (undefined2 *)FUN_8007d024(param_2,uVar3 | iVar5 * 0x100 | iVar7 * 0x10000);
+    puVar4 = (undefined2 *)FUN_8007d024_wrapper_2args(param_2,uVar3 | iVar5 * 0x100 | iVar7 * 0x10000);
 
     uVar8 = (undefined2)iVar9;
     *puVar4 = uVar8;
@@ -4641,7 +5013,7 @@ void FUN_arcade__80012948(char *renderData,undefined4 graphicsContext,int output
 void FUN_arcade__80012d38(int renderData,undefined4 graphicsContext,undefined4 additionalParam,int renderMode)
 
 {
-  byte bVar1;
+  byte bVar1 __attribute__((unused));
   byte bVar2;
   byte bVar3;
   short sVar4;
@@ -4659,6 +5031,10 @@ void FUN_arcade__80012d38(int renderData,undefined4 graphicsContext,undefined4 a
   uint uVar16;
   uint uVar17;
   undefined2 local_30;
+  int param_1 = renderData;
+  undefined4 param_2 = graphicsContext;
+  undefined4 param_3 = additionalParam;
+  int param_4 = renderMode;
 
   sVar4 = *(short *)(param_1 + 8);
 
@@ -4758,6 +5134,9 @@ void FUN_arcade__80013050(char *renderData,undefined4 graphicsContext,undefined4
   short local_22;
   int local_20;
   int local_1c;
+  char *param_1 = renderData;
+  undefined4 param_2 = graphicsContext;
+  undefined4 param_3 = outputBuffer;
 
   uVar3 = (uint)*(short *)(param_1 + 0x30);
 
@@ -4803,7 +5182,7 @@ void FUN_arcade__80013050(char *renderData,undefined4 graphicsContext,undefined4
       iVar2 = (int)*param_1;
     }
 
-    FUN_8007da44(param_2,iVar2);
+    FUN_8007da44_wrapper_2args(param_2,iVar2);
   }
   return;
 }
@@ -4824,6 +5203,10 @@ void FUN_arcade__80013378
   undefined4 uVar3;
   undefined4 uVar4;
   undefined4 uVar5;
+  undefined4 *param_1 = destination;
+  undefined4 param_2 = sourceParam1;
+  undefined4 param_3 = sourceParam2;
+  undefined4 *param_4 = sourceData;
 
   puVar1 = param_1 + 2;
   puVar2 = param_4 + 0x20;
@@ -4858,8 +5241,8 @@ bool FUN_arcade__800133c0(short *dataStructure)
   currentValue = (int)*dataStructure;
 
   if (currentValue < 100) {
-
-    FUN_arcade__80013378(dataStructure + currentValue * 0x52 + 2);
+    undefined4 *dataPtr = (undefined4 *)(dataStructure + currentValue * 0x52 + 2);
+    FUN_arcade__80013378(dataPtr, 0, 0, dataPtr);
 
     *dataStructure = *dataStructure + 1;
   }
@@ -4884,6 +5267,8 @@ void FUN_arcade__80013674(int dataPointer,uint processingValue)
   undefined2 local_e;
   undefined2 local_c;
   undefined2 local_a;
+  uint param_2 = processingValue;
+  int iVar1 = calculatedOffset;
 
   calculatedOffset = dataPointer + 8;
 
@@ -4891,6 +5276,7 @@ void FUN_arcade__80013674(int dataPointer,uint processingValue)
 
     calculatedOffset = calculatedOffset + *(int *)(dataPointer + 8);
   }
+  iVar1 = calculatedOffset;
   local_10 = (undefined2)((param_2 & 0xf) << 6);
   local_e = (undefined2)((param_2 & 0x10) << 4);
   local_c = *(undefined2 *)(iVar1 + 8);
@@ -4973,6 +5359,7 @@ void FUN_arcade__80013844(int param_1,int param_2,int param_3,int param_4)
   int textHeight;
   int renderData;
   short tempValue;
+  void (*func_ptr)(int, int);
 
   graphicsContext = *(int *)(param_3 + 8);
   renderData = *(int *)(param_1 + 0x1c4);
@@ -4988,7 +5375,7 @@ void FUN_arcade__80013844(int param_1,int param_2,int param_3,int param_4)
       dataOffset = FUN_8006ad3c(renderData,*(undefined4 *)(param_2 + 0x10),textHeight);
       textWidth = 0x160 - dataOffset >> 1;
 
-      graphicsBuffer = (short *)FUN_8007d024(graphicsOffset,param_4 * 0xf5 >> 7 | (param_4 * 0x5c >> 7) << 8 |
+      graphicsBuffer = (short *)FUN_8007d024_wrapper_2args(graphicsOffset,param_4 * 0xf5 >> 7 | (param_4 * 0x5c >> 7) << 8 |
                                            (param_4 * 0x19 >> 7) << 0x10);
       *graphicsBuffer = (short)textWidth + 1;
       graphicsBuffer[1] = 0x4e;
@@ -5005,7 +5392,7 @@ void FUN_arcade__80013844(int param_1,int param_2,int param_3,int param_4)
 
       colorValue = *(uint *)(param_2 + 0xc);
       graphicsContext = graphicsContext + 0x18;
-      colorBuffer = (uint *)FUN_8007e0b0(graphicsContext);
+      colorBuffer = FUN_8007e0b0_with_context((undefined4 *)(void *)(uintptr_t)graphicsContext);
 
       colorBuffer[6] = 0;
       colorBuffer[4] = 0;
@@ -5028,13 +5415,25 @@ void FUN_arcade__80013844(int param_1,int param_2,int param_3,int param_4)
       *(short *)((int)colorBuffer + 0x1e) = coordinate2;
       *(short *)((int)colorBuffer + 0x16) = coordinate2;
 
-      FUN_8007da44(graphicsContext,0x220);
+      FUN_8007da44_wrapper_2args(graphicsContext,0x220);
     }
 
     *(int *)(param_1 + 0x1c8) = param_2;
     if (*(code **)(param_2 + 8) != (code *)0x0) {
-      (**(code **)(param_2 + 8))(param_1,param_3);
+      func_ptr = (void (*)(int, int))*(code **)(param_2 + 8);
+      func_ptr(param_1,param_3);
     }
   }
   return;
 }
+
+// Implementation of FUN_8007e0b0_wrapper
+uint * FUN_8007e0b0_wrapper(void) {
+    // This is a wrapper that calls the graphics buffer allocation function
+    // The actual implementation should return a pointer to a graphics buffer
+    // For now, return NULL as this needs proper implementation
+    return (uint *)0;
+}
+
+#pragma GCC diagnostic pop
+

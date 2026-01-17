@@ -30,7 +30,7 @@ void FUN_overlay0__80054794(undefined4 param_1);
 void FUN_overlay0__80054b9c(undefined *param_1,int param_2,uint param_3);
 void FUN_overlay0__80054cc8(int param_1);
 void FUN_overlay0__80054d10(int param_1,uint *param_2);
-void FUN_overlay0__800551bc(int param_1,int param_2,undefined4 param_3,int param_4);
+void FUN_overlay0__800551bc(int param_1,int param_2,undefined4 param_3,int param_4,int param_5);
 void FUN_overlay0__80055e90(undefined2 *param_1,undefined2 param_2,undefined2 param_3);
 void FUN_overlay0__80055fd0(int param_1);
 void FUN_overlay0__80055fe0(int param_1);

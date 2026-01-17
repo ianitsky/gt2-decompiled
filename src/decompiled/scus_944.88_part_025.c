@@ -1,5 +1,95 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "ps1_stubs.h"
+#include <stdint.h>
+#include <stddef.h>
 
-void FUN_overlay3__80011b0c(int param_1,undefined4 *param_2)
+// CONCAT11 macro: Concatenate 1 byte with 1 byte into a 16-bit value
+#define CONCAT11(byte1, byte2) \
+    (((uint16_t)(byte1) << 8) | ((uint16_t)(byte2)))
+
+// Forward declarations for overlay3 functions
+void FUN_overlay3__80010000(undefined4 *param_1);
+void FUN_overlay3__80010024(undefined4 *param_1, undefined4 param_2);
+void FUN_overlay3__80011858(undefined4 *param_1, undefined4 *param_2);
+
+// Forward declarations for overlay5 functions
+void FUN_overlay5__8001049c(void);
+undefined4 FUN_overlay5__80010634(uint *param_1);
+bool FUN_overlay5__800106ec(uint *param_1);
+undefined4 FUN_overlay5__80010894(uint *param_1);
+void FUN_overlay5__80010610(undefined4 param_1);
+void FUN_overlay5__80010950(int param_1, undefined param_2);
+void FUN_overlay5__80010994(int param_1, int param_2, int param_3);
+void FUN_overlay5__800109e4(undefined2 *param_1, int param_2, undefined2 param_3, u_long *param_4);
+void FUN_overlay5__80010a90(int param_1);
+void FUN_overlay5__80010ac0(ushort *param_1, ushort *param_2);
+void FUN_overlay5__8001090c(uint *param_1);
+
+// Forward declarations for other functions
+void FUN_8005f958(undefined4 *param_1, undefined2 *param_2);
+void FUN_8005eac0(undefined4 *param_1, int param_2, int param_3);
+uint FUN_80078138(int param_1);
+uint FUN_80083ae0(undefined4 param_1);
+void *FUN_80078038(int param_1, int param_2);
+int FUN_80060b70(undefined4 param_1);
+undefined2 FUN_80060d28(undefined4 param_1, int param_2);
+uint FUN_80060bec(undefined4 param_1, int *param_2, int *param_3);
+undefined4 FUN_80060ae8(undefined4 param_1);
+void FUN_8008cedc(undefined4 *param_1, undefined4 param_2);
+void FUN_800771ac(undefined4 *param_1, undefined4 *param_2);
+void FUN_8008ce30(void *param_1, int param_2, int param_3);
+void FUN_80081c5c(void);
+undefined4 FUN_80081cf8(int param_1);
+int FUN_8007c4ec(int param_1);
+void FUN_8007c570(void);
+void FUN_8007ba70(undefined4 *param_1, undefined4 param_2, int param_3);
+void FUN_8007af30(void);
+void FUN_8007d23c(int param_1);
+void FUN_8007d0f0(int param_1);
+void FUN_80080858(void);
+void FUN_8007fab8(undefined4 *param_1, int param_2, undefined4 *param_3);
+void FUN_8007fb38(undefined4 *param_1);
+void FUN_800808c4(undefined4 *param_1, undefined4 param_2);
+void FUN_800833e8(undefined4 *param_1);
+void *FUN_80083d0c(undefined4 *param_1, undefined4 *param_2);
+void FUN_8007f830(int param_1);
+
+// GTE functions
+void gte_ldLZCS(uint param_1);
+int gte_stLZCR(void);
+
+// External variables
+extern undefined1 UNK_801cd558[];
+extern undefined4 DAT_80171034;
+extern undefined2 DAT_801727ea;
+extern undefined2 DAT_801727ec;
+extern undefined4 DAT_801d585c;
+extern undefined4 DAT_801d5fa0;
+extern undefined4 DAT_800a8d5c;
+extern undefined4 DAT_801f068c;
+extern undefined4 DAT_801c93cc;
+extern undefined DAT_801f0531;
+extern undefined4 DAT_801f0528;
+extern undefined4 DAT_801f0534;
+extern undefined4 DAT_801f0538;
+extern undefined DAT_801f0532;
+extern undefined DAT_801f0533;
+extern undefined4 DAT_801f053c;
+extern undefined DAT_801f0676;
+extern undefined DAT_800959ac;
+extern undefined4 DAT_8017c9dc[];
+extern undefined1 DAT_80132280[];
+extern undefined4 DAT_800a6f5c;
+extern undefined4 LAB_overlay5__800105ac;
+extern undefined4 LAB_overlay5__80010420;
+extern undefined4 LAB_overlay5__8001156c;
+extern undefined4 LAB_overlay5__800120cc;
+extern undefined4 LAB_overlay5__800120d2_2;
+extern undefined4 LAB_overlay5__800114cc;
+
+void FUN_overlay3__80011b0c(undefined4 *param_1,undefined4 *param_2)
 
 {
 
@@ -13,7 +103,7 @@ void FUN_overlay3__80011b0c(int param_1,undefined4 *param_2)
   undefined2 local_14;
   byte local_12;
 
-  puVar2 = (undefined4 *)(param_1 + 8);
+  puVar2 = (undefined4 *)((char *)param_1 + 8);
 
   puVar1 = param_2;
 
@@ -36,16 +126,16 @@ void FUN_overlay3__80011b0c(int param_1,undefined4 *param_2)
 
   FUN_8005f958(param_2,&local_18);
 
-  *(ushort *)(param_1 + 0x98) = *(ushort *)(param_1 + 0x98) & 0xc000 | local_16;
+  *(ushort *)((char *)param_1 + 0x98) = (*(ushort *)((char *)param_1 + 0x98) & 0xc000) | local_16;
 
-  *(undefined2 *)(param_1 + 0x96) = local_14;
+  *(undefined2 *)((char *)param_1 + 0x96) = local_14;
 
-  *(ushort *)(param_1 + 0x94) = *(ushort *)(param_1 + 0x94) & 0xe000 | local_18;
+  *(ushort *)((char *)param_1 + 0x94) = (*(ushort *)((char *)param_1 + 0x94) & 0xe000) | local_18;
 
-  *(ushort *)(param_1 + 0x94) = local_18 & 0x1fff | (ushort)local_12 << 0xd;
+  *(ushort *)((char *)param_1 + 0x94) = (local_18 & 0x1fff) | ((ushort)local_12 << 0xd);
 
-  *(ushort *)(param_1 + 0x98) =
-       *(ushort *)(param_1 + 0x98) & 0x7fff | (ushort)(0 < *(short *)((int)param_2 + 0x17d6)) << 0xf
+  *(ushort *)((char *)param_1 + 0x98) =
+       (*(ushort *)((char *)param_1 + 0x98) & 0x7fff) | ((ushort)(0 < *(short *)((char *)param_2 + 0x17d6)) << 0xf)
   ;
   return;
 }
@@ -56,7 +146,7 @@ void FUN_overlay3__80011be8(int param_1,int param_2,int param_3)
   undefined4 uVar1;
   undefined4 *puVar2;
 
-  puVar2 = (undefined4 *)(&UNK_801cd558 + param_1 * 0x4028 + param_2 * 0xa4);
+  puVar2 = (undefined4 *)((char *)UNK_801cd558 + param_1 * 0x4028 + param_2 * 0xa4);
 
   FUN_overlay3__80010000(&DAT_80171034);
 
@@ -232,7 +322,7 @@ ushort FUN_overlay3__80011ec0
   int iVar12;
   undefined4 uVar13;
   int iVar14;
-  undefined auStack_40 [2];
+  undefined2 auStack_40 [2];
   short local_3e;
   int local_38;
   int local_34;
@@ -261,7 +351,7 @@ ushort FUN_overlay3__80011ec0
 
       uVar4 = FUN_80083ae0(param_4);
 
-      uVar4 = *(uint *)(param_3 + (uVar4 % uVar3) * 4 + 4);
+      uVar4 = *(uint *)((char *)param_3 + (uVar4 % uVar3) * 4 + 4);
 
       uVar10 = uVar4 & 0xffff;
 
@@ -313,22 +403,22 @@ LAB_overlay3__80012078:
 
     iVar6 = (uVar10 % uVar3) * 2;
 
-    FUN_overlay3__80011d74(*(undefined2 *)(iVar6 + local_38),auStack_40);
+    FUN_overlay3__80011d74(*(undefined2 *)((char *)local_38 + iVar6),auStack_40);
     iVar14 = iVar14 + 1;
 
     if (5 < local_3e) break;
   }
 
-  cVar9 = *(char *)(local_34 + uVar10 % uVar3);
+  cVar9 = *(char *)((char *)local_34 + uVar10 % uVar3);
 
-  uVar2 = *(undefined2 *)(iVar6 + local_38);
+  uVar2 = *(undefined2 *)((char *)local_38 + iVar6);
 
 LAB_overlay3__800120dc:
 
   *param_1 = uVar13;
-  *(char *)((int)param_1 + 5) = cVar9;
-  *(undefined2 *)((int)param_1 + 6) = uVar2;
-  *(short *)(param_1 + 2) = (short)uVar4;
+  *(char *)((char *)param_1 + 5) = cVar9;
+  *(undefined2 *)((char *)param_1 + 6) = uVar2;
+  *(short *)((char *)param_1 + 8) = (short)uVar4;
   return local_30;
 }
 
@@ -348,9 +438,9 @@ void FUN_overlay3__80012130(int param_1,undefined4 param_2,uint param_3,undefine
 
     uVar4 = FUN_80083ae0(param_4);
 
-    uVar2 = *(undefined2 *)((uVar4 % uVar3) * 2 + local_18);
+    uVar2 = *(undefined2 *)((char *)local_18 + (uVar4 % uVar3) * 2);
 
-    *(undefined *)(param_1 + 5) = *(undefined *)(local_14 + uVar4 % uVar3);
+    *(undefined *)((char *)param_1 + 5) = *(undefined *)((char *)local_14 + uVar4 % uVar3);
   }
   else {
 
@@ -358,10 +448,10 @@ void FUN_overlay3__80012130(int param_1,undefined4 param_2,uint param_3,undefine
 
     uVar2 = FUN_80060d28(param_2,(int)cVar1);
 
-    *(char *)(param_1 + 5) = cVar1;
+    *(char *)((char *)param_1 + 5) = cVar1;
   }
 
-  *(undefined2 *)(param_1 + 6) = uVar2;
+  *(undefined2 *)((char *)param_1 + 6) = uVar2;
   return;
 }
 
@@ -378,7 +468,7 @@ FUN_overlay3__800127ac
   undefined4 uVar5;
   undefined4 *puVar6;
 
-  puVar6 = (undefined4 *)(param_1 + param_2 * 0xd0 + 0x5c);
+  puVar6 = (undefined4 *)((char *)param_1 + param_2 * 0xd0 + 0x5c);
 
   if (-1 < param_3) {
 
@@ -386,12 +476,12 @@ FUN_overlay3__800127ac
 
     *(undefined *)(puVar6 + 0x23) = 1;
 
-    *(char *)((int)puVar6 + 0x8d) = (char)param_3;
+    *(char *)((char *)puVar6 + 0x8d) = (char)param_3;
   }
 
-  *(undefined *)((int)puVar6 + 0x8e) = param_4;
+  *(undefined *)((char *)puVar6 + 0x8e) = param_4;
   puVar2 = puVar6 + 2;
-  *(undefined *)((int)puVar6 + 0x8f) = param_5;
+  *(undefined *)((char *)puVar6 + 0x8f) = param_5;
 
   puVar1 = (undefined4 *)(param_6 + 8);
 
@@ -411,19 +501,19 @@ FUN_overlay3__800127ac
 
     puVar1 = puVar1 + 4;
     puVar2 = puVar2 + 4;
-  } while (puVar1 != (undefined4 *)(param_6 + 0x88));
+  } while (puVar1 != (undefined4 *)((char *)param_6 + 0x88));
 
   *puVar2 = *puVar1;
 
-  *(byte *)((int)puVar6 + 0x82) = *(byte *)((int)puVar6 + 0x82) | 0x40;
+  *(byte *)((char *)puVar6 + 0x82) = *(byte *)((char *)puVar6 + 0x82) | 0x40;
 
   uVar3 = FUN_80060ae8(*puVar6);
   FUN_8008cedc(puVar6 + 0x24,uVar3);
 
-  *(undefined2 *)(param_1 + 0x582) = param_7;
-  *(undefined2 *)(param_1 + 0x584) = param_8;
+  *(undefined2 *)((char *)param_1 + 0x582) = param_7;
+  *(undefined2 *)((char *)param_1 + 0x584) = param_8;
 
-  FUN_800771ac(puVar6 + 2,&DAT_801de8ba + param_2 * 0x70);
+  FUN_800771ac(puVar6 + 2,(undefined4 *)((char *)DAT_801de8ba + param_2 * 0x70));
 
   return puVar6;
 }
@@ -443,18 +533,18 @@ void FUN_overlay3__8001290c(int param_1)
 
   if (cVar1 == '\x04') {
 
-    iVar6 = (int)*(short *)(param_1 + 6);
+    iVar6 = (int)*(short *)((char *)param_1 + 6);
     if (iVar6 < 0) {
 
       return;
     }
 
-    FUN_overlay3__80011be8(iVar6,(int)*(short *)(param_1 + 8),*(undefined4 *)(param_1 + 0x2cc));
+    FUN_overlay3__80011be8(iVar6,(int)*(short *)((char *)param_1 + 8),*(undefined4 *)((char *)param_1 + 0x2cc));
 
-    cVar1 = *(char *)(param_1 + 0x18);
+    cVar1 = *(char *)((char *)param_1 + 0x18);
     uVar3 = 0xffffffff;
 
-    puVar4 = &UNK_801cd558 + iVar6 * 0x4028 + *(short *)(param_1 + 8) * 0xa4;
+    puVar4 = (undefined *)((char *)UNK_801cd558 + iVar6 * 0x4028 + *(short *)((char *)param_1 + 8) * 0xa4);
   }
   else {
     if (cVar1 < '\x05') {
@@ -469,19 +559,19 @@ void FUN_overlay3__8001290c(int param_1)
 
       for (; iVar7 < 2; iVar7 = iVar7 + 1) {
 
-        iVar5 = (int)*(short *)(iVar6 + 0xa0);
+        iVar5 = (int)*(short *)((char *)iVar6 + 0xa0);
         if (-1 < iVar5) {
 
-          sVar2 = *(short *)(iVar6 + 0xa4);
+          sVar2 = *(short *)((char *)iVar6 + 0xa4);
 
-          FUN_overlay3__80011be8(iVar5,(int)sVar2,*(undefined4 *)(param_1 + 0x2cc));
+          FUN_overlay3__80011be8(iVar5,(int)sVar2,*(undefined4 *)((char *)param_1 + 0x2cc));
 
           FUN_overlay3__800127ac
-                    (&DAT_801d585c,iVar7,iVar7,iVar7 + 3,(int)*(char *)(param_1 + iVar7 + 0xb6),
-                     &UNK_801cd558 + iVar5 * 0x4028 + sVar2 * 0xa4,0xffffffff,0xffffffff);
+                    ((int)&DAT_801d585c,iVar7,iVar7,iVar7 + 3,(int)*(char *)((char *)param_1 + iVar7 + 0xb6),
+                     (int)((char *)UNK_801cd558 + iVar5 * 0x4028 + sVar2 * 0xa4),0xffffffff,0xffffffff);
         }
 
-        iVar6 = iVar6 + 2;
+        iVar6 = (int)((char *)iVar6 + 2);
       }
       return;
     }
@@ -491,20 +581,20 @@ void FUN_overlay3__8001290c(int param_1)
       return;
     }
 
-    iVar6 = (int)*(short *)(param_1 + 6);
+    iVar6 = (int)*(short *)((char *)param_1 + 6);
     if (iVar6 < 0) {
 
       return;
     }
 
-    sVar2 = *(short *)(param_1 + 8);
+    sVar2 = *(short *)((char *)param_1 + 8);
 
-    FUN_overlay3__80011be8(iVar6,(int)sVar2,*(undefined4 *)(param_1 + 0x2cc));
+    FUN_overlay3__80011be8(iVar6,(int)sVar2,*(undefined4 *)((char *)param_1 + 0x2cc));
 
     uVar3 = 0;
-    cVar1 = *(char *)(param_1 + 0x18);
+    cVar1 = *(char *)((char *)param_1 + 0x18);
 
-    puVar4 = &UNK_801cd558 + iVar6 * 0x4028 + sVar2 * 0xa4;
+    puVar4 = (undefined *)((char *)UNK_801cd558 + iVar6 * 0x4028 + sVar2 * 0xa4);
   }
 
   FUN_overlay3__800127ac
@@ -519,11 +609,11 @@ void FUN_overlay3__80012b68(int param_1,int param_2)
   FUN_overlay3__80010000(&DAT_801d5fa0);
 
   FUN_overlay3__80010024
-            (&DAT_801d5fa0,*(undefined4 *)(&UNK_801cd558 + param_1 * 0x4028 + param_2 * 0xa4));
+            (&DAT_801d5fa0,*(undefined4 *)((char *)UNK_801cd558 + param_1 * 0x4028 + param_2 * 0xa4));
 
   FUN_overlay3__80011858
             (&DAT_801d5fa0,
-             (undefined4 *)((int)(&UNK_801cd558 + param_1 * 0x4028 + param_2 * 0xa4) + 8));
+             (undefined4 *)((char *)UNK_801cd558 + param_1 * 0x4028 + param_2 * 0xa4 + 8));
   return;
 }
 
@@ -627,7 +717,7 @@ void FUN_overlay5__80010174(int param_1)
 
   DecDCToutCallback(FUN_overlay5__8001049c);
 
-  FUN_overlay5__80010634(param_1 + 8);
+  FUN_overlay5__80010634((uint *)((char *)param_1 + 8));
   return;
 }
 
@@ -641,9 +731,9 @@ undefined4 FUN_overlay5__800101b4(int param_1)
 
   uVar2 = 1;
 
-  if (*(short *)(param_1 + 0x10) == 0) {
+  if (*(short *)((char *)param_1 + 0x10) == 0) {
 
-    if ((*(uint *)(param_1 + 8) & 4) == 0) {
+    if ((*(uint *)((char *)param_1 + 8) & 4) == 0) {
 
       if (DAT_801f0676 == '\0') {
 
@@ -671,9 +761,9 @@ void FUN_overlay5__80010250(int param_1)
 
   DecDCToutCallback((func *)0x0);
 
-  FUN_overlay5__80010a90(param_1 + 0x24);
+  FUN_overlay5__80010a90((int)((char *)param_1 + 0x24));
 
-  FUN_overlay5__800106a4(param_1 + 8);
+  FUN_overlay5__800106a4((uint *)((char *)param_1 + 8));
   return;
 }
 
@@ -690,15 +780,15 @@ bool FUN_overlay5__800102a8(int param_1)
 {
   int videoDataPointer;
 
-  videoDataPointer = *(int *)(param_1 + 0x4c);
+  videoDataPointer = *(int *)((char *)param_1 + 0x4c);
 
   if (videoDataPointer != 0) {
 
     FUN_overlay5__80010994
-              (param_1 + 0x24,(int)*(short *)(param_1 + 0x40),(int)*(short *)(param_1 + 0x42));
+              ((int)((char *)param_1 + 0x24),(int)*(short *)((char *)param_1 + 0x40),(int)*(short *)((char *)param_1 + 0x42));
 
     FUN_overlay5__800109e4
-              (param_1 + 0x24,(int)*(short *)(param_1 + 0x3c),(int)*(short *)(param_1 + 0x3e),videoDataPointer)
+              ((undefined2 *)((char *)param_1 + 0x24),(int)*(short *)((char *)param_1 + 0x3c),(int)*(short *)((char *)param_1 + 0x3e),(u_long *)videoDataPointer)
     ;
   }
 
@@ -734,7 +824,7 @@ void FUN_overlay5__80010318(int param_1,undefined2 param_2,undefined2 param_3)
 
   FUN_overlay5__80010ac0(bufferPointer,tempData2);
 
-  FUN_overlay5__8001090c(param_1 + 8);
+  FUN_overlay5__8001090c((uint *)((char *)param_1 + 8));
 
   *(undefined4 *)(param_1 + 0x4c) = tempData2;
   return;
@@ -744,9 +834,9 @@ void FUN_overlay5__800103a8(undefined4 param_1,undefined4 param_2,undefined4 par
 
 {
 
-  FUN_overlay5__800102a8();
+  FUN_overlay5__800102a8((int)param_1);
 
-  FUN_overlay5__80010318(param_1,param_2,param_3);
+  FUN_overlay5__80010318((int)param_1,param_2,param_3);
   return;
 }
 
@@ -756,11 +846,11 @@ uint FUN_overlay5__80010450(int param_1)
   int streamStatus;
   uint statusFlags;
 
-  statusFlags = *(uint *)(param_1 + 8);
+  statusFlags = *(uint *)((char *)param_1 + 8);
 
-  if (*(char *)(param_1 + 0x2c) == '\0') {
+  if (*(char *)((char *)param_1 + 0x2c) == '\0') {
 
-    *(uint *)(param_1 + 8) = statusFlags | 8;
+    *(uint *)((char *)param_1 + 8) = statusFlags | 8;
     statusFlags = statusFlags >> 1 & 2;
   }
   else {
@@ -777,7 +867,7 @@ void FUN_overlay5__8001049c(void)
 
 {
 
-  FUN_overlay5__800104c4(DAT_800a8d5c);
+  FUN_overlay5__800104c4((int)DAT_800a8d5c);
   return;
 }
 
@@ -788,7 +878,7 @@ void FUN_overlay5__800104c4(int param_1)
   ushort frameCounter;
   uint newFrameCounter;
 
-  frameCounter = *(ushort *)(param_1 + 0x32);
+  frameCounter = *(ushort *)((char *)param_1 + 0x32);
 
   videoMode = *(char *)(param_1 + 0x2d);
 
@@ -826,10 +916,10 @@ void FUN_overlay5__800105d4(int param_1)
 
 {
 
-  if ((*(char *)(param_1 + 0x2c) == '\x01') &&
-     (*(undefined *)(param_1 + 0x2c) = 2, *(code **)(param_1 + 4) != (code *)0x0)) {
+  if ((*(char *)((char *)param_1 + 0x2c) == '\x01') &&
+     (*(undefined *)((char *)param_1 + 0x2c) = 2, *(code **)((char *)param_1 + 4) != (code *)0x0)) {
 
-    (**(code **)(param_1 + 4))();
+    (**(code **)((char *)param_1 + 4))();
   }
   return;
 }
@@ -852,7 +942,7 @@ undefined4 FUN_overlay5__80010634(uint *param_1)
   interruptState = FUN_80081cf8(0);
 
   *(undefined2 *)(param_1 + 1) = 0;
-  *(undefined2 *)((int)param_1 + 6) = 0;
+  *(undefined2 *)((char *)param_1 + 6) = 0;
   *(undefined2 *)(param_1 + 2) = 0;
 
   *param_1 = *param_1 & 1;
@@ -918,7 +1008,7 @@ bool FUN_overlay5__800106ec(uint *param_1)
   processedSectors = param_1[6];
   totalSectors = param_1[5];
   bufferAddress = (void *)param_1[4];
-  bufferIndex = *(ushort *)((int)param_1 + 6);
+  bufferIndex = *(ushort *)((char *)param_1 + 6);
   sectorIndex = *(ushort *)(param_1 + 2);
 
   if ((statusFlags & 4) != 0) {
@@ -932,7 +1022,7 @@ bool FUN_overlay5__800106ec(uint *param_1)
     statusFlags = statusFlags & 0xfffffffd;
     tempFlags = statusFlags;
 
-    if (sectorIndex == *(ushort *)((int)param_1 + 10)) {
+    if (sectorIndex == *(ushort *)((char *)param_1 + 10)) {
 LAB_overlay5__800107e4:
 
       statusFlags = tempFlags | 2;
@@ -955,14 +1045,14 @@ LAB_overlay5__800107e4:
   }
 
   processedSectors = processedSectors + 1;
-  nextBuffer = (void *)((int)bufferAddress + 0x7e0);
+  nextBuffer = (void *)((char *)bufferAddress + 0x7e0);
 
   if (sectorCount == sectorCount2 - 1) {
 
     bufferIndex = bufferIndex + 1;
     sectorIndex = sectorIndex + 1;
 
-    if (bufferIndex == *(ushort *)((int)param_1 + 10)) {
+    if (bufferIndex == *(ushort *)((char *)param_1 + 10)) {
       bufferIndex = 0;
     }
 
@@ -982,13 +1072,13 @@ LAB_overlay5__8001084c:
   param_1[6] = processedSectors;
   param_1[5] = totalSectors;
   param_1[4] = (uint)bufferAddress;
-  *(ushort *)((int)param_1 + 6) = bufferIndex;
+  *(ushort *)((char *)param_1 + 6) = bufferIndex;
   *(ushort *)(param_1 + 2) = sectorIndex;
 
   return (statusFlags & 4) != 0;
 }
 
-undefined4 FUN_overlay5__80010894(int param_1)
+undefined4 FUN_overlay5__80010894(uint *param_1)
 
 {
   undefined4 interruptState;
@@ -999,17 +1089,17 @@ undefined4 FUN_overlay5__80010894(int param_1)
 
   bufferData = 0;
 
-  if (*(short *)(param_1 + 8) != 0) {
+  if (*(short *)((char *)param_1 + 8) != 0) {
 
-    nextIndex = *(short *)(param_1 + 4) + 1;
+    nextIndex = *(short *)((char *)param_1 + 4) + 1;
 
-    bufferData = *(undefined4 *)(*(short *)(param_1 + 4) * 4 + *(int *)(param_1 + 0xc));
+    bufferData = *(undefined4 *)((char *)(*(undefined4 *)((char *)param_1 + 0xc)) + *(short *)((char *)param_1 + 4) * 4);
 
-    if (nextIndex == *(short *)(param_1 + 10)) {
+    if (nextIndex == *(short *)((char *)param_1 + 10)) {
       nextIndex = 0;
     }
 
-    *(short *)(param_1 + 4) = (short)nextIndex;
+    *(short *)((char *)param_1 + 4) = (short)nextIndex;
   }
 
   FUN_80081cf8(interruptState);
@@ -1017,7 +1107,7 @@ undefined4 FUN_overlay5__80010894(int param_1)
   return bufferData;
 }
 
-void FUN_overlay5__8001090c(int param_1)
+void FUN_overlay5__8001090c(uint *param_1)
 
 {
   undefined4 interruptState;
@@ -1025,13 +1115,13 @@ void FUN_overlay5__8001090c(int param_1)
 
   interruptState = FUN_80081cf8(0);
 
-  bufferCount = *(short *)(param_1 + 8);
+  bufferCount = *(short *)((char *)param_1 + 8);
 
   if (bufferCount != 0) {
     bufferCount = bufferCount + -1;
   }
 
-  *(short *)(param_1 + 8) = bufferCount;
+  *(short *)((char *)param_1 + 8) = bufferCount;
 
   FUN_80081cf8(interruptState);
   return;
@@ -1083,7 +1173,7 @@ void FUN_overlay5__800109e4(undefined2 *param_1,int param_2,undefined2 param_3,u
   ushort bufferIndex;
   uint decodingMode;
 
-  decodingMode = (uint)*(byte *)((int)param_1 + 9);
+  decodingMode = (uint)*(byte *)((char *)param_1 + 9);
 
   bufferIndex = param_1[6];
 
@@ -1152,8 +1242,12 @@ void FUN_overlay5__80010ac0(ushort *param_1,ushort *param_2)
 
   blockCount = totalBlocks * 6;
 
-  dataBuffer = (undefined *)
-           FUN_80083d0c(&stack0xffffffe8 + -(totalBlocks * 0xc + 7U & 0xfffffff8),param_1 + 5);
+  {
+    undefined stack_buffer[256];  // Local stack buffer for allocation
+    uintptr_t stack_offset = (uintptr_t)stack_buffer + sizeof(stack_buffer) - (totalBlocks * 0xc + 7U & 0xfffffff8);
+    dataBuffer = (undefined *)
+             FUN_80083d0c((undefined4 *)(void *)stack_offset, (undefined4 *)((char *)param_1 + 5));
+  }
 
   bitData2 = (uint)sourceData[1];
   sourceData2 = sourceData + 2;
@@ -1374,7 +1468,7 @@ void FUN_overlay5__80010e64(undefined4 *param_1,undefined4 param_2,int param_3)
     modeValue = 3;
   }
 
-  *(undefined *)((int)param_1 + 0x1e) = modeValue;
+  *(undefined *)((char *)param_1 + 0x1e) = modeValue;
 
   param_1[0x52] = 0;
 

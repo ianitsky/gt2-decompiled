@@ -1,3 +1,8 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_004.h"
+#include "scus_944.88_part_006.h"
 
 void FUN_80078408(void)
 {
@@ -16,15 +21,15 @@ void FUN_80078408(void)
 
   do {
 
-    *(undefined *)((int)audioChannelPtr + -0xf) = 2;
+    *((char *)audioChannelPtr - 0xf) = 2;
 
     audioChannelPtr[-3] = 0;
 
-    *(undefined *)((int)audioChannelPtr + -0xd) = 1;
+    *((char *)audioChannelPtr - 0xd) = 1;
 
-    *(undefined *)((int)audioChannelPtr + -0xe) = 0;
+    *((char *)audioChannelPtr - 0xe) = 0;
 
-    *(undefined *)(audioChannelPtr + -4) = 0;
+    *((char *)audioChannelPtr - 4) = 0;
 
     *audioBufferPtr = 0;
 
@@ -106,6 +111,7 @@ void FUN_800785a8(int *audioChannel,int leftVolume,int rightVolume,uint channelI
   undefined2 leftVolumeParam;
   undefined2 rightVolumeParam;
   undefined2 frequency;
+  undefined2 local_1c;
   undefined2 soundId;
   undefined4 soundDataPtr;
   undefined2 soundType;
@@ -190,10 +196,10 @@ void FUN_800787a8(int audioBuffer)
   return;
 }
 
-void FUN_800787cc(int *audioBuffer,undefined4 soundData,undefined4 bufferSize,int loadMethod)
+int FUN_800787cc(int *audioBuffer,undefined4 soundData,undefined4 bufferSize,int loadMethod)
 
 {
-  code *loadFunction;
+  undefined4 (*loadFunction)(int, undefined4, undefined4, undefined);
 
   if (loadMethod == 0) {
 
@@ -211,7 +217,7 @@ void FUN_800787cc(int *audioBuffer,undefined4 soundData,undefined4 bufferSize,in
 
   DAT_80092e74 = DAT_80092e74 + alignedSize;
 
-  return;
+  return alignedSize;
 }
 
 void FUN_80078840(undefined4 audioBuffer,undefined4 soundData,undefined4 bufferSize,undefined4 loadMethod)
@@ -244,8 +250,8 @@ void FUN_80078900(undefined4 channelId,undefined4 soundId,undefined4 audioBuffer
 {
   undefined4 channelOffset;
 
-  channelOffset = FUN_800788e4();
-  FUN_800784a0(channelOffset, audioBuffer, volume, channelOverride);
+  channelOffset = FUN_800788e4((int *)&DAT_801efe60, (int)channelId);
+  FUN_800784a0((undefined2 *)&soundId, channelOffset, (int)volume, (int)channelOverride);
   return;
 }
 
@@ -1010,10 +1016,10 @@ void FUN_80079744(int soundSequence)
                 *(char *)((int)timerData + 0xe) = commandParam + '\x01';
                 break;
               case 2:
-                    *(char *)((int)channelArray + *(char *)((int)timerData + 0xe) + 0x24) = commandParam + -1;
-                  }
-                  nextCommandPtr = channelArray[*(char *)((int)timerData + 0xe) + 5];
-                }
+                commandParam = *(char *)((int)timerData + 0xe);
+                *(char *)((int)channelArray + commandParam + 0x24) = commandParam + -1;
+                nextCommandPtr = channelArray[commandParam + 5];
+                *(char *)((int)timerData + 0xe) = commandParam + '\x01';
                 break;
               case 3:
                 commandData = *nextCommandPtr;
@@ -1037,6 +1043,7 @@ void FUN_80079744(int soundSequence)
                 nextCommandPtr = commandPtr + 4;
                 *(uint *)(soundSequence + 8) =
                      (uint)commandData << 0x10 | (uint)commandPtr[2] << 8 | (uint)commandPtr[3];
+                break;
               }
             }
             else {
@@ -1228,9 +1235,9 @@ void FUN_80079b64(void)
 
     timerIndex = timerIndex + 1;
     timerStatus = timerStatus + 0x1c;
-    puVar6 = puVar6 + 0x1c;
-    piVar7 = piVar7 + 7;
-  } while (iVar8 < 0x19);
+    timerData = timerData + 7;
+    channelId = channelId + 1;
+  } while (timerIndex < 0x19);
   return;
 }
 
@@ -1411,15 +1418,15 @@ void FUN_8007a118(char *channelId,undefined newParameter)
   if (-1 < channelIndex) {
     channelOffset = channelIndex * 0x28;
 
-    previousState = (&DAT_801efe6c)[channelOffset];
-    (&DAT_801efe6c)[channelOffset] = 1;
+    previousState = DAT_801efe6c[channelOffset];
+    DAT_801efe6c[channelOffset] = 1;
 
     if ((char *)(&DAT_801efe7c)[channelIndex * 10] == channelId) {
-      (&DAT_801efe8c)[channelOffset] = newParameter;
+      DAT_801efe8c[channelOffset] = newParameter;
       DAT_801efe62 = 1;
     }
 
-    (&DAT_801efe6c)[channelOffset] = previousState;
+    DAT_801efe6c[channelOffset] = previousState;
     return;
   }
   return;
@@ -1545,7 +1552,7 @@ void FUN_8007a300(undefined4 *timerData,ushort *timerParams,undefined4 timerType
   int channelOffset;
   int channelIndex;
 
-  FUN_8007a2a8();
+  FUN_8007a2a8((undefined4 *)0x0);
   *timerData = 0;
   *(ushort *)(timerData + 1) = *timerParams;
   timerMaxValue = (uint)DAT_801f0236;
@@ -1633,7 +1640,7 @@ void FUN_8007a44c(int timerData)
 void FUN_8007a4a4(undefined4 audioTimer)
 
 {
-  FUN_8007a2a8();
+  FUN_8007a2a8((undefined4 *)0x0);
   FUN_8007a44c(audioTimer);
   FUN_8007a434(audioTimer);
   return;
@@ -1645,7 +1652,7 @@ void FUN_8007a4d8(int timerToRemove)
   int *timerArray;
   int timerIndex;
 
-  FUN_8007a2a8();
+  FUN_8007a2a8((undefined4 *)0x0);
 
   timerIndex = 0;
   timerArray = &DAT_801f0248;
@@ -1703,8 +1710,8 @@ void FUN_8007a59c(undefined *audioChannel,int soundData)
   }
 
   if (-1 < availableChannel) {
-    (&DAT_801efe68)[availableChannel * 0x28] = 1;
-    (&DAT_801efe7c)[availableChannel * 10] = audioChannel;
+    DAT_801efe68[availableChannel * 0x28] = 1;
+    DAT_801efe7c[availableChannel * 10] = audioChannel;
     FUN_8007aa94(availableChannel, soundData);
   }
   return;
@@ -1721,14 +1728,14 @@ void FUN_8007a614(char *channelId,undefined newSoundType)
   if (-1 < channelIndex) {
     channelOffset = channelIndex * 0x28;
 
-    previousState = (&DAT_801efe6c)[channelOffset];
-    (&DAT_801efe6c)[channelOffset] = 1;
+    previousState = DAT_801efe6c[channelOffset];
+    DAT_801efe6c[channelOffset] = 1;
 
     if ((char *)(&DAT_801efe7c)[channelIndex * 10] == channelId) {
-      (&DAT_801efe6b)[channelOffset] = newSoundType;
+      DAT_801efe6b[channelOffset] = newSoundType;
     }
 
-    (&DAT_801efe6c)[channelOffset] = previousState;
+    DAT_801efe6c[channelOffset] = previousState;
     return;
   }
   return;
@@ -1746,17 +1753,17 @@ void FUN_8007a668(char *channelId,undefined2 newFrequency)
   if (-1 < channelIndex) {
     channelOffset = channelIndex * 0x28;
 
-    previousState = (&DAT_801efe6c)[channelOffset];
-    (&DAT_801efe6c)[channelOffset] = 1;
+    previousState = DAT_801efe6c[channelOffset];
+    DAT_801efe6c[channelOffset] = 1;
 
     if ((char *)(&DAT_801efe7c)[channelIndex * 10] == channelId) {
-      (&DAT_801efe6c)[channelOffset] = 2;
-      channelFlags = (&DAT_801efe6d)[channelOffset];
-      (&DAT_801efe74)[channelIndex * 0x14] = newFrequency;
-      (&DAT_801efe6d)[channelOffset] = channelFlags | 1;
+      DAT_801efe6c[channelOffset] = 2;
+      channelFlags = DAT_801efe6d[channelOffset];
+      DAT_801efe74[channelIndex * 0x14] = newFrequency;
+      DAT_801efe6d[channelOffset] = channelFlags | 1;
     }
 
-    (&DAT_801efe6c)[channelOffset] = previousState;
+    DAT_801efe6c[channelOffset] = previousState;
     return;
   }
   return;
@@ -1775,18 +1782,18 @@ void FUN_8007a6c8(char *channelId,undefined4 *newVolume)
   if (-1 < channelIndex) {
     channelOffset = channelIndex * 0x28;
 
-    previousState = (&DAT_801efe6c)[channelOffset];
-    (&DAT_801efe6c)[channelOffset] = 1;
+    previousState = DAT_801efe6c[channelOffset];
+    DAT_801efe6c[channelOffset] = 1;
     volumeValue = *newVolume;
 
     if ((char *)(&DAT_801efe7c)[channelIndex * 10] == channelId) {
-      (&DAT_801efe6c)[channelOffset] = 2;
-      channelFlags = (&DAT_801efe6d)[channelOffset];
-      (&DAT_801efe70)[channelIndex * 10] = volumeValue;
-      (&DAT_801efe6d)[channelOffset] = channelFlags | 2;
+      DAT_801efe6c[channelOffset] = 2;
+      channelFlags = DAT_801efe6d[channelOffset];
+      DAT_801efe70[channelIndex * 10] = volumeValue;
+      DAT_801efe6d[channelOffset] = channelFlags | 2;
     }
 
-    (&DAT_801efe6c)[channelOffset] = previousState;
+    DAT_801efe6c[channelOffset] = previousState;
     return;
   }
   return;
@@ -1803,14 +1810,14 @@ void FUN_8007a728(char *channelId)
   if (-1 < channelIndex) {
     channelOffset = channelIndex * 0x28;
 
-    previousState = (&DAT_801efe6c)[channelOffset];
-    (&DAT_801efe6c)[channelOffset] = 1;
+    previousState = DAT_801efe6c[channelOffset];
+    DAT_801efe6c[channelOffset] = 1;
 
     if ((char *)(&DAT_801efe7c)[channelIndex * 10] == channelId) {
-      *(undefined2 *)(&DAT_801efe6e + channelOffset) = 0x100;
+      *(undefined2 *)((char *)&DAT_801efe6e + channelOffset) = 0x100;
     }
 
-    (&DAT_801efe6c)[channelOffset] = previousState;
+    DAT_801efe6c[channelOffset] = previousState;
     return;
   }
   return;
@@ -1827,15 +1834,15 @@ void FUN_8007a778(char *channelId)
   if (-1 < channelIndex) {
     channelOffset = channelIndex * 0x28;
 
-    previousState = (&DAT_801efe6c)[channelOffset];
-    (&DAT_801efe6c)[channelOffset] = 1;
+    previousState = DAT_801efe6c[channelOffset];
+    DAT_801efe6c[channelOffset] = 1;
 
     if ((char *)(&DAT_801efe7c)[channelIndex * 10] == channelId) {
       *channelId = -1;
-      (&DAT_801efe7c)[channelIndex * 10] = 0;
+      DAT_801efe7c[channelIndex * 10] = 0;
     }
 
-    (&DAT_801efe6c)[channelOffset] = previousState;
+    DAT_801efe6c[channelOffset] = previousState;
     return;
   }
   return;
@@ -1926,6 +1933,32 @@ int FUN_8007a938(uint soundType)
   uint tempChannelMask;
   uint tempChannelState;
   uint tempChannelFlags;
+  int in_t5;
+  uint in_t7;
+  uint in_t8;
+  uint in_t9;
+  uint uVar7;
+  uint *puVar3;
+  uint uVar5;
+  uint param_1;
+  int iVar2;
+  uint uVar8;
+  int iVar9;
+  uint *puVar11;
+  uint *puVar10;
+  bool bVar1;
+  int iVar4;
+  undefined *puVar6;
+
+  param_1 = soundType;
+  iVar2 = -1;
+  in_t5 = -1;
+  in_t7 = 0;
+  in_t8 = 0;
+  in_t9 = 0;
+  puVar3 = channelData;
+  puVar10 = (uint *)0x0;
+  iVar4 = channelsToCheck;
 
   channelIndex = (int)DAT_801efe60;
   channelData = (uint *)(&DAT_801efe68 + channelIndex * 0x28);
@@ -2030,27 +2063,27 @@ void FUN_8007aa94(int channelId,undefined4 *soundData)
   undefined4 soundData2;
 
   channelOffset = channelId * 0x28;
-  (&DAT_801efe6c)[channelOffset] = 2;
+  DAT_801efe6c[channelOffset] = 2;
   audioMultiplier = DAT_801efe66;
   soundParameter = *(ushort *)(soundData + 3);
 
-  (&DAT_801efe69)[channelOffset] = 0;
-  (&DAT_801efe80)[channelId * 10] = 0;
-  (&DAT_801efe88)[channelId * 10] = 0;
+  DAT_801efe69[channelOffset] = 0;
+  DAT_801efe80[channelId * 10] = 0;
+  DAT_801efe88[channelId * 10] = 0;
 
   soundData1 = soundData[1];
   soundData2 = soundData[2];
   soundFlags = *(byte *)((int)soundData + 0xf);
 
-  (&DAT_801efe70)[channelId * 10] = *soundData;
-  *(undefined4 *)(&DAT_801efe74 + channelId * 0x14) = soundData1;
-  *(undefined4 *)(&DAT_801efe78 + channelId * 0x14) = soundData2;
+  DAT_801efe70[channelId * 10] = *soundData;
+  *(undefined4 *)((char *)&DAT_801efe74 + channelId * 0x14) = soundData1;
+  *(undefined4 *)((char *)&DAT_801efe78 + channelId * 0x14) = soundData2;
 
-  (&DAT_801efe84)[channelId * 10] = (uint)soundParameter * (uint)audioMultiplier;
-  (&DAT_801efe8c)[channelOffset] = soundFlags & 1;
+  DAT_801efe84[channelId * 10] = (uint)soundParameter * (uint)audioMultiplier;
+  DAT_801efe8c[channelOffset] = soundFlags & 1;
 
   DAT_801efe62 = 1;
-  *(undefined4 *)(&DAT_801efe6c + channelOffset) = 0x10700;
+  *(undefined4 *)((char *)&DAT_801efe6c + channelOffset) = 0x10700;
   return;
 }
 
@@ -2145,7 +2178,7 @@ FUN_8007abfc(int bufferAddress,uint sectorOffset,int dataSize,int bufferSize,und
 void FUN_8007ad20(void)
 
 {
-  FUN_8007abfc();
+  FUN_8007abfc(0, 0, 0, 0, 0, 0, 0);
   return;
 }
 
@@ -2510,6 +2543,40 @@ void FUN_8007b374(int projectionData,int viewportWidth,int viewportHeight,int pr
   undefined2 matrixElement7;
   undefined2 matrixElement8;
   undefined2 matrixElement9;
+  short local_20;
+  undefined2 local_24;
+  short local_1e;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  int iVar5;
+  int iVar6;
+  int iVar8;
+  int iVar9;
+  int iVar10;
+  uint uVar1;
+  uint uVar5;
+  uint uVar7;
+  short sVar1;
+  undefined *psVar8;
+  uint param_1;
+  uint param_2;
+  uint param_3;
+  uint param_4;
+  undefined4 local_28[4];
+
+  param_1 = projectionData;
+  iVar2 = 0;
+  iVar3 = 0;
+  iVar4 = 0;
+  iVar5 = 0;
+  iVar6 = 0;
+  iVar8 = 0;
+  iVar9 = 0;
+  iVar10 = 0;
+  param_2 = viewportWidth;
+  param_3 = viewportHeight;
+  param_4 = projectionMatrix;
 
   widthShifted = (uint)*(ushort *)(projectionData + 4) << 0x10;
   widthValue = widthShifted >> 0x10;
@@ -2591,8 +2658,9 @@ void FUN_8007b374(int projectionData,int viewportWidth,int viewportHeight,int pr
 }
 
 uint FUN_8007b640(int audioData,SVECTOR *vertexData,int processingFlags)
-
 {
+  int param_1;
+  param_1 = audioData;
   uint resultFlags;
   int coordinateX;
   int coordinateY;
@@ -2606,6 +2674,25 @@ uint FUN_8007b640(int audioData,SVECTOR *vertexData,int processingFlags)
   uint visibilityFlags;
   uint clippingFlags;
   uint processingFlags2;
+  SVECTOR *param_2;
+  int param_3;
+  SVECTOR *psVar8;
+  bitfield_16_t uVar5;
+  undefined4 uVar7;
+  uint uVar1;
+  int iVar2;
+  int iVar4;
+  int iVar10;
+  uint uVar6;
+  uint uVar11;
+  uint uVar12;
+  uint uVar13;
+  int iVar3;
+  int iVar9;
+
+  param_1 = audioData;
+  param_2 = vertexData;
+  param_3 = processingFlags;
 
   gte_ldv0(vertexData);
   processingFlags2 = 0;
@@ -2708,7 +2795,7 @@ undefined8 FUN_8007b778(int audioData,int viewportX,int viewportY,int viewportZ)
   gte_ldLB3(*(undefined4 *)(audioData + 0x50));
   gte_ldDQA(0x1000);
   gte_ldDQB(0);
-  return CONCAT44(*(undefined4 *)(param_1 + 0x4c),*(undefined4 *)(param_1 + 0x50));
+  return ((ulonglong)*(undefined4 *)(audioData + 0x4c) << 32) | (ulonglong)*(undefined4 *)(audioData + 0x50);
 }
 
 void FUN_8007b8a0(undefined4 param_1,int param_2,int param_3,int param_4)
@@ -2721,7 +2808,7 @@ void FUN_8007b8a0(undefined4 param_1,int param_2,int param_3,int param_4)
   return;
 }
 
-void FUN_8007b8f8(int audioData,undefined2 *transformationMatrix1,undefined2 *transformationMatrix2)
+uint FUN_8007b8f8(int audioData,undefined2 *transformationMatrix1,undefined2 *transformationMatrix2)
 
 {
   undefined2 matrix1Element1;
@@ -2764,8 +2851,7 @@ void FUN_8007b8f8(int audioData,undefined2 *transformationMatrix1,undefined2 *tr
   *(undefined2 *)(audioData + 0xce) = matrix2Element2;
   *(undefined2 *)(audioData + 0xd6) = matrix2Element2;
 
-  FUN_8007b640(audioData, audioData + 0x9c, 8);
-  return;
+  return FUN_8007b640(audioData, audioData + 0x9c, 8);
 }
 
 void FUN_8007b994(undefined2 *outputMatrix,undefined4 *rotationMatrix,uint *inputVectors)
@@ -2829,6 +2915,16 @@ int FUN_8007ba70(int audioData,dword *dataBuffer,int transferMode)
   uint alignmentMask;
   dword dmaMode1;
   dword dmaMode2;
+  uint uVar2;
+  dword *param_2;
+  int iVar1;
+  dword dVar3;
+  dword dVar4;
+
+  param_2 = dataBuffer;
+  iVar1 = dataSize;
+  dVar3 = dmaMode1;
+  dVar4 = dmaMode2;
 
   DAT_801f06a4 = 1;
   FUN_8007af30();
@@ -2896,7 +2992,7 @@ int FUN_8007bc1c(int audioData)
   dataPointer = audioData + 8;
 
   if ((*(uint *)(audioData + 4) >> 3 & 1) == 1) {
-    dataPointer = FUN_8007bbd4(audioData + 8);
+    dataPointer = FUN_8007bbd4(audioData + 8, (int *)0x0);
   }
   return dataPointer;
 }
@@ -2911,7 +3007,7 @@ void FUN_8007bc58(int audioData)
   if ((*(uint *)(audioData + 4) >> 3 & 1) != 0) {
     dataPointer = dataPointer + *(int *)(audioData + 8);
   }
-  FUN_8007bbd4(dataPointer);
+  FUN_8007bbd4((int *)dataPointer, (int *)0x0);
   return;
 }
 
@@ -2920,8 +3016,8 @@ void FUN_8007bca0(undefined4 audioData,undefined4 processingFlags,undefined4 out
 {
   undefined4 dataPointer;
 
-  dataPointer = FUN_8007bc1c();
-  FUN_8007bbd4(dataPointer, outputBuffer);
+  dataPointer = FUN_8007bc1c((int)audioData);
+  FUN_8007bbd4((int *)dataPointer, (int *)outputBuffer);
   return;
 }
 
@@ -2969,6 +3065,51 @@ void FUN_8007bcd0(uint audioData,int vertexCount)
   SVECTOR *vertex4;
   uint processingFlags2;
   SVECTOR *vertex5;
+  uint param_1;
+  short *psVar30;
+  uint uVar2;
+  undefined4 *puVar20;
+  undefined4 *puVar26;
+  undefined4 *puVar27;
+  SVECTOR *psVar37;
+  int iVar5;
+  uint uVar6;
+  uint uVar7;
+  undefined2 uVar11;
+  undefined2 uVar23;
+  int iVar14;
+  int iVar24;
+  int iVar33;
+  int iVar35;
+  uint uVar40;
+  uint uVar38;
+  undefined4 *puVar36;
+  SVECTOR *pSVar15;
+  SVECTOR *pSVar34;
+  SVECTOR *pSVar41;
+  SVECTOR *pSVar39;
+  SVECTOR *pSVar28;
+  SVECTOR *pSVar31;
+  uint uVar16;
+  uint uVar21;
+  uint uVar25;
+  uint uVar9;
+  uint uVar8;
+  short sVar12;
+  short sVar19;
+  uint uVar10;
+  uint uVar17;
+  uint uVar22;
+  int iVar29;
+  int iVar32;
+  uint uVar13;
+  undefined4 *puVar18;
+  bool bVar4;
+  bool bVar1;
+  undefined4 *puVar3;
+
+  param_1 = audioData;
+  puVar26 = (undefined4 *)0x0;
 
   coordinatePointer2 = (short *)(audioData + 0xa8);
   vertexBuffer = (undefined2 *)(audioData + 0xe8);
@@ -2991,12 +3132,12 @@ void FUN_8007bcd0(uint audioData,int vertexCount)
     uVar6 = 0x13 - iVar5;
     uVar7 = -uVar6;
     if ((int)uVar6 < 0) {
-      uVar11 = (undefined2)((int)*psVar37 << (uVar7 & 0x1f));
+      uVar11 = (undefined2)((int)psVar37->vx << (uVar7 & 0x1f));
       uVar23 = (undefined2)((int)psVar30[-1] << (uVar7 & 0x1f));
       iVar5 = (int)*psVar30 << (uVar7 & 0x1f);
     }
     else {
-      uVar11 = (undefined2)((int)*psVar37 >> (uVar6 & 0x1f));
+      uVar11 = (undefined2)((int)psVar37->vx >> (uVar6 & 0x1f));
       uVar23 = (undefined2)((int)psVar30[-1] >> (uVar6 & 0x1f));
       iVar5 = (int)*psVar30 >> (uVar6 & 0x1f);
     }
@@ -3435,7 +3576,7 @@ void FUN_8007c550(void)
 void FUN_8007c570(void)
 
 {
-  FUN_8007c5f0();
+  FUN_8007c5f0(0);
   FUN_8007c4f8(&DAT_801f0510, 2);
   return;
 }
@@ -3465,7 +3606,7 @@ undefined4 FUN_8007c628(int audioBuffer,int audioData)
     }
   }
   else {
-    FUN_8007c744();
+    FUN_8007c744(0, (uint **)0x0);
     result = 1;
   }
   return result;
@@ -3522,6 +3663,18 @@ void FUN_8007c744(int audioBuffer,uint **commandList)
   undefined4 commandData;
   u_char *parameterPointer;
   uint **commandPointer;
+  uint **param_2;
+  uint ***ppuVar5;
+  int param_1;
+  uint *puVar2;
+  uint uVar3;
+  u_char *param;
+  uint uVar4;
+  char cVar1;
+  uint uVar1;
+
+  param_1 = audioBuffer;
+  param_2 = commandList;
 
   *(undefined *)(audioBuffer + 0x162) = 0;
   *(undefined4 *)(audioBuffer + 0x80) = 0;
@@ -3656,7 +3809,7 @@ void FUN_8007c9e8(int audioBuffer,undefined4 audioData)
 {
   *(undefined4 *)(audioBuffer + 0x7c) = audioData;
   if (*(char *)(audioBuffer + 0x166) != '\x03') {
-    FUN_8007c744();
+    FUN_8007c744(audioBuffer, (uint **)0x0);
   }
   return;
 }
@@ -3669,10 +3822,10 @@ undefined4 FUN_8007ca18(int audioBuffer)
   result = 0;
   if ((*(char *)(audioBuffer + 0x166) != '\x03') && (*(int *)(audioBuffer + 0x84) != 0)) {
     *(undefined4 *)(audioBuffer + 0x84) = 0;
-    FUN_8007c744();
+    FUN_8007c744(audioBuffer, (uint **)0x0);
     result = 1;
   }
-  return uVar1;
+  return result;
 }
 
 void FUN_8007ca58(int param_1)
@@ -3730,7 +3883,7 @@ int FUN_8007d024(int commandBuffer,uint commandType,uint commandData)
   result = *(int *)((commandBuffer + 2U) - alignment1);
 
   *(undefined *)(DAT_801c93ec + 3) = 3;
-  alignment2 = DAT_801c93ec + 2U & 3;
+  alignment2 = ((uint)DAT_801c93ec + 2U) & 3;
   alignedPointer = (uint *)((DAT_801c93ec + 2U) - alignment2);
 
   *alignedPointer = *alignedPointer & -1 << (alignment2 + 1) * 8 |
@@ -3738,7 +3891,7 @@ int FUN_8007d024(int commandBuffer,uint commandType,uint commandData)
 
   alignment1 = commandBuffer + 2U & 3;
   alignedPointer = (uint *)((commandBuffer + 2U) - alignment1);
-  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - alignment1) * 8;
+  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - alignment1) * 8;
 
   *(uint *)(DAT_801c93ec + 4) = commandType ^ 0x60000000;
   result = DAT_801c93ec + 8;
@@ -3758,7 +3911,7 @@ int FUN_8007d060(int commandBuffer,uint commandType,uint commandData)
   result = *(int *)((commandBuffer + 2U) - alignment1);
 
   *(undefined *)(DAT_801c93ec + 3) = 5;
-  alignment2 = DAT_801c93ec + 2U & 3;
+  alignment2 = ((uint)DAT_801c93ec + 2U) & 3;
   alignedPointer = (uint *)((DAT_801c93ec + 2U) - alignment2);
 
   *alignedPointer = *alignedPointer & -1 << (alignment2 + 1) * 8 |
@@ -3766,7 +3919,7 @@ int FUN_8007d060(int commandBuffer,uint commandType,uint commandData)
 
   alignment1 = commandBuffer + 2U & 3;
   alignedPointer = (uint *)((commandBuffer + 2U) - alignment1);
-  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - alignment1) * 8;
+  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - alignment1) * 8;
 
   *(uint *)(DAT_801c93ec + 4) = commandType ^ 0x28000000;
   result = DAT_801c93ec + 4;
@@ -3983,7 +4136,7 @@ uint FUN_8007d7b0(int audioDataStructure,uint dataIndex)
 undefined FUN_8007d7cc(void)
 
 {
-  if (*DAT_801f06b0 == 0) {
+  if (DAT_801f06b0 == (undefined4 *)0x0 || *DAT_801f06b0 == 0) {
     return DAT_801f06de;
   }
   return 1;
@@ -4001,7 +4154,7 @@ int FUN_8007da44(int commandBuffer,uint commandType,uint commandData)
   result = *(int *)((commandBuffer + 2U) - alignment1);
 
   *(undefined *)(DAT_801c93ec + 3) = 1;
-  alignment2 = DAT_801c93ec + 2U & 3;
+  alignment2 = ((uint)DAT_801c93ec + 2U) & 3;
   alignedPointer = (uint *)((DAT_801c93ec + 2U) - alignment2);
 
   *alignedPointer = *alignedPointer & -1 << (alignment2 + 1) * 8 |
@@ -4009,7 +4162,7 @@ int FUN_8007da44(int commandBuffer,uint commandType,uint commandData)
 
   alignment1 = commandBuffer + 2U & 3;
   alignedPointer = (uint *)((commandBuffer + 2U) - alignment1);
-  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - alignment1) * 8;
+  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - alignment1) * 8;
 
   *(uint *)(DAT_801c93ec + 4) = commandType | 0xe1000000;
   result = DAT_801c93ec + 4;
@@ -4154,8 +4307,31 @@ void FUN_8007dd3c(int *audioData,uint command,int param3,uint param4)
   int value12;
   uint value13;
   uint value14;
+  uint *puVar2;
+  int param_1;
+  uint param_2;
+  uint param_3;
+  uint uVar4;
+  uint uVar13;
+  uint uVar14;
+  uint uVar7;
+  int iVar12;
+  uint param_4;
+  uint uVar10;
+  uint uVar3;
+  uint uVar5;
+  int iVar9;
+  uint uVar6;
+  int iVar11;
+  uint uVar1;
+  int iVar8;
 
-  puVar2 = (uint *)(*param_1 + (param_2 & 0xff) * 8);
+  param_1 = (int)audioData;
+  param_2 = command;
+  param_3 = param3;
+  param_4 = param4;
+
+  puVar2 = (uint *)(audioData[0] + (param_2 & 0xff) * 8);
   uVar13 = *puVar2;
   uVar14 = puVar2[1];
   if ((uVar13 & 0x3fc0) != 0) {
@@ -4168,13 +4344,13 @@ void FUN_8007dd3c(int *audioData,uint command,int param3,uint param4)
         uVar4 = 0xffffffff;
       }
     }
-    uVar7 = *(uint *)(((int)(uVar13 & 0x3fc0) >> 6) * 4 + *param_1 + 0x818);
+    uVar7 = *(uint *)(((int)(uVar13 & 0x3fc0) >> 6) * 4 + audioData[0] + 0x818);
     iVar12 = param_4 - (uVar14 >> 6 & 0x3f);
-    uVar10 = param_1[3];
+    uVar10 = audioData[3];
     uVar3 = uVar7 >> 0x10 & 0x1f;
     param_3 = param_3 - (uVar4 & uVar3);
-    uVar5 = param_1[5];
-    iVar9 = param_1[4];
+    uVar5 = audioData[5];
+    iVar9 = audioData[4];
 
     uVar4 = iVar9 + 2;
     uVar6 = uVar4 & 3;
@@ -4185,7 +4361,7 @@ void FUN_8007dd3c(int *audioData,uint command,int param3,uint param4)
     *(uint *)(DAT_801c93ec + 0x14) = uVar3 << 1 | (uVar7 >> 0x15 & 0x3f) << 0x10;
     *(ushort *)(DAT_801c93ec + 0x12) = ((ushort)(uVar7 >> 0x1b) & 3) + (short)uVar10;
     *(short *)(DAT_801c93ec + 0x10) = (short)uVar7;
-    uVar4 = DAT_801c93ec + 2U & 3;
+    uVar4 = ((uint)DAT_801c93ec + 2U) & 3;
     puVar2 = (uint *)((DAT_801c93ec + 2U) - uVar4);
     *puVar2 = *puVar2 & -1 << (uVar4 + 1) * 8 |
               (iVar11 << (3 - uVar6) * 8 | param_4 & 0xffffffffU >> (uVar6 + 1) * 8) >>
@@ -4195,15 +4371,15 @@ void FUN_8007dd3c(int *audioData,uint command,int param3,uint param4)
     uVar13 = iVar9 + 2;
     uVar4 = uVar13 & 3;
     puVar2 = (uint *)(uVar13 - uVar4);
-    *puVar2 = *puVar2 & -1 << (uVar4 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - uVar4) * 8;
+    *puVar2 = *puVar2 & -1 << (uVar4 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - uVar4) * 8;
     iVar11 = DAT_801c93ec;
     if (uVar6 != 0) {
-      uVar4 = *(uint *)(uVar6 * 4 + *param_1 + 0x7fc);
+      uVar4 = *(uint *)(uVar6 * 4 + audioData[0] + 0x7fc);
       iVar11 = DAT_801c93ec + 0x18;
-      iVar8 = param_1[4];
+      iVar8 = audioData[4];
       *(uint *)(DAT_801c93ec + 0x1c) =
            (uint)*(ushort *)((int)param_1 + 0xe) + (uVar4 >> 0x1d) ^ 0xe1000000;
-      uVar13 = param_1[5];
+      uVar13 = audioData[5];
       *(ushort *)(DAT_801c93ec + 0x24) = (short)param_3 + ((ushort)((int)uVar14 >> 0xc) & 0x3f);
       *(ushort *)(DAT_801c93ec + 0x26) = (short)iVar12 - ((ushort)((int)uVar14 >> 0x12) & 0x1f);
       *(short *)(DAT_801c93ec + 0x28) = (short)uVar4;
@@ -4217,7 +4393,7 @@ void FUN_8007dd3c(int *audioData,uint command,int param3,uint param4)
       uVar14 = uVar13 & 3;
       iVar9 = *(int *)(uVar13 - uVar14);
       *(undefined *)(DAT_801c93ec + 0x1b) = 5;
-      uVar13 = DAT_801c93ec + 0x1aU & 3;
+      uVar13 = ((uint)DAT_801c93ec + 0x1aU) & 3;
       puVar2 = (uint *)((DAT_801c93ec + 0x1aU) - uVar13);
       *puVar2 = *puVar2 & -1 << (uVar13 + 1) * 8 |
                 (iVar9 << (3 - uVar14) * 8 | uVar4 & 0xffffffffU >> (uVar14 + 1) * 8) >>
@@ -4284,7 +4460,7 @@ int FUN_8007e0b0(int commandBuffer,uint commandData)
   result = *(int *)((commandBuffer + 2U) - alignment1);
 
   *(undefined *)(DAT_801c93ec + 3) = 8;
-  alignment2 = DAT_801c93ec + 2U & 3;
+  alignment2 = ((uint)DAT_801c93ec + 2U) & 3;
   alignedPointer = (uint *)((DAT_801c93ec + 2U) - alignment2);
 
   *alignedPointer = *alignedPointer & -1 << (alignment2 + 1) * 8 |
@@ -4292,7 +4468,7 @@ int FUN_8007e0b0(int commandBuffer,uint commandData)
 
   alignment1 = commandBuffer + 2U & 3;
   alignedPointer = (uint *)((commandBuffer + 2U) - alignment1);
-  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - alignment1) * 8;
+  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - alignment1) * 8;
 
   result = DAT_801c93ec + 4;
   DAT_801c93ec = DAT_801c93ec + 0x24;
@@ -4311,7 +4487,7 @@ int FUN_8007e0e0(int commandBuffer,uint commandType,uint commandData)
   result = *(int *)((commandBuffer + 2U) - alignment1);
 
   *(undefined *)(DAT_801c93ec + 3) = 4;
-  alignment2 = DAT_801c93ec + 2U & 3;
+  alignment2 = ((uint)DAT_801c93ec + 2U) & 3;
   alignedPointer = (uint *)((DAT_801c93ec + 2U) - alignment2);
 
   *alignedPointer = *alignedPointer & -1 << (alignment2 + 1) * 8 |
@@ -4319,7 +4495,7 @@ int FUN_8007e0e0(int commandBuffer,uint commandType,uint commandData)
 
   alignment1 = commandBuffer + 2U & 3;
   alignedPointer = (uint *)((commandBuffer + 2U) - alignment1);
-  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - alignment1) * 8;
+  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - alignment1) * 8;
 
   *(uint *)(DAT_801c93ec + 4) = commandType ^ 0x20000000;
   result = DAT_801c93ec + 4;
@@ -4341,7 +4517,7 @@ undefined8 FUN_8007e15c(int colorMatrixData)
   gte_ldLG2LG3(*(undefined4 *)(colorMatrixData + 0x48));
   gte_ldLB1LB2(*(undefined4 *)(colorMatrixData + 0x4c));
   gte_ldLB3(*(undefined4 *)(colorMatrixData + 0x50));
-  return CONCAT44(*(undefined4 *)(colorMatrixData + 0x4c),*(undefined4 *)(colorMatrixData + 0x50));
+  return ((ulonglong)*(undefined4 *)(colorMatrixData + 0x4c) << 32) | (ulonglong)*(undefined4 *)(colorMatrixData + 0x50);
 }
 
 undefined8 FUN_8007e5e0(undefined4 *transformationMatrix,long *outputCoordinates,int *inputCoordinates,int coordinateCount)
@@ -4362,6 +4538,33 @@ undefined8 FUN_8007e5e0(undefined4 *transformationMatrix,long *outputCoordinates
   int translationY;
   int translationX;
   int maxShift;
+  int iVar4;
+  int iVar1;
+  int iVar15;
+  int *piVar11;
+  short *psVar10;
+  uint param_2;
+  int *param_3;
+  uint param_4;
+  uint uVar9;
+  int iVar14;
+  uint uVar5;
+  int iVar13;
+  uint uVar8;
+  int iVar12;
+  uint uVar2;
+  uint uVar3;
+  uint uVar7;
+  int iVar6;
+
+  param_2 = (uint)inputCoordinates;
+  param_3 = inputCoordinates;
+  param_4 = coordinateCount;
+  iVar4 = transformationMatrix[6];
+  iVar1 = transformationMatrix[7];
+  iVar14 = 0;
+  iVar13 = 0;
+  iVar12 = 0;
 
   translationX = transformationMatrix[8];
   translationY = transformationMatrix[9];
@@ -4433,7 +4636,7 @@ int FUN_8007e708(int commandBuffer,uint commandData)
   result = *(int *)((commandBuffer + 2U) - alignment1);
 
   *(undefined *)(DAT_801c93ec + 3) = 6;
-  alignment2 = DAT_801c93ec + 2U & 3;
+  alignment2 = ((uint)DAT_801c93ec + 2U) & 3;
   alignedPointer = (uint *)((DAT_801c93ec + 2U) - alignment2);
 
   *alignedPointer = *alignedPointer & -1 << (alignment2 + 1) * 8 |
@@ -4441,7 +4644,7 @@ int FUN_8007e708(int commandBuffer,uint commandData)
 
   alignment1 = commandBuffer + 2U & 3;
   alignedPointer = (uint *)((commandBuffer + 2U) - alignment1);
-  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - alignment1) * 8;
+  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - alignment1) * 8;
 
   result = DAT_801c93ec + 4;
   DAT_801c93ec = DAT_801c93ec + 0x1c;
@@ -4460,7 +4663,7 @@ int FUN_8007e738(int commandBuffer,uint commandType,uint commandData)
   result = *(int *)((commandBuffer + 2U) - alignment1);
 
   *(undefined *)(DAT_801c93ec + 3) = 7;
-  alignment2 = DAT_801c93ec + 2U & 3;
+  alignment2 = ((uint)DAT_801c93ec + 2U) & 3;
   alignedPointer = (uint *)((DAT_801c93ec + 2U) - alignment2);
 
   *alignedPointer = *alignedPointer & -1 << (alignment2 + 1) * 8 |
@@ -4468,7 +4671,7 @@ int FUN_8007e738(int commandBuffer,uint commandType,uint commandData)
 
   alignment1 = commandBuffer + 2U & 3;
   alignedPointer = (uint *)((commandBuffer + 2U) - alignment1);
-  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)(DAT_801c93ec << 8) >> (3 - alignment1) * 8;
+  *alignedPointer = *alignedPointer & -1 << (alignment1 + 1) * 8 | (uint)((uint)DAT_801c93ec << 8) >> (3 - alignment1) * 8;
 
   *(uint *)(DAT_801c93ec + 4) = commandType ^ 0x48000000;
   *(undefined4 *)(DAT_801c93ec + 0x1c) = 0x50005000;

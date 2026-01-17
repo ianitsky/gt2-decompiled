@@ -1,3 +1,74 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_018.h"
+#include <stdint.h>
+#include <stdbool.h>
+
+// Forward declarations for GTE (Geometry Transformation Engine) functions
+void gte_ldR11R12(undefined4 value);
+void gte_ldR13R21(undefined4 value);
+void gte_ldR22R23(undefined4 value);
+void gte_ldR31R32(undefined4 value);
+void gte_ldR33(undefined4 value);
+void gte_ldsv_(int x, int y, int z);
+void gte_rtir_b(void);
+void read_mt(int x, int y, int z);
+void gte_ldtr(int x, int y, int z);
+void gte_ldSXY0(undefined4 value);
+void gte_ldSXY1(undefined4 value);
+void gte_ldSXY2(undefined4 value);
+void gte_nclip_b(void);
+int gte_stMAC0(void);
+void gte_ldVZ0(undefined4 value);
+void gte_ldVZ1(undefined4 value);
+void gte_ldR33(undefined4 value);
+void gte_ldL33(undefined4 value);
+void gte_ldR11R12(undefined4 value);
+void gte_ldL11L12(undefined4 value);
+void gte_ldR31R32(undefined4 value);
+void gte_ldL31L32(undefined4 value);
+void gte_ldVXY0(undefined4 value);
+void gte_ldVXY1(undefined4 value);
+void gte_ldL13L21(undefined4 value);
+void gte_ldL22L23(undefined4 value);
+void gte_mvmva_b(int mx, int v, int cv, int lm, int sf);
+int gte_stMAC1(void);
+int gte_stMAC2(void);
+int gte_stMAC3(void);
+
+// Forward declarations for other functions
+void FUN_80081a34(undefined4 *param_1, int param_2, int param_3, int param_4, longlong param_5);
+void FUN_8007adc8(int *volumeData);
+int FUN_8007bca0(undefined4 audioData, undefined4 processingFlags, undefined4 outputBuffer);
+undefined4 *FUN_80060e94(int param_1);
+uint FUN_80060eb4(int param_1);
+undefined4 FUN_80060fb0(undefined4 param_1);
+int FUN_8008cf00(int param_1, char *param_2);
+undefined4 FUN_8007d23c(int frameCount);
+void FUN_8008ce30(undefined *param_1, int param_2, int param_3);
+uint FUN_80083ae0(uint *randomSeed);
+int FUN_80086084(int param_1, int param_2, int param_3, int param_4);
+uint FUN_80081a78(int *vector1, short *vector2);
+void FUN_80038da0(undefined4 param_1);
+void FUN_800272c8(int *param_1);
+void FUN_800200bc(uint *param_1, int param_2);
+void FUN_8005d92c(undefined4 param_1, undefined4 param_2);
+void FUN_8005d8a0(int param_1, undefined4 param_2);
+void FUN_8002eb08(int param_1, undefined4 param_2);
+int FUN_8007bca0(undefined4 audioData, undefined4 processingFlags, undefined4 outputBuffer);
+
+// External labels and global variables
+extern undefined4 DAT_801d589c;
+extern undefined1 DAT_801d5865;
+extern undefined4 DAT_801d58a0;
+extern undefined1 DAT_800a951c;
+extern undefined4 DAT_801d58b0;
+extern undefined4 DAT_801e2f7c;
+extern undefined4 DAT_801e2fc8;
+extern undefined **PTR_DAT_overlay0__8002f558_overlay0__8002f5a4;
+extern void LAB_overlay0__8002f548(void);
+extern undefined4 DAT_overlay0__8002f550;
 
 void FUN_overlay0__80026bb4(int param_1,int param_2)
 {
@@ -125,7 +196,7 @@ void FUN_overlay0__80026e0c(int param_1,int param_2)
     iVar2 = *piVar3;
     uVar1 = *(ushort *)(iVar6 + 8);
 
-    while( true ) {
+    while(1) {
 
       *piVar3 = iVar2 + param_2;
 
@@ -154,12 +225,12 @@ void FUN_overlay0__80026e88(int param_1,int param_2)
 
   *(int *)(param_1 + 0x94) = *(int *)(param_1 + 0x94) + param_2;
 
-  FUN_overlay0__80026db0();
+  FUN_overlay0__80026db0((int *)(param_1 + 0x94), param_2);
 
   iVar1 = *(int *)(param_1 + 0x98) + param_2;
   *(int *)(param_1 + 0x98) = iVar1;
 
-  FUN_overlay0__80026e04(iVar1,param_2);
+  FUN_overlay0__80026e04();
 
   iVar1 = *(int *)(param_1 + 0x9c) + param_2;
   *(int *)(param_1 + 0x9c) = iVar1;
@@ -169,9 +240,9 @@ void FUN_overlay0__80026e88(int param_1,int param_2)
   iVar1 = *(int *)(param_1 + 0xa0) + param_2;
   *(int *)(param_1 + 0xa0) = iVar1;
 
-  FUN_overlay0__80026e80(iVar1,param_2);
+  FUN_overlay0__80026e80();
 
-  FUN_overlay0__80026db0(param_1 + 0xa4,param_2);
+  FUN_overlay0__80026db0((int *)(param_1 + 0xa4), param_2);
   return;
 }
 
@@ -220,7 +291,7 @@ void FUN_overlay0__80027010(uint *param_1,int param_2)
 {
   uint uVar1;
 
-  FUN_8007adc8();
+  FUN_8007adc8((int *)0x0);
 
   for (uVar1 = 0; uVar1 < *param_1; uVar1 = uVar1 + 1) {
 
@@ -313,7 +384,7 @@ void FUN_overlay0__800271c0(int param_1)
     iVar3 = iVar3 + 4;
     iVar4 = iVar4 + 1;
 
-    FUN_overlay0__80027008(*puVar1,param_1);
+    FUN_overlay0__80027008();
   } while (iVar4 < 0x21);
 
   FUN_overlay0__80027184(*(undefined4 *)(param_1 + 0x1c),param_1);
@@ -383,7 +454,7 @@ void FUN_overlay0__8002743c(int param_1,int param_2)
   int iVar2;
   int iVar3;
 
-  FUN_overlay0__800273d8();
+  FUN_overlay0__800273d8(param_1, param_2);
 
   iVar1 = FUN_80060e94(param_2);
 
@@ -667,7 +738,7 @@ uint * FUN_overlay0__800279e8(short *param_1,int param_2,uint param_3,int param_
       gte_nclip_b();
       puVar8 = *ppuVar7;
 
-      while( true ) {
+      while(1) {
         uVar6 = *puVar8;
 
         if (-1 < (int)(uVar3 << 1)) {
@@ -735,15 +806,16 @@ uint FUN_overlay0__80027bbc(int param_1,int *param_2)
   return ~uVar1 >> 0x1f;
 }
 
-void FUN_overlay0__80027c1c(int param_1,int *param_2)
+int FUN_overlay0__80027c1c(int param_1,int *param_2)
 {
+  uint *puVar1;
 
-  FUN_overlay0__800279e8
+  puVar1 = FUN_overlay0__800279e8
             (*(undefined4 *)(param_1 + 0x9c),*(undefined4 *)(param_1 + 0xa4),
              (int)(*param_2 - (*(uint *)(param_1 + 0x30) & 0xffc00000)) >> 10,
              (int)(param_2[2] - (*(uint *)(param_1 + 0x38) & 0xffc00000)) >> 10);
 
-  return;
+  return (puVar1 != (uint *)0x0) ? (int)puVar1 : 0;
 }
 
 int FUN_overlay0__80027c70(int param_1,uint *param_2,int *param_3)

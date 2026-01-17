@@ -1,8 +1,6 @@
 ---
-name: compilation
-description: Compilation rules and guidelines for GT2 decompiled project
+alwaysApply: true
 ---
-
 # Compilation Rules
 
 ## Overview

@@ -72,7 +72,7 @@ void EVENT_OBJ_F4(void);
 // They are declared in the decompiled headers, not here
 
 // VSync and Pad initialization
-void VSyncCallback(func *callbackFunction);
+int VSyncCallback(func *callbackFunction);
 int PadInitDirect(void *padStructure1, void *padStructure2);
 void FUN_80085990(void);
 void FUN_800859fc(void);
@@ -82,6 +82,16 @@ void FUN_80085b3c(undefined4 *typeInfo, undefined4 typeName, undefined4 addition
 void FUN_80085b78(undefined4 *typeInfo, undefined4 typeName);
 void FUN_80086060(int typeFlag);
 void FUN_800870b8(void);
+
+// GTE (Geometry Transform Engine) functions
+void setCopReg(int copNumber, undefined4 registerNumber, undefined4 value, undefined4 unused);
+void gte_ldZSF3(undefined4 value);
+void gte_ldZSF4(undefined4 value);
+void gte_ldH(undefined4 value);
+void gte_ldDQA(undefined4 value);
+void gte_ldDQB(undefined4 value);
+void gte_ldOFX(undefined4 value);
+void gte_ldOFY(undefined4 value);
 
 // Debug flag for stub logging
 extern int ps1_stub_debug;

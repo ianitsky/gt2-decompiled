@@ -41,6 +41,7 @@ undefined4 FUN_80068734(char *param_1,uint param_2);
 undefined4 FUN_80068ee4(short *param_1,int param_2,undefined2 *param_3);
 undefined4 FUN_80069ff8(void);
 undefined4 FUN_8006ae98(undefined4 param_1,char *param_2,int param_3,int param_4);
+uint FUN_8006b548(byte *param_1,byte *param_2,int param_3,int param_4);
 void FUN_800670f0(int param_1,undefined4 param_2,short *param_3,int param_4,int param_5,uint param_6);
 void FUN_80067824(undefined4 param_1,uint param_2,short param_3);
 void FUN_8006788c(undefined4 param_1,uint param_2);

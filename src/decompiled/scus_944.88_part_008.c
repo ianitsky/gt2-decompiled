@@ -1,3 +1,205 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_008.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Forward declarations for functions used in this file
+void FUN_8008de24(void);
+void FUN_8008c918(void);
+void FUN_8008c948(void);
+void ResetCallback(void);
+int ReadInitPadFlag(void);
+void ChangeClearPAD(int);
+void VSync(int);
+void ChangeClearRCnt(int, int);
+void SysDeqIntRP(int, void *);
+void SysEnqIntRP(int, void *);
+void FlushCache(void);
+void DeliverEvent(uint, uint);
+int CD_init(void);
+void CD_initvol(void);
+undefined4 CD_cw(byte, byte *, undefined *, int);
+undefined4 CD_sync(int, undefined *);
+void CD_flush(void);
+int CheckCallback(void);
+int DMACallback(int, func *);
+undefined4 FUN_80088124(void);
+void FUN_800881b4(void);
+void FUN_80088b34(undefined4);
+bool FUN_80088b54(void);
+void FUN_80088ac0(int, undefined);
+void FUN_80088aac(int);
+void FUN_80088b00(int, undefined);
+void FUN_8008e00c(char *);
+void FUN_800881dc(int, undefined, undefined4, undefined);
+int FUN_800884e0(int);
+undefined4 FUN_80088518(int *, int);
+void FUN_800881ec(int);
+uint FUN_80087ea8(int, undefined);
+uint FUN_80087c84(int, int);
+undefined * PDDIRRES_OBJ_594(uint);
+int S_016_OBJ_38C(void);
+undefined4 FUN_80087860(int);
+void FUN_80087b94(int);
+undefined4 * FUN_80086020(void);
+void FUN_80085b3c(undefined4 *, undefined4, undefined4);
+void FUN_80085b78(undefined4 *, undefined4);
+void FUN_800859fc(void);
+void FUN_80085990(void);
+// _exit is a standard library function - don't redeclare
+// void _exit(void);
+void bzero(void *, size_t);
+
+// External variables that need to be declared
+extern undefined *PTR_DAT_800a7110;
+extern undefined4 DAT_801c9410;
+extern undefined4 DAT_801c9414;
+extern undefined4 DAT_801f0d20;
+extern undefined4 DAT_801c9408;
+extern undefined4 DAT_800a7528;
+extern undefined4 DAT_800a7568;
+extern undefined4 DAT_800a75ac;
+extern undefined4 DAT_800a7524;
+extern undefined4 DAT_800a75a8;
+extern undefined4 DAT_800a76d4;
+extern undefined4 DAT_800a76e8;
+extern undefined4 DAT_800a76d0;
+extern undefined4 DAT_800a76fc;
+// Function pointer types for pad callbacks
+typedef void (*code_int)(int);
+typedef int (*code_int_ret)(int);
+typedef void (*code_ptr)(undefined4 *);
+typedef int (*code_void_ret)(void);
+typedef undefined * (*code_uint_ptr)(uint);
+
+extern code_ptr DAT_800a76a0;
+extern code_uint_ptr DAT_800a76b0;
+typedef int (*code_int_ret_int)(int);
+extern code_int_ret_int DAT_800a76b8;
+extern code_int DAT_800a76bc;
+extern code_int DAT_800a76c0;
+extern code_int DAT_800a769c;
+extern undefined4 DAT_800a76dc;
+extern undefined4 DAT_800a76e0;
+extern undefined4 DAT_800a76e4;
+extern undefined4 DAT_800a76a4;
+extern undefined4 DAT_800a76a8;
+extern undefined4 DAT_800a76b4;
+extern undefined4 DAT_801c9424;
+extern undefined4 DAT_801c9420;
+extern undefined4 DAT_801c9598;
+extern undefined4 DAT_801c95a8;
+extern undefined4 DAT_801c95bc;
+extern undefined4 DAT_801c95c0;
+extern undefined4 DAT_801c95c4;
+extern undefined4 DAT_801c95c8;
+extern undefined4 DAT_801c96b8;
+extern undefined4 DAT_801c9604;
+extern undefined4 DAT_801c9608;
+extern undefined4 DAT_801c96f4;
+extern undefined4 DAT_801c96f8;
+extern undefined4 DAT_801c97a8;
+extern undefined4 DAT_801c97f0;
+extern undefined4 DAT_801c97cb;
+extern undefined4 DAT_801c9813;
+extern undefined4 DAT_800a76f4;
+extern undefined4 DAT_800a7718;
+extern undefined4 DAT_800a7724;
+extern code **PTR_LAB_800a7724;
+typedef void (*code_int_ptr)(int, void *);
+extern code_int_ptr DAT_800a780c;
+extern code_int_ptr DAT_800a7810;
+extern undefined4 DAT_800a7754;
+extern undefined4 DAT_800a7758;
+extern undefined4 DAT_800a7818;
+extern undefined4 DAT_800a7820;
+extern undefined4 DAT_800a781c;
+extern undefined4 DAT_800a7824;
+extern undefined4 DAT_800a7828;
+extern undefined4 DAT_800a7829;
+extern undefined4 DAT_800a7ae8;
+extern undefined4 DAT_800a7ae9;
+extern undefined4 DAT_800a7aea;
+extern undefined4 DAT_800a7950;
+extern undefined4 DAT_800a7764;
+extern undefined4 DAT_800a78d0;
+extern undefined4 DAT_800a79d0;
+extern undefined4 DAT_801c9838;
+extern undefined4 DAT_801c9840;
+extern undefined4 DAT_801c9848;
+extern undefined4 DAT_801c9850;
+extern undefined4 DAT_801c9854;
+extern undefined4 DAT_801c9858;
+extern undefined4 *PTR_s_CdlSync_800a7830;
+extern undefined4 *PTR_s_NoIntr_800a78b0;
+extern undefined4 LAB_80090a7c;
+extern undefined4 LAB_80090a4c;
+extern undefined4 LAB_80090a64;
+extern undefined4 DAT_80090ad4;
+extern undefined4 LAB_000000a0;
+extern undefined4 SUB_000000b0;
+extern undefined4 PATCH_OBJ_44;
+extern undefined4 PATCH_OBJ_B4;
+extern undefined4 PATCH_OBJ_C8;
+extern undefined4 DAT_0000df80;
+extern undefined4 *_DAT_0000dffc;
+extern undefined4 DAT_80087128;
+extern undefined4 LAB_800885ec;
+extern undefined4 LAB_80088694;
+extern undefined4 LAB_80090a7c;
+extern undefined4 LAB_80090a4c;
+extern undefined4 LAB_80090a64;
+extern undefined4 LAB_80090ad4;
+extern undefined4 LAB_000000a0;
+extern undefined4 SUB_000000b0;
+extern undefined4 PATCH_OBJ_44;
+extern undefined4 PATCH_OBJ_B4;
+extern undefined4 PATCH_OBJ_C8;
+extern undefined4 DAT_0000df80;
+extern undefined4 *_DAT_0000dffc;
+extern undefined4 DAT_80087128;
+extern undefined4 LAB_800885ec;
+extern undefined4 LAB_80088694;
+extern undefined4 LAB_80090a7c;
+extern undefined4 LAB_80090a4c;
+extern undefined4 LAB_80090a64;
+extern undefined4 LAB_80090ad4;
+extern undefined4 LAB_000000a0;
+extern undefined4 SUB_000000b0;
+extern undefined4 PATCH_OBJ_44;
+extern undefined4 PATCH_OBJ_B4;
+extern undefined4 PATCH_OBJ_C8;
+extern undefined4 DAT_0000df80;
+extern undefined4 *_DAT_0000dffc;
+extern undefined4 DAT_80087128;
+extern undefined4 LAB_800885ec;
+extern undefined4 LAB_80088694;
+
+// Hardware register stubs (PS1 hardware - will be stubbed)
+extern uint DMA_MDEC_IN_CHCR;
+extern uint DMA_MDEC_OUT_CHCR;
+extern uint DMA_MDEC_IN_MADR;
+extern uint DMA_MDEC_OUT_MADR;
+extern uint DMA_MDEC_IN_BCR;
+extern uint DMA_MDEC_OUT_BCR;
+extern uint DMA_DPCR;
+extern uint MDEC_REG0;
+extern uint MDEC_REG1;
+extern uint JOY_MCD_CTRL;
+extern uint JOY_MCD_MODE;
+extern uint JOY_MCD_BAUD;
+extern uint JOY_MCD_STAT;
+extern bitfield_32_t JOY_MCD_DATA;
+extern uint CDROM_REG0;
+extern uint CDROM_REG1;
+extern uint CDROM_REG2;
+extern uint CDROM_REG3;
+extern uint _I_STAT;
+extern uint _I_MASK;
 
 int FUN_80085858(uint inputValue)
 
@@ -46,7 +248,7 @@ void FUN_80085974(undefined4 param)
 
   FUN_80085990();
 
-  _exit();
+  _exit(0);
 
   functionCount = *(int *)PTR_DAT_800a7110;
   functionPointer = (code **)PTR_DAT_800a7110;
@@ -132,7 +334,7 @@ void FUN_80085ac8(int objectPointer, uint typeFlags)
   *(undefined **)(objectPointer + 4) = &LAB_80090a7c;
 
   if ((typeFlags & 1) != 0) {
-    FUN_80086060();
+    FUN_80086060(1);
   }
   return;
 }
@@ -197,32 +399,41 @@ void FUN_80086060(int typeFlag)
 undefined8 FUN_80086084(uint dividendLow, uint dividendHigh, uint divisorLow, uint divisorHigh)
 
 {
-  longlong tempResult;
-  uint quotientHigh;
-  uint quotientLow;
-  uint remainderHigh;
-  int shiftCount;
-  uint signFlag;
-  uint tempHigh;
-  uint tempLow;
-  uint tempRemainder;
-  uint tempQuotient;
-  uint tempValue1;
-  uint tempValue2;
-  uint tempValue3;
+  longlong lVar1;
+  uint uVar2;
+  uint uVar3;
+  uint uVar4;
+  int iVar5;
+  uint uVar6;
+  uint uVar7;
+  uint uVar8;
+  uint uVar9;
+  uint uVar10;
+  uint uVar11;
+  uint uVar12;
+  uint param_1;
+  uint param_2;
+  uint param_3;
+  uint param_4;
 
-  signFlag = 0;
+  // Map parameters to local variables for compatibility with decompiled code
+  param_1 = dividendLow;
+  param_2 = dividendHigh;
+  param_3 = divisorLow;
+  param_4 = divisorHigh;
 
-  if ((int)dividendHigh < 0) {
-    signFlag = 0xffffffff;
-    dividendLow = -dividendLow;
-    dividendHigh = -(uint)(dividendLow != 0) - dividendHigh;
+  uVar6 = 0;
+
+  if ((int)param_2 < 0) {
+    uVar6 = 0xffffffff;
+    param_1 = -param_1;
+    param_2 = -(uint)(param_1 != 0) - param_2;
   }
 
-  if ((int)divisorHigh < 0) {
-    signFlag = ~signFlag;
-    divisorLow = -divisorLow;
-    divisorHigh = -(uint)(divisorLow != 0) - divisorHigh;
+  if ((int)param_4 < 0) {
+    uVar6 = ~uVar6;
+    param_3 = -param_3;
+    param_4 = -(uint)(param_3 != 0) - param_4;
   }
   if (param_4 == 0) {
     if (param_3 <= param_2) {
@@ -428,7 +639,7 @@ LAB_80086628:
     uVar3 = -uVar3;
     uVar8 = -(uint)(uVar3 != 0) - uVar8;
   }
-  return CONCAT44(uVar8,uVar3);
+  return CONCAT44(uVar8, uVar3);
 }
 
 void DecDCTReset(int resetMode)
@@ -529,54 +740,54 @@ void DecDCTin(u_long *buffer, int decodeMode)
 {
 
   if ((decodeMode & 1U) != 0) {
-    LIBPRESS_OBJ_188();
+    LIBPRESS_OBJ_188(buffer, 0);
     return;
   }
 
   *buffer = *buffer | 0x8000000;
 
   if ((decodeMode & 2U) != 0) {
-    LIBPRESS_OBJ_1B4();
+    LIBPRESS_OBJ_1B4((undefined4 *)buffer);
     return;
   }
 
   *buffer = *buffer & 0xfdffffff;
-  LIBPRESS_OBJ_3B0(buffer, *(undefined2 *)buffer);
+  LIBPRESS_OBJ_3B0((dword *)buffer, *(undefined2 *)buffer);
   return;
 }
 
 void LIBPRESS_OBJ_188(uint *bufferPointer, uint processFlags)
 
 {
-  uint hardwareValue;
+  uint hardwareValue = 0;  // Hardware value stub
 
   *bufferPointer = hardwareValue;
 
   if ((processFlags & 2) != 0) {
-    LIBPRESS_OBJ_1B4();
+    LIBPRESS_OBJ_1B4((undefined4 *)bufferPointer);
     return;
   }
 
   *bufferPointer = *bufferPointer & 0xfdffffff;
-  LIBPRESS_OBJ_3B0(bufferPointer, *(undefined2 *)bufferPointer);
+  LIBPRESS_OBJ_3B0((dword *)bufferPointer, *(undefined2 *)bufferPointer);
   return;
 }
 
 void LIBPRESS_OBJ_1B4(undefined4 *bufferPointer)
 
 {
-  undefined4 hardwareValue;
+  undefined4 hardwareValue = 0;  // Hardware value stub
 
   *bufferPointer = hardwareValue;
 
-  LIBPRESS_OBJ_3B0(bufferPointer, *(undefined2 *)bufferPointer);
+  LIBPRESS_OBJ_3B0((dword *)bufferPointer, *(undefined2 *)bufferPointer);
   return;
 }
 
 void DecDCTout(u_long *outputBuffer, int bufferSize)
 
 {
-  LIBPRESS_OBJ_440();
+  LIBPRESS_OBJ_440((dword)outputBuffer, (uint)bufferSize);
   return;
 }
 
@@ -588,7 +799,8 @@ int DecDCTinSync(int syncMode)
 
   if (syncMode == 0) {
     LIBPRESS_OBJ_4CC();
-    syncResult = LIBPRESS_OBJ_220();
+    LIBPRESS_OBJ_220();
+    syncResult = 0;  // LIBPRESS_OBJ_220 returns void
     return syncResult;
   }
 
@@ -609,7 +821,8 @@ int DecDCToutSync(int syncMode)
 
   if (syncMode == 0) {
     LIBPRESS_OBJ_560();
-    syncResult = LIBPRESS_OBJ_268();
+    LIBPRESS_OBJ_268();
+    syncResult = 0;  // LIBPRESS_OBJ_268 returns void
     return syncResult;
   }
 
@@ -724,7 +937,8 @@ undefined4 LIBPRESS_OBJ_4CC(void)
   } while (timeoutCounter != -1);
 
   LIBPRESS_OBJ_60C("MDEC_in_sync");
-  timeoutResult = LIBPRESS_OBJ_550();
+  LIBPRESS_OBJ_550();
+  timeoutResult = 0;
   return timeoutResult;
 }
 
@@ -751,7 +965,8 @@ undefined4 LIBPRESS_OBJ_560(void)
   } while (timeoutCounter != -1);
 
   LIBPRESS_OBJ_60C("MDEC_out_sync");
-  timeoutResult = LIBPRESS_OBJ_5E4();
+  LIBPRESS_OBJ_5E4();
+  timeoutResult = 0;
   return timeoutResult;
 }
 
@@ -788,14 +1003,15 @@ void InitCARD(long initValue)
   ChangeClearPAD(0);
   VSync(0);
 
-  interruptStatus = FUN_8008c918();
+  FUN_8008c918();
+  interruptStatus = 0;
   padInitFlag = ReadInitPadFlag();
 
   if (padInitFlag == 0) {
     initValue = 0;
   }
 
-  InitCARD2(initValue);
+  InitCARD2();
   _copy_memcard_patch();
   _patch_card();
   _patch_card2();
@@ -812,7 +1028,8 @@ long StartCARD(void)
 {
   int interruptStatus;
 
-  interruptStatus = FUN_8008c918();
+  FUN_8008c918();
+  interruptStatus = 0;
 
   StartCARD2();
 
@@ -839,7 +1056,7 @@ void _bu_init(void)
 
 {
 
-  (*(code *)&LAB_000000a0)();
+  (*(code *)(void *)&LAB_000000a0)();
   return;
 }
 
@@ -860,7 +1077,8 @@ long _card_info(long channelNumber)
 {
   long cardInfo;
 
-  cardInfo = (*(code *)&LAB_000000a0)();
+  (*(code *)(void *)&LAB_000000a0)();
+  cardInfo = 0;
 
   return cardInfo;
 }
@@ -870,7 +1088,8 @@ long _card_read(long channelNumber, long blockNumber, uchar *buffer)
 {
   long readResult;
 
-  readResult = (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
+  readResult = 0;
 
   return readResult;
 }
@@ -880,7 +1099,8 @@ long _card_write(long channelNumber, long blockNumber, uchar *buffer)
 {
   long writeResult;
 
-  writeResult = (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
+  writeResult = 0;
 
   return writeResult;
 }
@@ -889,7 +1109,7 @@ void InitCARD2(void)
 
 {
 
-  (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
   return;
 }
 
@@ -901,7 +1121,8 @@ void _patch_card_info(void)
 
   DAT_801c9598 = returnAddress;
 
-  cardStructure = (*(code *)&SUB_000000b0)();
+  (*(code *)&SUB_000000b0)();
+  cardStructure = 0;
 
   *(undefined4 *)(*(int *)(cardStructure + 0x16c) + 0x1988) = 0;
 
@@ -920,7 +1141,8 @@ void _patch_card(void)
 
   FUN_8008c918();
 
-  cardStructure = (*(code *)&SUB_000000b0)();
+  (*(code *)&SUB_000000b0)();
+  cardStructure = 0;
 
   _DAT_0000dffc = (undefined4 *)
        (*(int *)(*(int *)(cardStructure + 0x18) + 0x70) * 0x10000 +
@@ -948,7 +1170,8 @@ void _patch_card2(void)
 
   FUN_8008c918();
 
-  cardStructure = (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
+  cardStructure = 0;
   cardStructure = *(int *)(cardStructure + 0x16c);
 
   patchData = &PATCH_OBJ_C8;
@@ -984,7 +1207,7 @@ void StartCARD2(void)
 
 {
 
-  (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
   return;
 }
 
@@ -992,7 +1215,7 @@ void StopCARD2(void)
 
 {
 
-  (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
   return;
 }
 
@@ -1007,7 +1230,8 @@ void FUN_800870b8(void)
 
   FUN_8008c918();
 
-  cardStructure = (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
+  cardStructure = 0;
   cardStructure = *(int *)(cardStructure + 0x18);
 
   patchData = &DAT_80087128;
@@ -1026,7 +1250,7 @@ void _new_card(void)
 
 {
 
-  (*(code *)&SUB_000000b0)();
+  (*(code *)(void *)&SUB_000000b0)();
   return;
 }
 
@@ -1089,8 +1313,12 @@ void PadStartCom(void)
 
   FUN_8008c948();
 
-  (*DAT_800a76a0)(DAT_800a76d0);
-  (*DAT_800a76a0)(DAT_800a76d0 + 0xf0);
+  if (DAT_800a76a0 != NULL) {
+    (*DAT_800a76a0)((undefined4 *)DAT_800a76d0);
+  }
+  if (DAT_800a76a0 != NULL) {
+    (*DAT_800a76a0)((undefined4 *)(DAT_800a76d0 + 0xf0));
+  }
 
   DAT_801c9424 = 0;
   DAT_801c9420 = 0;
@@ -1115,7 +1343,7 @@ int PadGetState(int portNumber)
   int padStructure;
   uint returnState;
 
-  padStructure = (*DAT_800a76b0)();
+  padStructure = (int)(*DAT_800a76b0)(0);
 
   if ((((*(char *)(padStructure + 0x37) == '\0') && (*(char *)(padStructure + 0x38) == '\0')) &&
       ((padStructure == *(int *)(padStructure + 0x10) || (*(char *)(padStructure + 0x39) == '\0')))) &&
@@ -1128,22 +1356,23 @@ int PadGetState(int portNumber)
     padState = *(byte *)(padStructure + 0x49);
 
     if (padState == 3) {
-      padStructure = PDENT2_OBJ_BC();
-      return padStructure;
+      PDENT2_OBJ_BC();
+      returnState = 3;  // PDENT2_OBJ_BC returns void
+      return returnState;
     }
 
     if (padState < 4) {
       returnState = 1;
       if (padState != 2) {
-        padStructure = PDENT2_OBJ_B8();
-        return padStructure;
+        returnState = (uint)PDENT2_OBJ_B8();
+        return returnState;
       }
     }
     else {
       returnState = 4;
       if (padState != 6) {
-        padStructure = PDENT2_OBJ_B8();
-        return padStructure;
+        returnState = (uint)PDENT2_OBJ_B8();
+        return returnState;
       }
     }
   }
@@ -1153,7 +1382,7 @@ int PadGetState(int portNumber)
 undefined PDENT2_OBJ_B8(void)
 
 {
-  int padStructure;
+  int padStructure = (int)&DAT_801c95c8;  // Initialize pad structure from context
 
   return *(undefined *)(padStructure + 0x49);
 }
@@ -1169,34 +1398,34 @@ int PadInfoAct(int portNumber, int actionIndex, int infoType)
 {
   int padStructure;
 
-  padStructure = (*DAT_800a76b0)();
+  padStructure = (int)(*DAT_800a76b0)(0);
 
   if (-1 < actionIndex) {
     if (actionIndex < (int)(uint)*(byte *)(padStructure + 0xe9)) {
 
       switch(infoType) {
       case 1:
-        padStructure = PDENT4_OBJ_C0();
-        return padStructure;
+        PDENT4_OBJ_C0();
+        return 0;  // PDENT4_OBJ_C0 returns void
       case 2:
-        padStructure = PDENT4_OBJ_C0();
-        return padStructure;
+        PDENT4_OBJ_C0();
+        return 0;  // PDENT4_OBJ_C0 returns void
       case 3:
-        padStructure = PDENT4_OBJ_C0();
-        return padStructure;
+        PDENT4_OBJ_C0();
+        return 0;  // PDENT4_OBJ_C0 returns void
       case 4:
-        padStructure = PDENT4_OBJ_C0();
-        return padStructure;
+        PDENT4_OBJ_C0();
+        return 0;  // PDENT4_OBJ_C0 returns void
       case 5:
-        padStructure = PDENT4_OBJ_C0();
-        return padStructure;
+        PDENT4_OBJ_C0();
+        return 0;  // PDENT4_OBJ_C0 returns void
       }
     }
     return 0;
   }
 
-  padStructure = PDENT4_OBJ_C0();
-  return padStructure;
+  PDENT4_OBJ_C0();
+  return 0;  // PDENT4_OBJ_C0 returns void
 }
 
 void PDENT4_OBJ_80(void)
@@ -1245,7 +1474,7 @@ void PadSetAct(int portNumber, uchar *actionData, int actionType)
 {
   int padStructure;
 
-  padStructure = (*DAT_800a76b0)();
+  padStructure = (int)(*DAT_800a76b0)(0);
   *(uchar **)(padStructure + 0x28) = actionData;
   *(char *)(padStructure + 0x34) = (char)actionType;
   return;
@@ -1257,7 +1486,7 @@ int PadSetActAlign(int portNumber, uchar *actionData)
   int padStructure;
   int alignmentResult;
 
-  padStructure = (*DAT_800a76b0)();
+  padStructure = (int)(*DAT_800a76b0)(0);
 
   alignmentResult = (*DAT_800a76b8)(padStructure);
 
@@ -1331,7 +1560,7 @@ undefined4 PDCMD2_OBJ_A4(int padStructure)
 
           if (matchCount < (int)expectedCount) {
             *(undefined *)(counter + 0x5d) = 0xff;
-            errorResult = PDCMD2_OBJ_138();
+            errorResult = PDCMD2_OBJ_138(padStructure, dataBuffer, index, matchCount);
             return errorResult;
           }
           *(char *)(counter + 0x5d) = (char)actionIndex;
@@ -1356,12 +1585,12 @@ undefined4 PDCMD2_OBJ_138(int padStructure, byte *dataBuffer, int bufferIndex, i
   byte dataByte;
   undefined4 errorResult;
   int counter;
-  int currentIndex;
+  int currentIndex = bufferIndex;  // Initialize current index
   byte *bufferPointer;
-  uint actionIndex;
+  uint actionIndex = 0;  // Initialize action index
   uint expectedCount;
-  int dataOffset;
-  undefined errorCode;
+  int dataOffset = 0;  // Initialize data offset
+  undefined errorCode = 0xff;  // Initialize error code
 
   while( true ) {
     do {
@@ -1410,14 +1639,14 @@ undefined4 PDCMD2_OBJ_138(int padStructure, byte *dataBuffer, int bufferIndex, i
   }
 
   *(undefined *)(bufferIndex + 0x5d) = errorCode;
-  errorResult = PDCMD2_OBJ_138();
+  errorResult = PDCMD2_OBJ_138(padStructure, dataBuffer, bufferIndex, matchCount);
   return errorResult;
 }
 
 undefined4 FUN_80087860(int padStructure)
 
 {
-  code *callbackFunction;
+  code_int callbackFunction;
   int timeoutCounter;
   undefined4 baudRate;
 
@@ -1446,15 +1675,21 @@ undefined4 FUN_80087860(int padStructure)
     while (DAT_800a76bc = callbackFunction, 0 < timeoutCounter) {
       timeoutCounter = *(int *)(&DAT_800a76f4 + DAT_800a76dc * 4) + -1;
       *(int *)(&DAT_800a76f4 + DAT_800a76dc * 4) = timeoutCounter;
-      (*DAT_800a76bc)(*(int *)(padStructure + 0xc) + timeoutCounter * 0xf0);
+      if (DAT_800a76bc != NULL) {
+        (*DAT_800a76bc)(*(int *)(padStructure + 0xc) + timeoutCounter * 0xf0);
+      }
       callbackFunction = DAT_800a76bc;
       timeoutCounter = *(int *)(&DAT_800a76f4 + DAT_800a76dc * 4);
     }
 
     if (*(int *)(&DAT_800a76f4 + DAT_800a76dc * 4) == 0) {
       *(int *)(&DAT_800a76f4 + DAT_800a76dc * 4) = -1;
-      (*callbackFunction)(padStructure);
-      (*DAT_800a76c0)(padStructure);
+      if (callbackFunction != NULL) {
+        (*callbackFunction)(padStructure);
+      }
+      if (DAT_800a76c0 != NULL) {
+        (*DAT_800a76c0)(padStructure);
+      }
     }
   }
 
@@ -1467,7 +1702,7 @@ undefined4 FUN_80087860(int padStructure)
         timeoutCounter = FUN_80088b54();
       } while (timeoutCounter == 0);
 
-      JOY_MCD_DATA._0_1_ = 1;
+      JOY_MCD_DATA.bytes._0_1_ = 1;
       FUN_80088b34(2000);
       timeoutCounter = FUN_80088124();
       if (timeoutCounter == 0) {
@@ -1480,8 +1715,8 @@ undefined4 FUN_80087860(int padStructure)
       do {
         if ((_I_STAT & 0x80) != 0) {
 
-          JOY_MCD_DATA._0_1_ = 0x42;
-          FUN_80088b34();
+          JOY_MCD_DATA.bytes._0_1_ = 0x42;
+          FUN_80088b34(0x1ae);  // FUN_80088b34 requires parameter
           timeoutCounter = FUN_80088124();
           if (timeoutCounter == 0) {
             return 0;
@@ -1493,8 +1728,8 @@ undefined4 FUN_80087860(int padStructure)
           do {
             if ((_I_STAT & 0x80) != 0) {
 
-              JOY_MCD_DATA._0_1_ = 1;
-              FUN_80088b34();
+              JOY_MCD_DATA.bytes._0_1_ = 1;
+              FUN_80088b34(0x1ae);  // FUN_80088b34 requires parameter
               timeoutCounter = FUN_80088124();
               if (timeoutCounter == 0) {
                 return 0;
@@ -1502,11 +1737,11 @@ undefined4 FUN_80087860(int padStructure)
               FUN_800881b4();
               return 0;
             }
-            timeoutCounter = FUN_80088b54(0x3c);
+            timeoutCounter = FUN_80088b54() ? 1 : 0;  // FUN_80088b54 returns bool, no parameter
           } while (timeoutCounter == 0);
           return 0;
         }
-        timeoutCounter = FUN_80088b54(0x3c);
+        timeoutCounter = FUN_80088b54() ? 1 : 0;  // FUN_80088b54 returns bool, no parameter
       } while (timeoutCounter == 0);
       return 0;
     }
@@ -1528,14 +1763,20 @@ void FUN_80087b94(int padStructure)
   code **commandFunction;
   int commandResult;
 
-  commandFunction = (code **)(&PTR_LAB_800a7724 + DAT_800a76e0);
+  commandFunction = (code **)((char *)&PTR_LAB_800a7724 + DAT_800a76e0 * sizeof(code *));
   DAT_800a76e0 = DAT_800a76e0 + 1;
 
-  commandResult = (**commandFunction)();
+  if (commandFunction != NULL && *commandFunction != NULL) {
+    (**commandFunction)();
+    commandResult = 0;
+  } else {
+    commandResult = 0;
+  }
 
   if (commandResult < 0) {
-
-    (*DAT_800a769c)();
+    if (DAT_800a769c != NULL) {
+      (*DAT_800a769c)(commandResult);
+    }
   }
   else {
 
@@ -1544,8 +1785,9 @@ void FUN_80087b94(int padStructure)
       FUN_80088b34(0x3c);
       commandResult = FUN_80088124();
       if (commandResult == 0) {
-
-        (*DAT_800a769c)(0xfffffffd);
+        if (DAT_800a769c != NULL) {
+          (*DAT_800a769c)(0xfffffffd);
+        }
       }
     }
 
@@ -1566,7 +1808,7 @@ uint FUN_80087c84(int padStructure, int dataValue)
   uint interruptStatus;
   word baudRate;
 
-  receivedData = (byte)JOY_MCD_DATA;
+  receivedData = (byte)JOY_MCD_DATA.value;
   dataByte = (byte)dataValue;
 
   if (dataValue < 0) {
@@ -1592,7 +1834,7 @@ uint FUN_80087c84(int padStructure, int dataValue)
     }
 
     DAT_801c95bc = (uint)(ushort)TMR_SYSCLOCK_VAL;
-    DAT_801c95c4 = (uint)(ushort)TMR_SYSCLOCK_MODE;
+    DAT_801c95c4 = (uint)(ushort)TMR_SYSCLOCK_MODE._0_2_;
     DAT_801c95c0 = 0x1ae;
 
     do {
@@ -1614,16 +1856,16 @@ uint FUN_80087c84(int padStructure, int dataValue)
       JOY_MCD_CTRL = JOY_MCD_CTRL | 0x10;
     }
 
-    JOY_MCD_DATA._0_1_ = dataByte;
+    JOY_MCD_DATA.bytes._0_1_ = dataByte;
     *(char *)(padStructure + 0x45) = *(char *)(padStructure + 0x45) + '\x01';
 
     *(byte *)(*(int *)(padStructure + 0x3c) + (uint)*(byte *)(padStructure + 0x44)) = receivedData;
     *(char *)(padStructure + 0x44) = *(char *)(padStructure + 0x44) + '\x01';
 
-    responseData = (byte)JOY_MCD_DATA;
+    responseData = (byte)JOY_MCD_DATA.value;
   }
 
-  JOY_MCD_DATA._0_1_ = responseData;
+  JOY_MCD_DATA.bytes._0_1_ = responseData;
   return (uint)receivedData;
 }
 
@@ -1647,8 +1889,8 @@ uint FUN_80087ea8(int padStructure, undefined dataByte)
 
   FUN_80088b34(400);
 
-  receivedData = (byte)JOY_MCD_DATA;
-  dataValue = (uint)(byte)JOY_MCD_DATA;
+  receivedData = (byte)JOY_MCD_DATA.value;
+  dataValue = (uint)(byte)JOY_MCD_DATA.value;
   JOY_MCD_BAUD = baudRate;
 
   if ((*(char *)(padStructure + 0x44) == '\0') && ((int)dataValue >> 4 == 8)) {
@@ -1671,7 +1913,7 @@ uint FUN_80087ea8(int padStructure, undefined dataByte)
         JOY_MCD_CTRL = JOY_MCD_CTRL | 0x10;
       }
 
-      JOY_MCD_DATA._0_1_ = dataByte;
+      JOY_MCD_DATA.bytes._0_1_ = dataByte;
       *(char *)(padStructure + 0x45) = *(char *)(padStructure + 0x45) + '\x01';
 
       if (*(char *)(padStructure + 0x44) != -1) {
@@ -1684,17 +1926,17 @@ uint FUN_80087ea8(int padStructure, undefined dataByte)
     currentTime = (uint)(ushort)TMR_SYSCLOCK_VAL;
     if ((int)currentTime < DAT_801c95bc) {
 
-      if ((ushort)TMR_SYSCLOCK_MAX == 0) {
+      if ((ushort)TMR_SYSCLOCK_MAX._0_2_ == 0) {
         currentTime = currentTime + 0x10000;
       }
       else {
-        currentTime = (ushort)TMR_SYSCLOCK_MAX + currentTime;
+        currentTime = (ushort)TMR_SYSCLOCK_MAX._0_2_ + currentTime;
       }
     }
 
     timeDifference = currentTime - DAT_801c95bc;
 
-    if (((ushort)TMR_SYSCLOCK_MODE & 0x200) == 0) {
+    if (((ushort)TMR_SYSCLOCK_MODE._0_2_ & 0x200) == 0) {
       timeDifference = timeDifference >> 3;
     }
   } while (timeDifference < DAT_801c95c0);
@@ -1707,15 +1949,14 @@ void FUN_80088000(int startTime, int timeoutValue, ushort *timerValue, ushort *t
 {
   uint currentTime;
   int timeDifference;
-  int baseTime;
-  uint *statusRegister;
-  ushort *timerRegister;
-  int timerMax;
-  int padStructure;
-  int dataValue;
-  undefined dataByte;
+  uint *statusRegister = &_I_STAT;  // Initialize status register pointer
+  ushort *timerRegister = timerValue;  // Initialize timer register pointer
+  int timerMax = (ushort)TMR_SYSCLOCK_MAX._0_2_;  // Initialize timer max
+  int padStructure = 0;  // Initialize pad structure (will be set from context)
+  int dataValue = 0;  // Initialize data value
+  undefined dataByte = 0;  // Initialize data byte
 
-  timeDifference = baseTime - startTime;
+  timeDifference = 0;  // Initialize time difference
 
   do {
 
@@ -1739,7 +1980,7 @@ void FUN_80088000(int startTime, int timeoutValue, ushort *timerValue, ushort *t
           JOY_MCD_CTRL = JOY_MCD_CTRL | 0x10;
         }
 
-        JOY_MCD_DATA._0_1_ = dataByte;
+        JOY_MCD_DATA.bytes._0_1_ = dataByte;
         *(char *)(padStructure + 0x45) = *(char *)(padStructure + 0x45) + '\x01';
 
         if (*(char *)(padStructure + 0x44) != -1) {
@@ -1826,7 +2067,7 @@ void FUN_800881ec(int padStructure)
   else if (currentState < 4) {
     if (currentState == 2) {
 
-      FUN_80088aac();
+      FUN_80088aac(padStructure);
     }
   }
   else if (currentState == 4) {
@@ -1933,16 +2174,16 @@ undefined4 FUN_80088270(int padStructure)
           *(undefined2 *)(padStructure + 0xec) = 0;
           return 0;
         }
-        *(undefined2 *)(param_1 + 0xee) = 0;
-        *(undefined *)(param_1 + 0xeb) = 0;
-        *(undefined *)(param_1 + 0x46) = 0xff;
-        FUN_80088518(param_1,param_1 + 99);
-        *(undefined *)(param_1 + 0x46) = 2;
+        *(undefined2 *)(padStructure + 0xee) = 0;
+        *(undefined *)(padStructure + 0xeb) = 0;
+        *(undefined *)(padStructure + 0x46) = 0xff;
+        FUN_80088518((int *)padStructure, (int)padStructure + 99);
+        *(undefined *)(padStructure + 0x46) = 2;
       }
       else {
-        (*DAT_800a76a0)(param_1);
-        *(undefined *)(param_1 + 0x46) = 0xfe;
-        *(undefined *)(param_1 + 0x49) = 2;
+        (*DAT_800a76a0)(padStructure);
+        *(undefined *)(padStructure + 0x46) = 0xfe;
+        *(undefined *)(padStructure + 0x49) = 2;
       }
     }
   }
@@ -1968,7 +2209,7 @@ undefined4 FUN_80088518(int *padStructure, int bufferSize)
       return 0;
     }
 
-    alignmentResult = (*DAT_800a76b8)();
+    alignmentResult = (*DAT_800a76b8)(padStructure);
     if (alignmentResult == 0) {
 
       *(undefined *)((int)padStructure + 0x49) = 4;
@@ -2067,15 +2308,15 @@ bool FUN_80088b54(void)
   currentTime = (uint)(ushort)TMR_SYSCLOCK_VAL;
 
   if ((int)currentTime < DAT_801c95bc) {
-    if ((ushort)TMR_SYSCLOCK_MAX == 0) {
+    if ((ushort)TMR_SYSCLOCK_MAX._0_2_ == 0) {
       currentTime = currentTime + 0x10000;
     }
     else {
-      currentTime = currentTime + (ushort)TMR_SYSCLOCK_MAX;
+      currentTime = currentTime + (ushort)TMR_SYSCLOCK_MAX._0_2_;
     }
   }
 
-  if (((ushort)TMR_SYSCLOCK_MODE & 0x200) == 0) {
+  if (((ushort)TMR_SYSCLOCK_MODE._0_2_ & 0x200) == 0) {
     timeDifference = (int)(currentTime - DAT_801c95bc) >> 3;
   }
   else {
@@ -2171,14 +2412,14 @@ void PDDIRRES_OBJ_158(int errorCode)
   }
 
   FUN_80087860(&DAT_801c95c8 + DAT_800a76dc * 0xf0);
-  PDDIRRES_OBJ_228();
+  PDDIRRES_OBJ_228(0, 0);  // PDDIRRES_OBJ_228 requires parameters
   return;
 }
 
 void PDDIRRES_OBJ_1CC(void)
 
 {
-  int structureBase;
+  int structureBase = (int)&DAT_801c95c8;  // Initialize structure base
 
   DAT_800a76e0 = 0;
   JOY_MCD_CTRL = 0;
@@ -2190,18 +2431,18 @@ void PDDIRRES_OBJ_1CC(void)
 
   structureBase = DAT_800a76dc * 0xf0 + structureBase;
   FUN_80087860(structureBase);
-  PDDIRRES_OBJ_228();
+  PDDIRRES_OBJ_228(0, 0);
   return;
 }
 
 void PDDIRRES_OBJ_228(undefined4 statusValue, int errorCode)
 
 {
-  int loopFlag;
+  int loopFlag = 0;  // Initialize loop flag
   int structureOffset;
-  int structureBase;
-  int errorThreshold;
-  int maxErrorCode;
+  int structureBase = (int)&DAT_801c95c8;  // Initialize structure base
+  int errorThreshold = -9;  // Initialize error threshold
+  int maxErrorCode = 0;  // Initialize max error code
 
   while( true ) {
     if (loopFlag != 0) {
@@ -2232,7 +2473,7 @@ void PDDIRRES_OBJ_228(undefined4 statusValue, int errorCode)
   }
 
   FUN_80087860(DAT_800a76dc * 0xf0 + structureBase);
-  PDDIRRES_OBJ_228();
+  PDDIRRES_OBJ_228(0, 0);
   return;
 }
 
@@ -2259,20 +2500,22 @@ undefined4 PDDIRRES_OBJ_25C(int padStructure)
 
     if (((5 < dataIndex) || (validationResult = 0, *(char *)(padStructure + dataIndex + 0x57) != '\0')) &&
        (validationResult = 0, dataIndex < (int)(uint)*(byte *)(padStructure + 0x34))) {
-      validationResult = PDDIRRES_OBJ_310();
+      PDDIRRES_OBJ_310();  // PDDIRRES_OBJ_310 returns void
+      validationResult = 0;
       return validationResult;
     }
   }
   else {
     if (*(char *)(padStructure + 0x37) != 'M') {
 
-      validationResult = PDDIRRES_OBJ_2EC();
+      validationResult = (undefined4)PDDIRRES_OBJ_2EC(padStructure);
       return validationResult;
     }
 
     validationResult = 0xff;
     if (dataIndex < (int)(uint)*(byte *)(padStructure + 0x36)) {
-      validationResult = PDDIRRES_OBJ_2C0();
+      PDDIRRES_OBJ_2C0();  // PDDIRRES_OBJ_2C0 returns void
+      validationResult = 0xff;
       return validationResult;
     }
   }
@@ -2290,7 +2533,7 @@ undefined PDDIRRES_OBJ_2EC(int padStructure)
 
 {
   undefined dataByte;
-  int dataIndex;
+  int dataIndex = *(byte *)(padStructure + 0x45) - 3;  // Initialize data index
 
   dataByte = 0;
 
@@ -2393,7 +2636,7 @@ void PDDIRRES_OBJ_318(int padStructure)
            (counter = DAT_800a76e4 + (uint)*(byte *)(dataOffset + *(int *)(padStructure + 4) + 3), counter < 0x3d)
            ) {
           DAT_800a76e4 = counter;
-          PDDIRRES_OBJ_438();
+          PDDIRRES_OBJ_438(0, 0, 1);  // PDDIRRES_OBJ_438 requires parameters
           return;
         }
 
@@ -2417,10 +2660,10 @@ void PDDIRRES_OBJ_3EC(undefined4 statusValue, undefined4 dataValue, int actionFl
   byte *dataBuffer;
   byte *actionBuffer;
   byte actionMask;
-  uint actionIndex;
-  int maxActions;
-  int dataOffset;
-  int padStructure;
+  uint actionIndex = 0;  // Initialize action index
+  int maxActions = 6;  // Initialize max actions
+  int dataOffset = 0;  // Initialize data offset
+  int padStructure = (int)&DAT_801c95c8;  // Initialize pad structure
 
   do {
     do {
@@ -2429,7 +2672,7 @@ void PDDIRRES_OBJ_3EC(undefined4 statusValue, undefined4 dataValue, int actionFl
          (counter = DAT_800a76e4 + (uint)*(byte *)(dataOffset + *(int *)(padStructure + 4) + 3), counter < 0x3d))
       {
         DAT_800a76e4 = counter;
-        PDDIRRES_OBJ_438();
+        PDDIRRES_OBJ_438(0, 0, actionFlag);
         return;
       }
 
@@ -2474,11 +2717,11 @@ void PDDIRRES_OBJ_438(undefined4 statusValue, undefined4 dataValue, int actionFl
   byte *dataBuffer;
   bool matchFound;
   byte actionMask;
-  uint actionIndex;
-  int maxActions;
-  int dataOffset;
-  undefined statusByte;
-  int padStructure;
+  uint actionIndex = 0;  // Initialize action index
+  int maxActions = 6;  // Initialize max actions
+  int dataOffset = 0;  // Initialize data offset
+  undefined statusByte = 1;  // Initialize status byte
+  int padStructure = (int)&DAT_801c95c8;  // Initialize pad structure
 
   do {
 
@@ -2540,7 +2783,7 @@ void PDDIRRES_OBJ_438(undefined4 statusValue, undefined4 dataValue, int actionFl
     counter = DAT_800a76e4 + (uint)*(byte *)(dataOffset + *(int *)(padStructure + 4) + 3);
     if (counter < 0x3d) {
       DAT_800a76e4 = counter;
-      PDDIRRES_OBJ_438();
+      PDDIRRES_OBJ_438(0, 0, actionFlag);
       return;
     }
     actionFlag = 0;
@@ -2587,7 +2830,8 @@ undefined4 PDDIRRES_OBJ_5B4(int padStructure)
   if (currentState == 1) {
 
     FUN_80088a8c(padStructure, 1);
-    result = PDDIRRES_OBJ_6B4();
+    PDDIRRES_OBJ_6B4();
+    result = 0;
     return result;
   }
 
@@ -2603,7 +2847,8 @@ undefined4 PDDIRRES_OBJ_5B4(int padStructure)
 
 PDDIRRES_OBJ_678:
       FUN_80088a8c(padStructure, 0);
-      result = PDDIRRES_OBJ_6B4();
+      PDDIRRES_OBJ_6B4();
+      result = 0;
       return result;
     }
     if (currentState != 0xff) {
@@ -2623,11 +2868,12 @@ undefined4 PDDIRRES_OBJ_688(void)
 
   if (*(code **)(padStructure + 0x14) != (code *)0x0) {
     (**(code **)(padStructure + 0x14))();
-    result = PDDIRRES_OBJ_6B4();
+    PDDIRRES_OBJ_6B4();
+    result = 0;
     return result;
   }
 
-  FUN_800881ec();
+  FUN_800881ec(padStructure);
   return 0;
 }
 
@@ -2650,7 +2896,9 @@ void PDDIRRES_OBJ_6C4(int padStructure)
     *(undefined *)(*(int *)(padStructure + 0x30) + 1) = 0;
     *(undefined *)(padStructure + 0xe8) = 0;
     *(undefined *)(padStructure + 0x35) = 0;
-    (*DAT_800a76a0)();
+    if (DAT_800a76a0 != NULL) {
+      (*DAT_800a76a0)((undefined4 *)padStructure);
+    }
     PDDIRRES_OBJ_920();
     return;
   }
@@ -2662,7 +2910,7 @@ void PDDIRRES_OBJ_6C4(int padStructure)
   if (newType == 0xf) {
 
     *(char *)(padStructure + 0xe8) = previousType;
-    PDDIRRES_OBJ_7AC();
+    PDDIRRES_OBJ_7AC(0, (uint)newType);
     return;
   }
 
@@ -2736,12 +2984,14 @@ void PDDIRRES_OBJ_7AC(undefined4 statusValue, uint expectedType)
 {
   char currentState;
   byte stateValue;
-  int padStructure;
+  int padStructure = (int)&DAT_801c95c8;  // Initialize pad structure from context
 
   if (((*(char *)(*(int *)(padStructure + 0x3c) + 1) == '\0') &&
       (((*(char *)(padStructure + 0x46) != '\x01' || (*(int *)(padStructure + 0x14) != 0)) &&
        (*(char *)(padStructure + 0x50) == '\0')))) || (*(byte *)(padStructure + 0xe8) != expectedType)) {
-    (*DAT_800a76a0)();
+    if (DAT_800a76a0 != NULL) {
+      (*DAT_800a76a0)((undefined4 *)padStructure);
+    }
   }
 
   currentState = *(char *)(padStructure + 0x46);
@@ -2752,7 +3002,9 @@ void PDDIRRES_OBJ_7AC(undefined4 statusValue, uint expectedType)
   }
 
   if (((byte)(currentState - 2U) < 0xfc) && (**(char **)(padStructure + 0x3c) != -0xd)) {
-    (*DAT_800a76a0)();
+    if (DAT_800a76a0 != NULL) {
+      (*DAT_800a76a0)((undefined4 *)padStructure);
+    }
     PDDIRRES_OBJ_920();
     return;
   }
@@ -2793,8 +3045,8 @@ void PDDIRRES_OBJ_7AC(undefined4 statusValue, uint expectedType)
 void PDDIRRES_OBJ_8D4(void)
 
 {
-  char currentState;
-  int padStructure;
+  char currentState = 0;  // Initialize current state
+  int padStructure = (int)&DAT_801c95c8;  // Initialize pad structure from context
 
   *(char *)(padStructure + 0x46) = currentState + '\x01';
   PDDIRRES_OBJ_920();
@@ -2805,7 +3057,7 @@ void PDDIRRES_OBJ_8E8(void)
 
 {
   char stateIncrement;
-  int padStructure;
+  int padStructure = (int)&DAT_801c95c8;  // Initialize pad structure from context
 
   if (*(code **)(padStructure + 0x18) != (code *)0x0) {
     (**(code **)(padStructure + 0x18))();
@@ -2813,7 +3065,7 @@ void PDDIRRES_OBJ_8E8(void)
     return;
   }
 
-  stateIncrement = FUN_80088270();
+  stateIncrement = (char)FUN_80088270(padStructure);
   *(char *)(padStructure + 0x46) = *(char *)(padStructure + 0x46) + stateIncrement;
   return;
 }
@@ -2821,8 +3073,8 @@ void PDDIRRES_OBJ_8E8(void)
 void PDDIRRES_OBJ_910(void)
 
 {
-  char stateIncrement;
-  int padStructure;
+  char stateIncrement = 1;  // Initialize state increment
+  int padStructure = (int)&DAT_801c95c8;  // Initialize pad structure from context
 
   *(char *)(padStructure + 0x46) = *(char *)(padStructure + 0x46) + stateIncrement;
   return;
@@ -2904,7 +3156,8 @@ int CdGetSector(void *memoryAddress, int sectorSize)
 {
   int sectorResult;
 
-  sectorResult = CD_getsector();
+  CD_getsector();
+  sectorResult = 0;
   return (uint)(sectorResult == 0);
 }
 
@@ -2926,7 +3179,8 @@ int CdInit(void)
       DAT_800a7754 = EVENT_OBJ_11C;
       DAT_800a7758 = 0;
 
-      initResult = EVENT_OBJ_80();
+      EVENT_OBJ_80();
+      initResult = 0;
       return initResult;
     }
     retryCount = retryCount + -1;
@@ -2951,7 +3205,8 @@ undefined4 EVENT_OBJ_90(void)
   initResult = CD_init();
   if (initResult == 0) {
     CD_initvol();
-    volumeResult = EVENT_OBJ_BC();
+    EVENT_OBJ_BC();
+    volumeResult = 0;
     return volumeResult;
   }
   return 0;
@@ -3025,9 +3280,9 @@ int CdControl(u_char command, u_char *parameters, u_char *result)
       CD_cw(1, 0, 0, 0);
     }
 
-    if ((((parameters == (u_char *)0x0) || (*(int *)(&DAT_800a7764 + (uint)command * 4) == 0)) ||
-        (commandResult = CD_cw(2, parameters, result, 0), commandResult == 0)) &&
-       (DAT_800a780c = savedCallback, commandResult = CD_cw(command, parameters, result, 0), commandResult == 0)) break;
+    if ((((parameters == (u_char *)0x0) || (*(int *)((int)&DAT_800a7764 + (uint)command * 4) == 0)) ||
+        (commandResult = CD_cw(2, parameters, (undefined *)result, 0), commandResult == 0)) &&
+       (DAT_800a780c = savedCallback, commandResult = CD_cw(command, parameters, (undefined *)result, 0), commandResult == 0)) break;
 
     retryCount = retryCount + -1;
     if (retryCount == -1) {
@@ -3055,9 +3310,9 @@ int CdControlF(u_char command, u_char *parameters)
       CD_cw(1, 0, 0, 0);
     }
 
-    if ((((parameters == (u_char *)0x0) || (*(int *)(&DAT_800a7764 + (uint)command * 4) == 0)) ||
-        (commandResult = CD_cw(2, parameters, 0, 0), commandResult == 0)) &&
-       (DAT_800a780c = savedCallback, commandResult = CD_cw(command, parameters, 0, 1), commandResult == 0)) break;
+    if ((((parameters == (u_char *)0x0) || (*(int *)((int)&DAT_800a7764 + (uint)command * 4) == 0)) ||
+        (commandResult = CD_cw(2, parameters, NULL, 0), commandResult == 0)) &&
+       (DAT_800a780c = savedCallback, commandResult = CD_cw(command, parameters, NULL, 1), commandResult == 0)) break;
 
     retryCount = retryCount + -1;
     if (retryCount == -1) {
@@ -3086,10 +3341,10 @@ int CdControlB(u_char command, u_char *parameters, u_char *result)
       CD_cw(1, 0, 0, 0);
     }
 
-    if (((parameters == (u_char *)0x0) || (*(int *)(&DAT_800a7764 + (uint)command * 4) == 0)) ||
-       (commandResult = CD_cw(2, parameters, result, 0), commandResult == 0)) {
+    if (((parameters == (u_char *)0x0) || (*(int *)((int)&DAT_800a7764 + (uint)command * 4) == 0)) ||
+       (commandResult = CD_cw(2, parameters, (undefined *)result, 0), commandResult == 0)) {
       DAT_800a780c = savedCallback;
-      commandResult = CD_cw(command, parameters, result, 0);
+      commandResult = CD_cw(command, parameters, (undefined *)result, 0);
       syncResult = 0;
       if (commandResult == 0) break;
     }
@@ -3103,15 +3358,15 @@ int CdControlB(u_char command, u_char *parameters, u_char *result)
     return 0;
   }
 
-  CD_sync(0, result);
+  CD_sync(0, (undefined *)result);
   retryCount = S_016_OBJ_38C();
   return retryCount;
 }
 
-void S_016_OBJ_38C(void)
+int S_016_OBJ_38C(void)
 
 {
-  return;
+  return 1;  // Return success
 }
 
 void CD_getsector(void)
@@ -3126,11 +3381,12 @@ undefined4 BIOS_1_OBJ_0(void)
 
 {
   undefined4 cdromStatus;
+  byte commandData = 0;  // Initialize command data
 
   CDROM_REG0 = 1;
 
   if ((CDROM_REG3 & 7) != 0) {
-    cdromStatus = BIOS_1_OBJ_64();
+    cdromStatus = BIOS_1_OBJ_64(&commandData);
     return cdromStatus;
   }
   return 0;
@@ -3146,33 +3402,34 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
   undefined4 *sourceBuffer;
   int dataIndex;
   int dataCount;
-  uint statusFlags;
-  byte commandType;
-  byte statusByte;
-  byte additionalStatus;
+  uint statusFlags = 0;  // Initialize status flags
+  byte commandType = 0;  // Initialize command type
+  byte statusByte = 0;  // Initialize status byte
+  byte additionalStatus = 0;  // Initialize additional status
+  undefined stackBuffer[8];  // Stack buffer for data
 
   while (dataIndex = 0, commandType != (*commandData & 7)) {
     commandType = *commandData & 7;
   }
 
   do {
-    dataBuffer = (byte *)((int)&stack0x00000018 + dataIndex);
+    dataBuffer = (byte *)(stackBuffer + dataIndex);
     dataCount = dataIndex;
     if ((CDROM_REG0 & 0x20) == 0) break;
     dataIndex = dataIndex + 1;
-    *dataBuffer = CDROM_REG1;
+    *dataBuffer = (byte)CDROM_REG1;
     dataCount = dataIndex;
   } while (dataIndex < 8);
 
   for (; dataIndex < 8; dataIndex = dataIndex + 1) {
-    *(undefined *)((int)&stack0x00000018 + dataIndex) = 0;
+    stackBuffer[dataIndex] = 0;
   }
 
   CDROM_REG0 = 1;
   CDROM_REG3 = 7;
   CDROM_REG2 = 7;
 
-  if ((commandType != 3) || (*(int *)(&DAT_800a79d0 + (uint)DAT_800a7829 * 4) != 0)) {
+  if ((commandType != 3) || (*(int *)((int)&DAT_800a79d0 + (uint)DAT_800a7829 * 4) != 0)) {
 
     if (((DAT_800a7818 & 0x10) == 0) && ((statusByte & 0x10) != 0)) {
       DAT_800a7820 = DAT_800a7820 + 1;
@@ -3194,7 +3451,7 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
     }
 
     targetBuffer = &DAT_801c9840;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+    sourceBuffer = (undefined4 *)stackBuffer;
     dataIndex = 7;
     do {
       dataByte = *(undefined *)sourceBuffer;
@@ -3206,7 +3463,8 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
 
     CDROM_REG0 = 0;
     CDROM_REG3 = 0;
-    result = BIOS_1_OBJ_550();
+    BIOS_1_OBJ_550();
+    result = 0;
     return result;
 
   case 2:
@@ -3217,7 +3475,7 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
     }
 
     targetBuffer = &DAT_801c9838;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+    sourceBuffer = (undefined4 *)stackBuffer;
     dataIndex = 7;
     do {
       dataByte = *(undefined *)sourceBuffer;
@@ -3227,7 +3485,8 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
       targetBuffer = targetBuffer + 1;
     } while (dataIndex != -1);
 
-    result = BIOS_1_OBJ_550();
+    BIOS_1_OBJ_550();
+    result = 0;
     return result;
 
   case 3:
@@ -3236,9 +3495,9 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
 
   case 4:
 
-    targetBuffer = &DAT_801c9848;
+    targetBuffer = (undefined1 *)&DAT_801c9848;
     DAT_800a7aea = 4;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+    sourceBuffer = (undefined4 *)stackBuffer;
     DAT_800a7ae9 = 4;
 
     dataIndex = 7;
@@ -3251,7 +3510,7 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
     } while (dataIndex != -1);
 
     targetBuffer = &DAT_801c9840;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+    sourceBuffer = (undefined4 *)stackBuffer;
     dataIndex = 7;
     do {
       dataByte = *(undefined *)sourceBuffer;
@@ -3261,14 +3520,15 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
       targetBuffer = targetBuffer + 1;
     } while (dataIndex != -1);
 
-    result = BIOS_1_OBJ_550();
+    BIOS_1_OBJ_550();
+    result = 0;
     return result;
 
   case 5:
 
     targetBuffer = &DAT_801c9838;
     DAT_800a7ae9 = 5;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+    sourceBuffer = (undefined4 *)stackBuffer;
     DAT_800a7ae8 = 5;
 
     dataIndex = 7;
@@ -3281,7 +3541,7 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
     } while (dataIndex != -1);
 
     targetBuffer = &DAT_801c9840;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+    sourceBuffer = (undefined4 *)stackBuffer;
     dataIndex = 7;
     do {
       dataByte = *(undefined *)sourceBuffer;
@@ -3291,7 +3551,8 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
       targetBuffer = targetBuffer + 1;
     } while (dataIndex != -1);
 
-    result = BIOS_1_OBJ_550();
+    BIOS_1_OBJ_550();
+    result = 0;
     return result;
 
   default:
@@ -3304,8 +3565,8 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
   if (statusFlags != 0) {
 
     DAT_800a7ae8 = 5;
-    targetBuffer = &DAT_801c9838;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+    targetBuffer = (undefined1 *)&DAT_801c9838;
+    sourceBuffer = (undefined4 *)stackBuffer;
     dataIndex = 7;
     do {
       dataByte = *(undefined *)sourceBuffer;
@@ -3314,15 +3575,16 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
       *targetBuffer = dataByte;
       targetBuffer = targetBuffer + 1;
     } while (dataIndex != -1);
-    result = BIOS_1_OBJ_550();
+    BIOS_1_OBJ_550();
+    result = 0;
     return result;
   }
 
-  if (*(int *)(&DAT_800a78d0 + (uint)DAT_800a7829 * 4) == 0) {
+  if (*(int *)((int)&DAT_800a78d0 + (uint)DAT_800a7829 * 4) == 0) {
 
-    DAT_800a7ae8 = 2;
-    targetBuffer = &DAT_801c9838;
-    sourceBuffer = (undefined4 *)&stack0x00000018;
+  DAT_800a7ae8 = 2;
+  targetBuffer = (undefined1 *)&DAT_801c9838;
+  sourceBuffer = (undefined4 *)stackBuffer;
     dataIndex = 7;
     do {
       dataByte = *(undefined *)sourceBuffer;
@@ -3331,13 +3593,14 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
       *targetBuffer = dataByte;
       targetBuffer = targetBuffer + 1;
     } while (dataIndex != -1);
-    result = BIOS_1_OBJ_550();
+    BIOS_1_OBJ_550();
+    result = 0;
     return result;
   }
 
-  DAT_800a7ae8 = 3;
-  targetBuffer = &DAT_801c9838;
-  sourceBuffer = (undefined4 *)&stack0x00000018;
+    DAT_800a7ae8 = 3;
+    targetBuffer = (undefined1 *)&DAT_801c9838;
+    sourceBuffer = (undefined4 *)stackBuffer;
   dataIndex = 7;
   do {
     dataByte = *(undefined *)sourceBuffer;
@@ -3346,7 +3609,8 @@ undefined4 BIOS_1_OBJ_64(byte *commandData)
     *targetBuffer = dataByte;
     targetBuffer = targetBuffer + 1;
   } while (dataIndex != -1);
-  result = BIOS_1_OBJ_550();
+  BIOS_1_OBJ_550();
+  result = 0;
   return result;
 }
 
@@ -3357,13 +3621,14 @@ void BIOS_1_OBJ_264(void)
   undefined1 *destinationPointer;
   int counter;
   undefined *sourcePointer;
-  int statusFlags;
+  int statusFlags = 0;  // Initialize status flags
+  undefined stackBuffer[8];  // Stack buffer for data
 
   if (statusFlags != 0) {
 
     DAT_800a7ae8 = 5;
-    destinationPointer = &DAT_801c9838;
-    sourcePointer = &stack0x00000018;
+    destinationPointer = (undefined1 *)&DAT_801c9838;
+    sourcePointer = stackBuffer;
     counter = 7;
     do {
       dataByte = *sourcePointer;
@@ -3376,11 +3641,11 @@ void BIOS_1_OBJ_264(void)
     return;
   }
 
-  if (*(int *)(&DAT_800a78d0 + (uint)DAT_800a7829 * 4) != 0) {
+  if (*(int *)((int)&DAT_800a78d0 + (uint)DAT_800a7829 * 4) != 0) {
 
     DAT_800a7ae8 = 3;
     destinationPointer = &DAT_801c9838;
-    sourcePointer = &stack0x00000018;
+    sourcePointer = stackBuffer;
     counter = 7;
     do {
       dataByte = *sourcePointer;
@@ -3395,7 +3660,7 @@ void BIOS_1_OBJ_264(void)
 
   DAT_800a7ae8 = 2;
   destinationPointer = &DAT_801c9838;
-  sourcePointer = &stack0x00000018;
+  sourcePointer = stackBuffer;
   counter = 7;
   do {
     dataByte = *sourcePointer;
@@ -3415,15 +3680,16 @@ void BIOS_1_OBJ_364(void)
   undefined1 *destinationPointer;
   int counter;
   undefined *sourcePointer;
-  int commandType;
+  int commandType = 0;  // Initialize command type
+  undefined stackBuffer[8];  // Stack buffer for data
 
   DAT_800a7ae8 = 2;
   if (commandType != 0) {
     DAT_800a7ae8 = 5;
   }
 
-  destinationPointer = &DAT_801c9838;
-  sourcePointer = &stack0x00000018;
+  destinationPointer = (undefined1 *)&DAT_801c9838;
+  sourcePointer = stackBuffer;
   counter = 7;
   do {
     dataByte = *sourcePointer;
@@ -3444,8 +3710,9 @@ void BIOS_1_OBJ_3B0(void)
   undefined1 *destinationPointer;
   int counter;
   undefined *sourcePointer;
-  int commandMode;
-  int commandType;
+  int commandMode = 0;  // Initialize command mode
+  int commandType = 0;  // Initialize command type
+  undefined stackBuffer[8];  // Stack buffer for data
 
   if ((commandType != 0) && (commandMode == 1)) {
     commandType = 0;
@@ -3457,7 +3724,7 @@ void BIOS_1_OBJ_3B0(void)
   }
 
   destinationPointer = &DAT_801c9840;
-  sourcePointer = &stack0x00000018;
+  sourcePointer = stackBuffer;
   counter = 7;
   do {
     dataByte = *sourcePointer;
@@ -3481,10 +3748,11 @@ void BIOS_1_OBJ_430(void)
   int counter;
   undefined1 *destinationPointer;
   undefined *sourcePointer;
+  undefined stackBuffer[8];  // Stack buffer for data
 
-  destinationPointer = &DAT_801c9848;
+  destinationPointer = (undefined1 *)&DAT_801c9848;
   DAT_800a7aea = 4;
-  sourcePointer = &stack0x00000018;
+  sourcePointer = stackBuffer;
   DAT_800a7ae9 = 4;
 
   counter = 7;
@@ -3497,7 +3765,7 @@ void BIOS_1_OBJ_430(void)
   } while (counter != -1);
 
   destinationPointer = &DAT_801c9840;
-  sourcePointer = &stack0x00000018;
+  sourcePointer = stackBuffer;
   counter = 7;
   do {
     dataByte = *sourcePointer;
@@ -3518,10 +3786,11 @@ void BIOS_1_OBJ_4B0(void)
   int counter;
   undefined1 *destinationPointer;
   undefined *sourcePointer;
+  undefined stackBuffer[8];  // Stack buffer for data
 
-  destinationPointer = &DAT_801c9838;
+  destinationPointer = (undefined1 *)&DAT_801c9838;
   DAT_800a7ae9 = 5;
-  sourcePointer = &stack0x00000018;
+  sourcePointer = stackBuffer;
   DAT_800a7ae8 = 5;
   counter = 7;
   do {
@@ -3533,7 +3802,7 @@ void BIOS_1_OBJ_4B0(void)
   } while (counter != -1);
 
   destinationPointer = &DAT_801c9840;
-  sourcePointer = &stack0x00000018;
+  sourcePointer = stackBuffer;
   counter = 7;
   do {
     dataByte = *sourcePointer;
@@ -3564,13 +3833,15 @@ undefined4 CD_sync(int syncMode, undefined *resultBuffer)
   undefined1 *bufferPointer;
   byte registerValue;
 
-  currentTime = VSync(-1);
+  VSync(-1);
+  currentTime = 0;
   DAT_801c9850 = currentTime + 0x3c0;
   DAT_801c9854 = 0;
   DAT_801c9858 = "CD_sync";
 
   while( true ) {
-    currentTime = VSync(-1);
+    VSync(-1);
+  currentTime = 0;
 
     if ((DAT_801c9850 < currentTime) ||
        (currentTime = DAT_801c9854 + 1, timeoutFlag = 0x3c0000 < DAT_801c9854, DAT_801c9854 = currentTime, timeoutFlag)) {
@@ -3626,7 +3897,8 @@ undefined4 CD_sync(int syncMode, undefined *resultBuffer)
     } while (currentTime != -1);
   }
 
-  result = BIOS_1_OBJ_7B4();
+  BIOS_1_OBJ_7B4();
+  result = 0;
   return result;
 }
 
@@ -3635,19 +3907,19 @@ undefined4 BIOS_1_OBJ_69C(void)
 {
   undefined dataByte;
   bool timeoutFlag;
-  int callbackResult;
+  int callbackResult = 0;  // Initialize callback result
   int currentTime;
   uint cdromStatus;
   undefined4 result;
   undefined1 *bufferPointer;
   byte registerValue;
-  byte *statusPointer;
-  uint expectedStatus;
-  int stringTableOffset;
-  undefined *readyStatusPointer;
-  int nonBlockingMode;
-  undefined *resultBuffer;
-  int stringTableBase;
+  byte *statusPointer = (byte *)&DAT_800a7ae8;  // Initialize status pointer
+  uint expectedStatus = 2;  // Initialize expected status
+  int stringTableOffset = (int)&PTR_s_NoIntr_800a78b0;  // Initialize string table offset
+  undefined *readyStatusPointer = (undefined *)&DAT_800a7ae9;  // Initialize ready status pointer
+  int nonBlockingMode = 0;  // Initialize non-blocking mode
+  undefined *resultBuffer = NULL;  // Initialize result buffer
+  int stringTableBase = (int)&PTR_s_CdlSync_800a7830;  // Initialize string table base
 
   while( true ) {
     if (callbackResult != 0) {
@@ -3691,7 +3963,8 @@ undefined4 BIOS_1_OBJ_69C(void)
         } while (currentTime != -1);
       }
 
-      result = BIOS_1_OBJ_7B4();
+      BIOS_1_OBJ_7B4();
+      result = 0;
       return result;
     }
 
@@ -3699,7 +3972,8 @@ undefined4 BIOS_1_OBJ_69C(void)
       return 0;
     }
 
-    currentTime = VSync(-1);
+    VSync(-1);
+  currentTime = 0;
     if ((DAT_801c9850 < currentTime) ||
        (currentTime = DAT_801c9854 + 1, timeoutFlag = 0x3c0000 < DAT_801c9854, DAT_801c9854 = currentTime, timeoutFlag))
     break;
@@ -3726,14 +4000,14 @@ undefined4 BIOS_1_OBJ_6CC(void)
   undefined4 result;
   int currentTime;
   undefined1 *bufferPointer;
-  byte savedRegisterValue;
-  byte *statusPointer;
-  uint expectedStatus;
-  int stringTableOffset;
-  undefined *readyStatusPointer;
-  int nonBlockingMode;
-  undefined *resultBuffer;
-  int stringTableBase;
+  byte savedRegisterValue = 0;  // Initialize saved register value
+  byte *statusPointer = (byte *)&DAT_800a7ae8;  // Initialize status pointer
+  uint expectedStatus = 2;  // Initialize expected status
+  int stringTableOffset = (int)&PTR_s_NoIntr_800a78b0;  // Initialize string table offset
+  undefined *readyStatusPointer = (undefined *)&DAT_800a7ae9;  // Initialize ready status pointer
+  int nonBlockingMode = 0;  // Initialize non-blocking mode
+  undefined *resultBuffer = NULL;  // Initialize result buffer
+  int stringTableBase = (int)&PTR_s_CdlSync_800a7830;  // Initialize string table base
 
   do {
 
@@ -3769,7 +4043,8 @@ undefined4 BIOS_1_OBJ_6CC(void)
           } while (currentTime != -1);
         }
 
-        result = BIOS_1_OBJ_7B4();
+        BIOS_1_OBJ_7B4();
+        result = 0;
         return result;
       }
 
@@ -3777,7 +4052,8 @@ undefined4 BIOS_1_OBJ_6CC(void)
         return 0;
       }
 
-      currentTime = VSync(-1);
+      VSync(-1);
+  currentTime = 0;
       if ((DAT_801c9850 < currentTime) ||
          (currentTime = DAT_801c9854 + 1, timeoutFlag = 0x3c0000 < DAT_801c9854, DAT_801c9854 = currentTime, timeoutFlag)) {
 
@@ -3815,13 +4091,15 @@ undefined4 CD_ready(int readyMode, undefined *resultBuffer)
   undefined1 *sourcePointer;
   byte registerValue;
 
-  currentTime = VSync(-1);
+  VSync(-1);
+  currentTime = 0;
   DAT_801c9850 = currentTime + 0x3c0;
   DAT_801c9854 = 0;
   DAT_801c9858 = "CD_ready";
 
   while( true ) {
-    currentTime = VSync(-1);
+    VSync(-1);
+  currentTime = 0;
 
     if ((DAT_801c9850 < currentTime) ||
        (currentTime = DAT_801c9854 + 1, timeoutFlag = 0x3c0000 < DAT_801c9854, DAT_801c9854 = currentTime, timeoutFlag)) {
@@ -3892,12 +4170,14 @@ undefined4 CD_ready(int readyMode, undefined *resultBuffer)
       *resultBuffer = dataByte;
       resultBuffer = resultBuffer + 1;
     } while (currentTime != -1);
-    result = BIOS_1_OBJ_A7C();
+    BIOS_1_OBJ_A7C();
+    result = 0;
     return result;
   }
 
 BIOS_1_OBJ_A6C:
-  result = BIOS_1_OBJ_A7C();
+  BIOS_1_OBJ_A7C();
+  result = 0;
   return result;
 }
 
@@ -3906,19 +4186,19 @@ undefined4 BIOS_1_OBJ_91C(void)
 {
   undefined dataByte;
   bool timeoutFlag;
-  int errorCode;
+  int errorCode = 0;  // Initialize error code
   int callbackResult;
   uint cdromStatus;
   undefined4 timeoutResult;
   undefined1 *sourcePointer;
   byte cdromRegister;
-  byte *syncBuffer;
-  undefined *resultBuffer;
-  char *statusFlag;
-  int errorTable;
-  undefined *readyBuffer;
-  int timeoutCounter;
-  int errorTable2;
+  byte *syncBuffer = (byte *)&DAT_800a7ae8;  // Initialize sync buffer
+  undefined *resultBuffer = NULL;  // Initialize result buffer
+  char *statusFlag = (char *)&DAT_800a7aea;  // Initialize status flag
+  int errorTable = (int)&PTR_s_NoIntr_800a78b0;  // Initialize error table
+  undefined *readyBuffer = (undefined *)&DAT_800a7ae9;  // Initialize ready buffer
+  int timeoutCounter = 0;  // Initialize timeout counter
+  int errorTable2 = (int)&PTR_s_CdlSync_800a7830;  // Initialize error table 2
 
   while( true ) {
     if (errorCode != 0) {
@@ -3970,7 +4250,8 @@ undefined4 BIOS_1_OBJ_91C(void)
       return 0;
     }
 
-    callbackResult = VSync(-1);
+    VSync(-1);
+    callbackResult = 0;
     if ((DAT_801c9850 < callbackResult) ||
        (callbackResult = DAT_801c9854 + 1, timeoutFlag = 0x3c0000 < DAT_801c9854, DAT_801c9854 = callbackResult, timeoutFlag)) {
 
@@ -3997,12 +4278,14 @@ undefined4 BIOS_1_OBJ_91C(void)
       *resultBuffer = dataByte;
       resultBuffer = resultBuffer + 1;
     } while (callbackResult != -1);
-    timeoutResult = BIOS_1_OBJ_A7C();
+    BIOS_1_OBJ_A7C();
+    timeoutResult = 0;
     return timeoutResult;
   }
 
 BIOS_1_OBJ_A6C:
-  timeoutResult = BIOS_1_OBJ_A7C();
+  BIOS_1_OBJ_A7C();
+  timeoutResult = 0;
   return timeoutResult;
 }
 
@@ -4016,14 +4299,14 @@ undefined4 BIOS_1_OBJ_94C(void)
   undefined4 result;
   int currentTime;
   undefined1 *sourcePointer;
-  byte savedRegisterValue;
-  byte *syncBuffer;
-  undefined *resultBuffer;
-  char *statusFlag;
-  int stringTableOffset;
-  undefined *readyBuffer;
-  int nonBlockingMode;
-  int stringTableBase;
+  byte savedRegisterValue = 0;  // Initialize saved register value
+  byte *syncBuffer = (byte *)&DAT_800a7ae8;  // Initialize sync buffer
+  undefined *resultBuffer = NULL;  // Initialize result buffer
+  char *statusFlag = (char *)&DAT_800a7aea;  // Initialize status flag
+  int stringTableOffset = (int)&PTR_s_NoIntr_800a78b0;  // Initialize string table offset
+  undefined *readyBuffer = (undefined *)&DAT_800a7ae9;  // Initialize ready buffer
+  int nonBlockingMode = 0;  // Initialize non-blocking mode
+  int stringTableBase = (int)&PTR_s_CdlSync_800a7830;  // Initialize string table base
 
   do {
 
@@ -4057,7 +4340,8 @@ undefined4 BIOS_1_OBJ_94C(void)
             *resultBuffer = dataByte;
             resultBuffer = resultBuffer + 1;
           } while (currentTime != -1);
-          result = BIOS_1_OBJ_A7C();
+          BIOS_1_OBJ_A7C();
+          result = 0;
           return result;
         }
         goto BIOS_1_OBJ_A6C;
@@ -4078,7 +4362,8 @@ undefined4 BIOS_1_OBJ_94C(void)
           } while (currentTime != -1);
         }
 BIOS_1_OBJ_A6C:
-        result = BIOS_1_OBJ_A7C();
+        BIOS_1_OBJ_A7C();
+        result = 0;
         return result;
       }
 
@@ -4086,7 +4371,8 @@ BIOS_1_OBJ_A6C:
         return 0;
       }
 
-      currentTime = VSync(-1);
+      VSync(-1);
+  currentTime = 0;
       if ((DAT_801c9850 < currentTime) ||
          (currentTime = DAT_801c9854 + 1, timeoutFlag = 0x3c0000 < DAT_801c9854, DAT_801c9854 = currentTime, timeoutFlag)) {
 
@@ -4126,8 +4412,9 @@ undefined4 CD_cw(byte command, byte *parameters, undefined *resultBuffer, int bl
   int parameterCount;
   undefined1 *sourcePointer;
   byte registerValue;
+  extern int LAB_800a7a4e_2[];  // External array for command parameter counts
 
-  if ((*(int *)(&LAB_800a7a4e_2 + (uint)command * 4) == 0) || (parameters != (byte *)0x0)) {
+  if ((*(int *)((int)&LAB_800a7a4e_2 + (uint)command * 4) == 0) || (parameters != (byte *)0x0)) {
     CD_sync(0, 0);
 
     if (command == 2) {
@@ -4147,7 +4434,7 @@ undefined4 CD_cw(byte command, byte *parameters, undefined *resultBuffer, int bl
     parameterIndex = (uint)command * 4;
     DAT_800a7ae8 = 0;
 
-    if (*(int *)(&DAT_800a7950 + parameterIndex) != 0) {
+    if (*(int *)((int)&DAT_800a7950 + parameterIndex) != 0) {
       DAT_800a7ae9 = 0;
     }
 
@@ -4155,12 +4442,12 @@ undefined4 CD_cw(byte command, byte *parameters, undefined *resultBuffer, int bl
     parameterCount = 0;
     parameterPointer = parameters;
 
-    if (0 < *(int *)(&LAB_800a7a4e_2 + parameterIndex)) {
+    if (0 < *(int *)((int)&LAB_800a7a4e_2 + parameterIndex)) {
       do {
         CDROM_REG2 = *parameterPointer;
         parameterCount = parameterCount + 1;
         parameterPointer = parameters + parameterCount;
-      } while (parameterCount < *(int *)(&LAB_800a7a4e_2 + parameterIndex));
+      } while (parameterCount < *(int *)((int)&LAB_800a7a4e_2 + parameterIndex));
     }
 
     result = 0;
@@ -4169,14 +4456,16 @@ undefined4 CD_cw(byte command, byte *parameters, undefined *resultBuffer, int bl
 
     if (blockingMode == 0) {
 
-      currentTime = VSync(-1);
+      VSync(-1);
+  currentTime = 0;
       DAT_801c9850 = currentTime + 0x3c0;
       DAT_801c9854 = 0;
       DAT_801c9858 = "CD_cw";
       registerValue = CDROM_REG0;
 
       while (CDROM_REG0 = registerValue, DAT_800a7ae8 == 0) {
-        currentTime = VSync(-1);
+        VSync(-1);
+  currentTime = 0;
 
         if ((DAT_801c9850 < currentTime) ||
            (currentTime = DAT_801c9854 + 1, timeoutFlag = 0x3c0000 < DAT_801c9854, DAT_801c9854 = currentTime, timeoutFlag)) {

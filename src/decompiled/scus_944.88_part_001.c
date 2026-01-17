@@ -1,12 +1,30 @@
 // Include common types and global variables
 #include "gt2_types.h"
 #include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_006.h"
+#include "scus_944.88_part_009.h"
+#include <stdint.h>
 
 // Keep local type aliases for compatibility
 // Note: __WORDSIZE is already defined by system headers, so we don't redefine it
 #ifndef __GLIBC_HAVE_LONG_LONG
 #define __GLIBC_HAVE_LONG_LONG 1
 #endif
+
+// Forward declarations to avoid implicit declarations
+uint FUN_80060924(char *param_1);
+undefined4 * FUN_80060e94(int param_1);
+uint FUN_80060eb4(int param_1);
+void FUN_80061010(int param_1);
+uint FUN_80060bec(undefined4 param_1, int *param_2, int *param_3);
+byte * FUN_8001124c(int param_1, undefined4 param_2, undefined4 param_3);
+char * FUN_80011b3c(char *param_1, uint param_2);
+uint FUN_8005d74c(int param_1);
+uint * FUN_8005d950(uint param_1);
+undefined4 FUN_8005d6e0(undefined4 param_1, undefined4 param_2);
+byte FUN_8005db90(int param_1, uint param_2);
+int FUN_8005de8c(int param_1, uint *param_2);
+int FUN_8001146c(char *param_1);
 
 void FUN_80010000(int *param_1)
 
@@ -19,16 +37,16 @@ void FUN_80010000(int *param_1)
   fileHandle = FUN_8001146c("gt2.ovl");
   baseMemoryAddress = DAT_801c93e8;
 
-  fileSize = *(int *)(fileHandle + 2);
+  fileSize = *(int *)((intptr_t)fileHandle + 2);
   *param_1 = fileSize - baseMemoryAddress;
 
-  DAT_801c93e0 = *(int *)(fileHandle + 10);
+  DAT_801c93e0 = *(int *)((intptr_t)fileHandle + 10);
   param_1[1] = DAT_801c93e0;
 
   DAT_801c93d0 = baseMemoryAddress + *param_1;
 
-  decompressionBuffer = (int *)FUN_8008d0d0(DAT_801c93e0);
-  param_1[2] = (int)decompressionBuffer;
+  decompressionBuffer = (int *)(intptr_t)FUN_8008d0d0(DAT_801c93e0);
+  param_1[2] = (int)(intptr_t)decompressionBuffer;
 
   if (decompressionBuffer == (int *)0x0) {
 
@@ -40,11 +58,11 @@ void FUN_80010000(int *param_1)
     fileSize = param_1[1];
   }
 
-  FUN_8007ab74(decompressionBuffer, baseMemoryAddress + *param_1, fileSize);
+  FUN_8007ab74((undefined4)(uintptr_t)decompressionBuffer, baseMemoryAddress + *param_1, fileSize);
 
   if (param_1[2] != 0) {
 
-    FUN_8008cfe0(param_1 + 3, param_1[2], 0x30);
+    FUN_8008cfe0((undefined *)(param_1 + 3), (undefined *)(intptr_t)param_1[2], 0x30);
   }
 
   return;
@@ -59,17 +77,17 @@ void FUN_80010010(int param_1)
   int iVar4;
   int *unaff_s1;
 
-  iVar2 = FUN_8001146c(param_1 + 0x1d30);
+  iVar2 = FUN_8001146c((char *)(intptr_t)(param_1 + 0x1d30));
   iVar1 = DAT_801c93e8;
 
-  *unaff_s1 = *(int *)(iVar2 + 2) - DAT_801c93e8;
-  DAT_801c93e0 = *(int *)(iVar2 + 10);
+  *unaff_s1 = *(int *)((intptr_t)iVar2 + 2) - DAT_801c93e8;
+  DAT_801c93e0 = *(int *)((intptr_t)iVar2 + 10);
   iVar2 = *unaff_s1;
   unaff_s1[1] = DAT_801c93e0;
   DAT_801c93d0 = iVar1 + iVar2;
 
-  piVar3 = (int *)FUN_8008d0d0(DAT_801c93e0);
-  unaff_s1[2] = (int)piVar3;
+  piVar3 = (int *)(intptr_t)FUN_8008d0d0(DAT_801c93e0);
+  unaff_s1[2] = (int)(intptr_t)piVar3;
 
   if (piVar3 == (int *)0x0) {
 
@@ -81,10 +99,10 @@ void FUN_80010010(int param_1)
     iVar4 = unaff_s1[1];
   }
 
-  FUN_8007ab74(piVar3,iVar1 + iVar2,iVar4);
+  FUN_8007ab74((undefined4)(uintptr_t)piVar3,iVar1 + iVar2,iVar4);
 
   if (unaff_s1[2] != 0) {
-    FUN_8008cfe0(unaff_s1 + 3,unaff_s1[2],0x30);
+    FUN_8008cfe0((undefined *)(unaff_s1 + 3),(undefined *)(intptr_t)unaff_s1[2],0x30);
   }
 
   return;
@@ -102,14 +120,14 @@ void FUN_80010020(void)
 
   iVar1 = DAT_801c93e8;
 
-  *unaff_s1 = *(int *)(in_v0 + 2) - DAT_801c93e8;
-  DAT_801c93e0 = *(int *)(in_v0 + 10);
+  *unaff_s1 = *(int *)((intptr_t)in_v0 + 2) - DAT_801c93e8;
+  DAT_801c93e0 = *(int *)((intptr_t)in_v0 + 10);
   iVar2 = *unaff_s1;
   unaff_s1[1] = DAT_801c93e0;
   DAT_801c93d0 = iVar1 + iVar2;
 
-  piVar3 = (int *)FUN_8008d0d0(DAT_801c93e0);
-  unaff_s1[2] = (int)piVar3;
+  piVar3 = (int *)(intptr_t)FUN_8008d0d0(DAT_801c93e0);
+  unaff_s1[2] = (int)(intptr_t)piVar3;
 
   if (piVar3 == (int *)0x0) {
 
@@ -121,10 +139,10 @@ void FUN_80010020(void)
     iVar4 = unaff_s1[1];
   }
 
-  FUN_8007ab74(piVar3,iVar1 + iVar2,iVar4);
+  FUN_8007ab74((undefined4)(uintptr_t)piVar3,iVar1 + iVar2,iVar4);
 
   if (unaff_s1[2] != 0) {
-    FUN_8008cfe0(unaff_s1 + 3,unaff_s1[2],0x30);
+    FUN_8008cfe0((undefined *)(unaff_s1 + 3),(undefined *)(intptr_t)unaff_s1[2],0x30);
   }
 
   return;
@@ -140,14 +158,15 @@ void FUN_80010030(undefined4 param_1,int param_2)
   int iVar3;
   int *unaff_s1;
 
+  (void)param_1;  // Unused parameter
   *unaff_s1 = in_v1 - param_2;
-  DAT_801c93e0 = *(int *)(in_v0 + 10);
+  DAT_801c93e0 = *(int *)((intptr_t)in_v0 + 10);
   iVar1 = *unaff_s1;
   unaff_s1[1] = DAT_801c93e0;
   DAT_801c93d0 = param_2 + iVar1;
 
-  piVar2 = (int *)FUN_8008d0d0(DAT_801c93e0);
-  unaff_s1[2] = (int)piVar2;
+  piVar2 = (int *)(intptr_t)FUN_8008d0d0(DAT_801c93e0);
+  unaff_s1[2] = (int)(intptr_t)piVar2;
 
   if (piVar2 == (int *)0x0) {
 
@@ -159,10 +178,10 @@ void FUN_80010030(undefined4 param_1,int param_2)
     iVar3 = unaff_s1[1];
   }
 
-  FUN_8007ab74(piVar2,param_2 + iVar1,iVar3);
+  FUN_8007ab74((undefined4)(uintptr_t)piVar2,param_2 + iVar1,iVar3);
 
   if (unaff_s1[2] != 0) {
-    FUN_8008cfe0(unaff_s1 + 3,unaff_s1[2],0x30);
+    FUN_8008cfe0((undefined *)(unaff_s1 + 3),(undefined *)(intptr_t)unaff_s1[2],0x30);
   }
 
   return;
@@ -177,13 +196,14 @@ void FUN_80010040(undefined4 param_1,int param_2)
   int iVar3;
   int *unaff_s1;
 
-  DAT_801c93e0 = *(int *)(in_v0 + 10);
+  (void)param_1;  // Unused parameter
+  DAT_801c93e0 = *(int *)((intptr_t)in_v0 + 10);
   iVar1 = *unaff_s1;
   unaff_s1[1] = DAT_801c93e0;
   DAT_801c93d0 = param_2 + iVar1;
 
-  piVar2 = (int *)FUN_8008d0d0(DAT_801c93e0);
-  unaff_s1[2] = (int)piVar2;
+  piVar2 = (int *)(intptr_t)FUN_8008d0d0(DAT_801c93e0);
+  unaff_s1[2] = (int)(intptr_t)piVar2;
 
   if (piVar2 == (int *)0x0) {
 
@@ -195,10 +215,10 @@ void FUN_80010040(undefined4 param_1,int param_2)
     iVar3 = unaff_s1[1];
   }
 
-  FUN_8007ab74(piVar2,param_2 + iVar1,iVar3);
+  FUN_8007ab74((undefined4)(uintptr_t)piVar2,param_2 + iVar1,iVar3);
 
   if (unaff_s1[2] != 0) {
-    FUN_8008cfe0(unaff_s1 + 3,unaff_s1[2],0x30);
+    FUN_8008cfe0((undefined *)(unaff_s1 + 3),(undefined *)(intptr_t)unaff_s1[2],0x30);
   }
 
   return;
@@ -667,9 +687,10 @@ void FUN_80010a24(undefined4 *param_1)
   return;
 }
 
-void FUN_80010a60(undefined4 *param_1)
+void FUN_80010a60(undefined4 *param_1, int param_2)
 
 {
+  (void)param_2;  // Parameter unused but required by call site
 
   *param_1 = &LAB_80011d3e_2;
 
@@ -787,7 +808,7 @@ void FUN_80010e14(void)
   FUN_80079e2c(0x3c);
   FUN_80079e64();
   FUN_80079eec(0x3c);
-  FUN_80079ef8(4);
+  FUN_80079ef8(4, 0, 0);
   FUN_8007a0e0(1);
 
   FUN_800686c8();
@@ -1053,7 +1074,7 @@ joined_r0x800112ec:
   goto joined_r0x800112ec;
 }
 
-undefined4 FUN_80011390(int param_1)
+undefined4 FUN_80011390(int param_1, undefined4 param_2)
 
 {
   undefined uVar1;
@@ -1064,7 +1085,7 @@ undefined4 FUN_80011390(int param_1)
   undefined4 uVar6;
   undefined4 uVar7;
 
-  puVar2 = (undefined4 *)FUN_80011154();
+  puVar2 = (undefined4 *)FUN_80011154((int)&LAB_800a8e5c, (char *)param_2);
   puVar5 = (undefined4 *)(param_1 + 0x22);
 
   if (puVar2 == (undefined4 *)0x0) {
@@ -1115,12 +1136,11 @@ undefined4 FUN_80011390(int param_1)
   return uVar3;
 }
 
-void FUN_8001146c(undefined4 param_1)
+int FUN_8001146c(char *param_1)
 
 {
 
-  FUN_80011154(&LAB_800a8e5c,param_1);
-  return;
+  return FUN_80011154(&LAB_800a8e5c,param_1);
 }
 
 void FUN_80011494(undefined4 param_1)
@@ -1285,7 +1305,7 @@ void FUN_80011710(void)
 
   while( true ) {
 
-    uVar4 = FUN_80060924((int)puVar5 + 7);
+    uVar4 = FUN_80060924((char *)((int)puVar5 + 7));
     *puVar8 = uVar4;
 
     uVar1 = *(undefined2 *)(pbVar6 + -0x62);
@@ -1337,7 +1357,7 @@ void FUN_80011820(void)
 
   while( true ) {
 
-    uVar5 = FUN_80060924((int)puVar7 + 7);
+    uVar5 = FUN_80060924((char *)((int)puVar7 + 7));
 
     if (((0x71 < pbVar8[-0x1a]) || (pbVar8[-0x1a] < 0x70)) &&
        (iVar3 = FUN_8005d950(uVar5), iVar3 != 0)) {
@@ -1556,6 +1576,7 @@ void FUN_80011c20(void)
   undefined4 *unaff_s1;
   short unaff_s2;
   uint unaff_s3;
+  undefined4 stack_var;  // Replace stack0x00000010
 
   while( true ) {
 
@@ -1563,15 +1584,15 @@ void FUN_80011c20(void)
       *in_v0 = 0;
     }
 
-    uVar1 = FUN_80083004(&stack0x00000010);
+    uVar1 = FUN_80083004(&stack_var);
     *unaff_s1 = uVar1;
     unaff_s1 = unaff_s1 + 1;
     unaff_s2 = unaff_s2 + 1;
 
     if ((*(byte *)(unaff_s0 + 0x1f) & 3) == unaff_s3) break;
 
-    FUN_8008cedc(&stack0x00000010,unaff_s0 + 0x20);
-    in_v0 = (undefined *)FUN_80011b3c(&stack0x00000010,0x2e);
+    FUN_8008cedc(&stack_var,unaff_s0 + 0x20);
+    in_v0 = (undefined *)FUN_80011b3c((char *)&stack_var,0x2e);
     unaff_s0 = unaff_s0 + 0x20;
   }
 
@@ -2155,9 +2176,11 @@ undefined4 start(undefined4 param_1,undefined4 param_2)
   return uVar2;
 }
 
-undefined4 FUN_8005d6e0(void)
+undefined4 FUN_8005d6e0(undefined4 param_1, undefined4 param_2)
 
 {
+  (void)param_1;  // Parameters unused but required by call sites
+  (void)param_2;
   FUN_80085a98();
   FUN_80010e14();
   FUN_8005d9f0();
@@ -2199,11 +2222,14 @@ void FUN_8005d7d0(undefined4 param_1,int param_2)
 
 {
 
-  FUN_8007ab78(param_1,(DAT_801c93e8 + ((param_2 << 0xb) >> 0xb)) * 0x800);
+  FUN_8007ab78(param_1,(DAT_801c93e8 + ((param_2 << 0xb) >> 0xb)) * 0x800, 0x800);
   return;
 }
 
-void FUN_8005d848(int param_1,undefined4 param_2,code *param_3)
+// Function pointer type for FUN_8005d848 callback
+typedef void (*callback_3args)(undefined4, uint, uint);
+
+void FUN_8005d848(int param_1,undefined4 param_2,callback_3args param_3)
 
 {
 
@@ -2287,14 +2313,17 @@ void FUN_8005d9bc(void)
   return;
 }
 
+// Function pointer type for FUN_8005d9f0 callback
+typedef void (*callback_4args)(undefined4, undefined4, undefined4, undefined4);
+
 void FUN_8005d9f0(void)
 
 {
-  code *pcVar1;
+  callback_4args pcVar1;
 
-  pcVar1 = (code *)FUN_8007ad58(&DAT_801c942c);
+  pcVar1 = (callback_4args)FUN_8007ad58(&DAT_801c942c);
 
-  if (pcVar1 != (code *)0x0) {
+  if (pcVar1 != (callback_4args)0x0) {
 
     (*pcVar1)(DAT_801c945c,DAT_801c9460,DAT_801c9464,DAT_801c9468);
   }
@@ -2394,7 +2423,7 @@ undefined4 FUN_8005dbc0(int param_1,uint param_2,int param_3)
   byte bVar2;
   undefined4 uVar3;
 
-  iVar1 = FUN_8005db90();
+  iVar1 = FUN_8005db90(param_1, param_2);
   uVar3 = 0;
 
   if (((-1 < (int)param_2) && (uVar3 = 0, param_3 != 0)) &&
@@ -2610,8 +2639,9 @@ void FUN_8005defc(int param_1,undefined4 *param_2,undefined4 param_3)
   undefined4 uVar3, uVar4, uVar5;
   int iVar6;
   int iVar7, iVar8, iVar9, iVar10;
+  uint local_var;
 
-  iVar1 = FUN_8005de8c();
+  iVar1 = FUN_8005de8c(param_1, &local_var);
   iVar6 = 3;
 
   if (iVar1 < 4) {
@@ -2967,7 +2997,7 @@ void FUN_8005e590(int param_1,undefined4 param_2)
 
   *(undefined4 *)(param_1 + 0x40) = param_2;
 
-  uVar1 = FUN_80060eb4();
+  uVar1 = FUN_80060eb4(0);  // Pass 0 as default parameter
 
   puVar2 = (undefined4 *)FUN_80060e94(uVar1);
 
@@ -4462,7 +4492,7 @@ int FUN_80060a88(undefined4 param_1,int *param_2)
   uint uVar3;
 
   iVar1 = DAT_801c93d8;
-  iVar2 = FUN_80060a24();
+  iVar2 = FUN_80060a24(param_1);  // Pass param_1 to binary search function
 
   uVar3 = *(uint *)(iVar1 + iVar2 * 8 + 0xc);
 
@@ -4498,7 +4528,7 @@ uint FUN_80060b30(void)
   int iVar2;
 
   iVar1 = DAT_801c93d8;
-  iVar2 = FUN_80060a24();
+  iVar2 = FUN_80060a24(0);  // Default value - may need adjustment based on context
 
   return *(uint *)(iVar1 + iVar2 * 8 + 0xc) >> 0x17 & 0xf;
 }
@@ -4543,7 +4573,7 @@ LAB_80060bd8:
   return uVar1 & 1;
 }
 
-void FUN_80060bec(undefined4 param_1,int *param_2,int *param_3)
+uint FUN_80060bec(undefined4 param_1,int *param_2,int *param_3)
 
 {
   int iVar1;
@@ -4553,6 +4583,8 @@ void FUN_80060bec(undefined4 param_1,int *param_2,int *param_3)
 
   *param_2 = local_18[0];
   *param_3 = local_18[0] + iVar1 * 2;
+
+  return (uint)iVar1;
 
   return;
 }
@@ -4733,9 +4765,10 @@ uint FUN_80060fb0(int param_1)
   return (uint)DAT_801c93dc;
 }
 
-void FUN_80061010(void)
+void FUN_80061010(int param_1)
 
 {
+  (void)param_1;  // Parameter unused but required by disassembly
   return;
 }
 
@@ -4812,7 +4845,7 @@ void FUN_8006101c(int param_1,uint param_2)
 
   *(ushort **)(param_1 + 4) = puVar5;
   FUN_8007adc8(iVar7);
-  FUN_80061010(param_1,0);
+  FUN_80061010(param_1);
 
   return;
 }

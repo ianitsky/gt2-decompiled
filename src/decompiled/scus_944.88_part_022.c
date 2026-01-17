@@ -1,3 +1,94 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_022.h"
+
+// External declarations for overlay0 variables
+extern undefined4 DAT_overlay0__80046ef4;
+extern undefined4 DAT_overlay0__80046f64;
+extern undefined4 DAT_overlay0__80046f70;
+extern undefined4 DAT_overlay0__80046f74;
+extern undefined4 DAT_overlay0__80046f7c;
+extern undefined4 DAT_overlay0__80046f80;
+extern undefined4 DAT_overlay0__80046f6c;
+extern undefined4 DAT_overlay0__80046f78;
+extern undefined4 DAT_overlay0__80046f84;
+extern undefined4 DAT_overlay0__80046f88[];
+extern undefined4 DAT_overlay0__80046f98[];
+extern undefined4 DAT_overlay0__80046fa8[];
+
+// External declarations for missing variables (will be added to gt2_global_vars_clean.h)
+extern undefined4 DAT_800a9520;
+extern undefined4 DAT_801c86ac;
+extern undefined2 DAT_801c86ae;
+extern undefined2 DAT_801c86b0;
+extern undefined2 DAT_801c86a8;
+extern undefined2 DAT_801c86aa;
+extern undefined4 DAT_1f80001c;
+extern undefined2 DAT_80093950[];
+extern undefined2 DAT_80093150[];
+extern undefined4 DAT_800a9688;
+extern undefined1 DAT_800af231;
+extern undefined4 DAT_800aa1c8;
+extern undefined4 DAT_800a96b4;
+extern undefined4 DAT_800aa1f4;
+extern bitfield_32_t DAT_801c98b4;
+extern undefined4 DAT_800a9e04;
+extern undefined4 DAT_801c8578;
+extern undefined1 DAT_801c8577;
+extern undefined4 *DAT_800b4a44;
+extern undefined4 UNK_800a9d1c;
+extern undefined4 UNK_800a9d24;
+extern undefined4 UNK_800a9d2c;
+extern undefined4 DAT_800a9d34;
+extern undefined4 DAT_800a9d10;
+extern undefined4 DAT_800a9d38;
+extern undefined4 DAT_800a9d14;
+extern undefined4 DAT_800a9d3c;
+extern undefined4 UNK_800a9d40;
+extern undefined4 UNK_800a9d48;
+extern undefined4 UNK_800a9d50;
+extern undefined4 DAT_800a9cb8;
+extern undefined4 DAT_801c8740;
+extern undefined4 DAT_801c8744;
+extern undefined4 DAT_801c874c;
+extern undefined4 DAT_801c8610;
+extern undefined4 DAT_801c8650;
+extern undefined4 DAT_801c8670;
+extern undefined4 DAT_801c8608;
+extern undefined4 DAT_801c856c;
+extern undefined4 DAT_800a9500;
+extern undefined4 DAT_1f800020;
+extern bitfield_32_t DAT_801c98b8;
+extern undefined4 DAT_801c98bc;
+extern undefined4 DAT_801c8570;
+extern undefined1 DAT_801c8579;
+extern undefined4 DAT_801c857d;
+extern undefined1 DAT_800af232;
+extern undefined4 DAT_overlay0__80046eb8;
+extern undefined4 LAB_overlay0__80046eba;
+extern undefined4 LAB_overlay0__80046ebe_2;
+extern undefined4 LAB_overlay0__80046ebe;
+extern undefined4 LAB_overlay0__80046eba_2;
+extern undefined4 LAB_overlay0__80046ec2;
+extern undefined4 LAB_overlay0__80046ec2_2;
+extern undefined4 DAT_overlay0__80046ec6;
+extern undefined4 DAT_overlay0__80046ec8;
+extern undefined4 DAT_1f800018;
+extern undefined4 DAT_1f800028;
+extern undefined4 DAT_801c8568;
+extern undefined4 LAB_overlay0__80046c94;
+extern undefined4 LAB_overlay0__80046c9c;
+
+// Forward declarations for functions used but not yet declared
+void FUN_overlay0__80044ea4(undefined4 *param_1, undefined4 *param_2, undefined4 *param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6);
+undefined4 FUN_overlay0__800450a0(undefined4 param_1);
+
+// Aliases for DAT_1f800090 array access
+#define DAT_1f800090 _DAT_1f800090
+// DAT_1f800092 is offset +2 bytes from DAT_1f800090 (used as array of shorts)
+// Access via: ((short *)((char *)&_DAT_1f800090 + 2))
+#define DAT_1f800092_base ((short *)((char *)&_DAT_1f800090 + 2))
 
 int FUN_overlay0__8003d7b8(int param_1,int param_2)
 
@@ -92,7 +183,7 @@ FUN_overlay0__8003d940(ushort *param_1,int param_2,short param_3,short *param_4,
       psVar9 = psVar9 + uVar4;
 
       *param_4 = psVar8[-1] + (short)((iVar5 * ((int)*psVar8 - (int)psVar8[-1])) / iVar7);
-      *param_5 = psVar9[-1] + (short)((iVar5 * ((int)*psVar9 - (int)*psVar9[-1])) / iVar7);
+      *param_5 = psVar9[-1] + (short)((iVar5 * ((int)psVar9[0] - (int)psVar9[-1])) / iVar7);
       return 1;
     }
 
@@ -220,7 +311,7 @@ void FUN_overlay0__8003dbe8(int param_1,int param_2,int param_3)
   }
 
   if ((param_2 != 0) &&
-     (0 < (short)(&DAT_1f800092)[(uint)*(byte *)(param_1 + 0x45c) * 0x48] - param_3)) {
+     (0 < DAT_1f800092_base[(uint)*(byte *)(param_1 + 0x45c) * 0x48] - param_3)) {
 
     iVar1 = param_1 + 0x4c8;
     if (*(int *)(param_1 + 0x64c) < 1) {
@@ -228,7 +319,7 @@ void FUN_overlay0__8003dbe8(int param_1,int param_2,int param_3)
     }
 
     iVar4 = (int)*(short *)(iVar1 + 0x60) +
-            (param_2 * ((short)(&DAT_1f800092)[(uint)*(byte *)(param_1 + 0x45c) * 0x48] - param_3)
+            (param_2 * (DAT_1f800092_base[(uint)*(byte *)(param_1 + 0x45c) * 0x48] - param_3)
             >> 9);
     if (0x1000 < iVar4) {
       iVar4 = 0x1000;
@@ -448,7 +539,7 @@ void FUN_overlay0__8003e0c4(int param_1,int param_2)
   while (bVar4) {
     DAT_1f800000 = (int)*(short *)(iVar18 + 0x72a);
     iVar19 = iVar19 + 1;
-    FUN_overlay0__8003daa8();
+    FUN_overlay0__8003daa8(iVar18);
     bVar4 = iVar19 < param_2;
     iVar18 = iVar18 + 0xb40;
   }
@@ -549,10 +640,10 @@ LAB_overlay0__8003e304:
     for (; uVar10 < 4; uVar10 = uVar10 + 1) {
 
       *(undefined2 *)((int)&DAT_1f80001c + iVar9 + 2) =
-           (&DAT_80093950)[*(ushort *)(iVar16 + 0x46c) & 0xfff];
+           DAT_80093950[*(ushort *)(iVar16 + 0x46c) & 0xfff];
       puVar1 = (ushort *)(iVar16 + 0x46c);
       iVar16 = iVar16 + 0x68;
-      *(undefined2 *)((int)&DAT_1f80001c + iVar9) = (&DAT_80093150)[*puVar1 & 0xfff];
+      *(undefined2 *)((int)&DAT_1f80001c + iVar9) = DAT_80093150[*puVar1 & 0xfff];
       iVar9 = iVar9 + 0x1c;
     }
     iVar7 = iVar7 + 0x90;
@@ -580,7 +671,7 @@ LAB_overlay0__8003e304:
           uVar17 = -uVar17;
         }
 
-        uVar10 = FUN_80075bf4(*(int *)(iVar18 + 0x6d0),(int)(short)(&DAT_80093150)[uVar10 & 0xfff]);
+        uVar10 = FUN_80075bf4(*(int *)(iVar18 + 0x6d0),(int)(short)DAT_80093150[uVar10 & 0xfff]);
         iVar16 = *(short *)(iVar18 + 0x3c) * 0x6488;
         iVar16 = FUN_80086084(uVar10 << 0xc,((int)uVar10 >> 0x1f) << 0xc | uVar10 >> 0x14,
                               iVar16 >> 0xc,iVar16 >> 0x1f);
@@ -730,7 +821,7 @@ void FUN_overlay0__8003e8e4(int param_1,int param_2)
   int iVar10;
 
   if (DAT_800a9520 == 0) {
-    FUN_overlay0__80043ae0();
+    FUN_overlay0__80043ae0(param_1, param_2);
   }
 
   iVar9 = 0;
@@ -739,7 +830,7 @@ void FUN_overlay0__8003e8e4(int param_1,int param_2)
   while (bVar1) {
     DAT_1f800000 = (int)*(short *)(iVar8 + 0x72a);
     iVar9 = iVar9 + 1;
-    FUN_overlay0__800426f0();
+    FUN_overlay0__800426f0(iVar8);
     bVar1 = iVar9 < param_2;
     iVar8 = iVar8 + 0xb40;
   }
@@ -900,7 +991,7 @@ void FUN_overlay0__8003ebf0(void)
   }
 
   iVar3 = 1;
-  if (DAT_801c98b4._2_1_ == '\0') {
+  if (DAT_801c98b4.bytes._2_1_ == '\0') {
 
     puVar6 = &DAT_800aa1c8;
     if (1 < uVar5) {
@@ -993,7 +1084,7 @@ bool FUN_overlay0__8003ef40(int param_1)
   return cVar1 != '\0';
 }
 
-void FUN_overlay0__8003eff0(int param_1,undefined4 param_2,int param_3,undefined4 param_4)
+undefined4 FUN_overlay0__8003eff0(int param_1,undefined4 param_2,int param_3,undefined4 param_4)
 
 {
   int iVar1;
@@ -1017,8 +1108,7 @@ void FUN_overlay0__8003eff0(int param_1,undefined4 param_2,int param_3,undefined
   if (iVar1 < 0) {
     iVar1 = iVar1 + 0xfff;
   }
-  FUN_overlay0__800450a0(iVar1 >> 0xc);
-  return;
+  return FUN_overlay0__800450a0(iVar1 >> 0xc);
 }
 
 void FUN_overlay0__8003f09c(undefined4 *param_1,int param_2)
@@ -1813,8 +1903,8 @@ void FUN_overlay0__800400cc(int param_1,int param_2)
       local_38 = iVar20;
 
       uVar5 = *(ushort *)(iVar19 + 0x674) & 0xfff;
-      sVar1 = (&DAT_80093150)[uVar5];
-      sVar2 = (&DAT_80093950)[uVar5];
+      sVar1 = DAT_80093150[uVar5];
+      sVar2 = DAT_80093950[uVar5];
 
       iVar21 = param_1;
 
@@ -1947,6 +2037,9 @@ int FUN_overlay0__80040478(int param_1,int param_2,int *param_3,int *param_4,und
   int bestCollisionIndex;
   undefined4 bestCollisionType;
   int collisionOffset;
+  int vehicleIndex1;
+  int vehicleIndex2;
+  int *vehicleData;
 
   currentBuffer = DAT_801c8608;
   minDistance = 0x1000;
@@ -1954,6 +2047,9 @@ int FUN_overlay0__80040478(int param_1,int param_2,int *param_3,int *param_4,und
   bestCollisionType = 0xffffffff;
   collisionOffset = 0;
   otherBuffer = 1 - DAT_801c8608;
+  vehicleIndex1 = param_1;
+  vehicleIndex2 = param_2;
+  vehicleData = param_3;
 
   for (collisionLoop = 0; collisionLoop < 4; collisionLoop = collisionLoop + 1) {
 
@@ -2029,8 +2125,8 @@ int FUN_overlay0__80040478(int param_1,int param_2,int *param_3,int *param_4,und
     collisionOffset = collisionOffset + 0x14;
   }
 
-  *collisionIndex = bestCollisionIndex;
-  *collisionType = bestCollisionType;
+  *param_4 = bestCollisionIndex;
+  *param_5 = bestCollisionType;
   return minDistance;
 }
 
@@ -2137,6 +2233,45 @@ void FUN_overlay0__80040924(int param_1,int param_2)
   int vehicle2Index;
   int distanceArrayOffset;
   int collisionTypeOffset;
+  char cVar2;
+  short sVar3;
+  short sVar6;
+  short sVar7;
+  short local_66;
+  short local_68;
+  undefined4 uVar15;
+  undefined4 uVar16;
+  undefined4 local_64;
+  short *psVar12;
+  short local_48 [4];
+  int iVar10;
+  int iVar22;
+  int iVar21;
+  int iVar23;
+  undefined4 uVar11;
+  undefined4 *puVar1;
+  int iVar8;
+  int *piVar19;
+  short local_40 [4];
+  short *psVar17;
+  int iVar18;
+  undefined4 uVar13;
+  int iVar20;
+  undefined4 uVar14;
+  undefined4 uVar25;
+  int local_3c;
+  int local_38;
+  int *local_34;
+  longlong local_30;
+  int local_2c;
+  int local_58;
+  short local_50 [4];
+  short local_44 [4];
+  undefined4 uVar9;
+  bool bVar4;
+  short local_60 [4];
+  short local_5c [4];
+  undefined4 uVar5;
 
   velocityPtr1 = &velocityXComponent;
   collisionCount = 1;
@@ -2179,8 +2314,8 @@ void FUN_overlay0__80040924(int param_1,int param_2)
         collisionDistanceScaled = 0x1000 - collisionDistanceScaled;
         vehicleAngle = *(ushort *)(vehicle1Ptr + 0x674) & 0xfff;
 
-        velocityX = (&DAT_80093150)[vehicleAngle];
-        velocityY = (&DAT_80093950)[vehicleAngle];
+        velocityX = DAT_80093150[vehicleAngle];
+        velocityY = DAT_80093950[vehicleAngle];
 
         if (cVar2 == '\x01') {
           sVar6 = sVar3;
@@ -2215,8 +2350,11 @@ LAB_overlay0__80040b38:
         local_64 = 0;
         psVar12 = local_48;
         iVar10 = iVar22;
+        iVar23 = vehicle2Ptr;
         iVar21 = iVar23;
         uVar11 = uVar15;
+        iVar18 = vehicle1Ptr;
+        iVar20 = vehicle2Ptr;
 
         do {
           puVar1 = (undefined4 *)(iVar10 + 0x628);
@@ -2392,6 +2530,28 @@ void FUN_overlay0__80040f30(int param_1,int param_2)
   int otherVehiclePtr;
   int currentVehicle;
   int currentVehiclePtr;
+  undefined1 *puVar14;
+  int local_40 [4];
+  int iVar17;
+  int iVar9;
+  int iVar15;
+  int iVar13;
+  int *piVar7;
+  int local_50 [4];
+  int *piVar12;
+  int iVar8;
+  int iVar6;
+  int iVar19;
+  longlong lVar3;
+  short sVar2;
+  short sVar1;
+  undefined4 uVar5;
+  int iVar4;
+  longlong local_30;
+  undefined4 uVar10;
+  byte bVar11;
+  int *piVar18;
+  int iVar21;
   int positionArray1 [4];
   int positionArray2 [4];
   longlong rotationTemp;
@@ -2407,8 +2567,8 @@ void FUN_overlay0__80040f30(int param_1,int param_2)
       collisionOffset = 0;
       positionArray2[3] = positionArray2[2];
       vehicleAngle = *(ushort *)(currentVehiclePtr + 0x674) & 0xfff;
-      velocityX = (&DAT_80093150)[vehicleAngle];
-      velocityY = (&DAT_80093950)[vehicleAngle];
+      velocityX = DAT_80093150[vehicleAngle];
+      velocityY = DAT_80093950[vehicleAngle];
       otherVehiclePtr = param_1;
 
       for (; otherVehicle < param_2; otherVehicle = otherVehicle + 1) {
@@ -2534,6 +2694,64 @@ void FUN_overlay0__800412d4(int param_1,int param_2)
   int tempValue11;
   int tempValue12;
   int tempValue13;
+  int local_4c;
+  int local_48;
+  int local_30;
+  int iVar9;
+  int vehiclePtr_local_30;
+  int vehicleOffset_local_38;
+  int otherVehiclePtr_local_3c;
+  int vehicleCounter3_local_60;
+  int currentVehicleIndex_iVar4;
+  int vehicleIndex_local_34;
+  int vehicleOffset_iVar8;
+  int vehicleCounter2_local_60;
+  int otherVehicleWheelPtr_local_44;
+  bool collisionDetected_bVar3;
+  int *collisionBoundaryZ_piVar15;
+  int collisionBoundariesZ_local_80 [4];
+  int *collisionBoundaryX_piVar14;
+  int collisionBoundariesX_local_90 [4];
+  int negativeCollisionFactor2_iVar17;
+  int collisionFactor2_local_48;
+  int collisionDataOffset_iVar13;
+  int *validCollisionFlags_piVar11;
+  int validCollisionArray_local_40 [4];
+  int collisionIndex_iVar12;
+  int boundaryIndex_iVar16;
+  int collisionDataIndex_iVar5;
+  int boundaryValueX_iVar10;
+  int collisionFactor3_iVar9;
+  int boundaryValueZ_iVar5;
+  int collisionFactor1_local_4c;
+  int positionDiffX_iVar13;
+  int currentVehicleWheelPtr_local_50;
+  int positionDiffZ_iVar17;
+  uint orientationIndex_uVar6;
+  short cosValue_sVar1;
+  int cosValue_iVar12;
+  short sinValue_sVar2;
+  int sinValue_iVar8;
+  int collisionAngle1_iVar4;
+  int collisionAngle2_iVar17;
+  int absoluteAngle1_iVar8;
+  int collisionFactor_iVar13;
+  int absoluteAngle2_iVar12;
+  int bestCollisionIntensity_iVar16;
+  undefined4 collisionDirection_uVar6;
+  int boundaryCheckIndex_iVar8;
+  int collisionResponse_iVar17;
+  int collisionIntensity_iVar17;
+  int *collisionBoundaryZ_piVar14;
+  int collisionResponseZ_iVar4;
+  int collisionVector_local_60 [4];
+  undefined4 scaledCollisionForce_uVar7;
+  int *collisionVectorPtr_piVar11;
+  int otherVehicleForcePtr_iVar8;
+  int currentVehicleForcePtr_iVar4;
+  int forceComponentIndex_iVar17;
+  int forceComponent_iVar12;
+  int scaledForceComponent_iVar12;
 
   currentVehiclePtr = param_1;
 
@@ -2559,11 +2777,14 @@ void FUN_overlay0__800412d4(int param_1,int param_2)
 
     collisionIndex = tempValue13 + 0x2c;
     tempValue7 = *(int *)(tempValue13 + 0x2c) * 0xf;
+    local_4c = tempValue7;
     if (tempValue7 < 0) {
       local_4c = local_4c + 0xf;
     }
     local_4c = local_4c >> 4;
 
+    local_30 = tempValue13;
+    vehiclePtr_local_30 = tempValue13;
     local_48 = *(int *)(local_30 + 0x30) * 0xf;
     if (local_48 < 0) {
       local_48 = local_48 + 0xf;
@@ -2579,6 +2800,11 @@ void FUN_overlay0__800412d4(int param_1,int param_2)
     if ((*(char *)(vehiclePtr_local_30 + 0x48a) == '\0') && (*(char *)(vehiclePtr_local_30 + 0x7b5) != '\x04')) {
       vehicleOffset_local_38 = 0;
       otherVehiclePtr_local_3c = param_1;
+      vehicleCounter2_local_60 = collisionArray[2];
+      currentVehicleWheelPtr_local_50 = vehiclePtr_local_30 + 0x2c;
+      collisionFactor1_local_4c = local_48;
+      collisionFactor2_local_48 = iVar9;
+      collisionFactor3_iVar9 = local_4c;
 
       for (vehicleCounter3_local_60 = 0; currentVehicleIndex_iVar4 = vehicleIndex_local_34, vehicleOffset_iVar8 = vehicleOffset_local_38, vehicleCounter3_local_60 < param_2; vehicleCounter3_local_60 = vehicleCounter3_local_60 + 1) {
 
@@ -2626,10 +2852,10 @@ void FUN_overlay0__800412d4(int param_1,int param_2)
               positionDiffZ_iVar17 = *(int *)(otherVehicleWheelPtr_local_44 + 0x660) - *(int *)(currentVehicleWheelPtr_local_50 + 0x660);
 
               orientationIndex_uVar6 = *(ushort *)(currentVehicleWheelPtr_local_50 + 0x648) & 0xfff;
-              cosValue_sVar1 = (&DAT_80093950)[orientationIndex_uVar6];
-              cosValue_iVar12 = (int)(short)(&DAT_80093950)[orientationIndex_uVar6];
-              sinValue_sVar2 = (&DAT_80093150)[orientationIndex_uVar6];
-              sinValue_iVar8 = (int)(short)(&DAT_80093150)[orientationIndex_uVar6];
+              cosValue_sVar1 = DAT_80093950[orientationIndex_uVar6];
+              cosValue_iVar12 = (int)(short)DAT_80093950[orientationIndex_uVar6];
+              sinValue_sVar2 = DAT_80093150[orientationIndex_uVar6];
+              sinValue_iVar8 = (int)(short)DAT_80093150[orientationIndex_uVar6];
 
               collisionAngle1_iVar4 = FUN_80075ef8(cosValue_iVar12,positionDiffX_iVar13,sinValue_iVar8,positionDiffZ_iVar17,0);
               collisionAngle2_iVar17 = FUN_80075ef8(-sinValue_iVar8,positionDiffX_iVar13,cosValue_iVar12,positionDiffZ_iVar17,0);
@@ -2769,8 +2995,10 @@ undefined4 FUN_overlay0__800418e8(void)
   int gameStatePtr;
   char gameMode;
   undefined4 result;
+  undefined4 uVar4;
 
   result = 0;
+  uVar4 = result;
 
   switch(DAT_801d5866) {
   case 0:
@@ -2791,7 +3019,7 @@ undefined4 FUN_overlay0__800418e8(void)
       return 0;
     }
     gameMode = '\x01';
-    inputFlag = DAT_801d585c._1_1_;
+    inputFlag = (char)DAT_801d585c;
     if (DAT_801d5865 == '\x01') {
       return 0;
     }
@@ -2807,6 +3035,7 @@ undefined4 FUN_overlay0__800418e8(void)
   }
 LAB_overlay0__800419d8:
 
+  uVar4 = result;
   return uVar4;
 }
 
@@ -2862,10 +3091,17 @@ void FUN_overlay0__80041ae8(undefined4 *param_1)
   int velocityY2;
   int velocityYScaled;
   int velocityXScaled;
+  byte bVar1;
+  int iVar7;
+  int iVar3;
+  int iVar6;
+  int iVar2;
+  int iVar4;
+  int iVar5;
 
   vehicleState = *(byte *)((int)param_1 + 0x6b3);
-  velocityXScaled = (int)(short)(&DAT_80093150)[*(ushort *)(param_1 + 0x192) & 0xfff];
-  velocityYScaled = (int)(short)(&DAT_80093950)[*(ushort *)(param_1 + 0x192) & 0xfff];
+  velocityXScaled = (int)(short)DAT_80093150[*(ushort *)(param_1 + 0x192) & 0xfff];
+  velocityYScaled = (int)(short)DAT_80093950[*(ushort *)(param_1 + 0x192) & 0xfff];
 
   velocityX1 = FUN_8007596c(*param_1, velocityXScaled);
   velocityY1 = FUN_8007596c(*param_1, velocityYScaled);
@@ -2923,6 +3159,16 @@ uint FUN_overlay0__80041ccc(int param_1,int *param_2,uint *param_3)
   int sourceOffset;
   int dataCount;
   uint result;
+  int iVar1;
+  int iVar6;
+  int iVar10;
+  int iVar2;
+  undefined4 uVar4;
+  undefined4 uVar11;
+  short sVar8;
+  undefined4 uVar7;
+  undefined4 *puVar3;
+  undefined4 uVar5;
 
   sourceOffset = (uint)*(byte *)(param_1 + 0x6b3) << 5;
   destOffset = (1 - (uint)*(byte *)(param_1 + 0x6b3)) * 0x20;
@@ -2984,15 +3230,15 @@ void FUN_overlay0__80041e4c(int param_1)
 
   if (param_1 != 0) {
 
-    configValue = (uint)(byte)DAT_801c98b4;
+    configValue = (uint)DAT_801c98b4.bytes._0_1_;
 
-    DAT_overlay0__80046f70 = (uint)(byte)DAT_801c98b8 << 0x10;
-    DAT_overlay0__80046f74 = (uint)DAT_801c98b8._1_1_ * 0xa0000;
-    DAT_overlay0__80046f7c = (uint)DAT_801c98b8._3_1_ << 0x10;
+    DAT_overlay0__80046f70 = (uint)DAT_801c98b8.bytes._0_1_ << 0x10;
+    DAT_overlay0__80046f74 = (uint)DAT_801c98b8.bytes._1_1_ * 0xa0000;
+    DAT_overlay0__80046f7c = (uint)DAT_801c98b8.bytes._3_1_ << 0x10;
     DAT_overlay0__80046f80 = (uint)(byte)DAT_801c98bc * 0xa0000;
 
-    DAT_overlay0__80046f6c = ((uint)DAT_801c98b4._3_1_ << 0xc) / 100;
-    DAT_overlay0__80046f78 = ((uint)DAT_801c98b8._2_1_ << 0xc) / 100;
+    DAT_overlay0__80046f6c = ((uint)DAT_801c98b4.bytes._3_1_ << 0xc) / 100;
+    DAT_overlay0__80046f78 = ((uint)DAT_801c98b8.bytes._2_1_ << 0xc) / 100;
 
     if (configValue == 0) {
       configValue = 100;
@@ -3374,6 +3620,10 @@ void FUN_overlay0__800426f0(int param_1)
   int engineSoundAccum;
   int tireSlipAccum;
   int boostSoundValue;
+  int engineSpeed_iVar3;
+  int engineSpeedDiff_iVar2;
+  int pitchModulation_iVar15;
+  uint vehicleStateIndex_uVar14;
 
   audioAccumulator = 0;
   engineSoundAccum = 0;
@@ -3567,9 +3817,9 @@ void FUN_overlay0__800426f0(int param_1)
         }
       }
 
-      audioCalc = FUN_80075a5c((int)(short)(&DAT_80093950)[*(ushort *)(wheelIndex + 0xc) & 0xfff],
+      audioCalc = FUN_80075a5c((int)(short)DAT_80093950[*(ushort *)(wheelIndex + 0xc) & 0xfff],
                             *(undefined4 *)(wheelIndex + 0x30));
-      velocityCalc = FUN_80075a5c((int)(short)(&DAT_80093150)[*(ushort *)(wheelIndex + 0xc) & 0xfff],
+      velocityCalc = FUN_80075a5c((int)(short)DAT_80093150[*(ushort *)(wheelIndex + 0xc) & 0xfff],
                            *(undefined4 *)(wheelIndex + 0x2c));
 
       if (*(char *)(wheelDataPtr + 0x14) == '\x01') {
@@ -3861,7 +4111,7 @@ void FUN_overlay0__8004335c(undefined4 param_1)
 
 {
 
-  FUN_overlay0__800431a0();
+  FUN_overlay0__800431a0((int)param_1);
 
   FUN_overlay0__8004323c(param_1);
 
@@ -3970,6 +4220,13 @@ void FUN_overlay0__80043578(int param_1,int param_2)
   int matrixDataIndex;
   int collisionMatrixPtr;
   int currentVehiclePtr;
+  int collisionHeight;
+  int previousHeight;
+  undefined4 surfaceFriction;
+  undefined4 surfaceResistance;
+  undefined4 collisionAngle1;
+  undefined4 vehicleCollisionState;
+  bool specialConditionFlag;
 
   vehicleIndex = 0;
   matrixDataIndex = 0;
@@ -4023,19 +4280,19 @@ LAB_overlay0__8004376c:
           airborneWheelCount = airborneWheelCount + 1;
         }
 
-        surfaceFriction = (&DAT_overlay0__80046f88)[*(byte *)(wheelDataPtr + 5)];
+        surfaceFriction = DAT_overlay0__80046f88[*(byte *)(wheelDataPtr + 5)];
         if (surfaceFriction == 0) goto LAB_overlay0__8004376c;
 
-        surfaceResistance = (&DAT_overlay0__80046f98)[*(byte *)(wheelDataPtr + 5)];
+        surfaceResistance = DAT_overlay0__80046f98[*(byte *)(wheelDataPtr + 5)];
 
-        collisionAngle1 = *(undefined4 *)((int)&DAT_1f800014 + matrixIndex);
-        angleValue1 = FUN_80075bf4((int)surfaceResistance,*(undefined4 *)((int)&DAT_1f80000c + matrixIndex));
+        collisionAngle1 = *(undefined4 *)((char *)&DAT_1f800014 + matrixIndex);
+        angleValue1 = FUN_80075bf4((int)surfaceResistance,*(undefined4 *)((char *)&DAT_1f80000c + matrixIndex));
         angleValue2 = FUN_80075bf4((int)surfaceResistance,collisionAngle1);
 
-        groundHeight = (int)(short)(&DAT_80093150)[angleValue1 & 0xfff] +
-                      (int)(short)(&DAT_80093950)[angleValue2 & 0xfff];
+        groundHeight = (int)(short)DAT_80093150[angleValue1 & 0xfff] +
+                      (int)(short)DAT_80093950[angleValue2 & 0xfff];
 
-        if ((&DAT_overlay0__80046fa8)[*(byte *)(wheelDataPtr + 5)] != '\0') {
+        if (DAT_overlay0__80046fa8[*(byte *)(wheelDataPtr + 5)] != '\0') {
           groundHeight = FUN_8007596c(groundHeight,(int)*(short *)(wheelDataPtr + 0x10));
         }
 
@@ -4208,8 +4465,8 @@ void FUN_overlay0__80043ae0(int param_1,int param_2)
   uint statusMask;
   int vehicleIndex;
   int scaledValue;
-  undefined4 xOffset;
-  undefined4 xOffsetCopy;
+  bitfield_16_t xOffset;
+  bitfield_16_t xOffsetCopy;
   int yOffset;
   int yOffsetCopy;
   int calculationArray [2];
@@ -4224,6 +4481,61 @@ void FUN_overlay0__80043ae0(int param_1,int param_2)
   int tempValue6;
   int tempValue7;
   int tempValue8;
+  int local_3c;
+  undefined4 heightRecordResult;
+  undefined4 orientationResult;
+  int orientationAdjustment;
+  short orientationValue;
+  int frontWheelForce1;
+  int frontWheelForce2;
+  int rearWheelForce1;
+  int rearWheelForce2;
+  int currentOrientation;
+  int newOrientation;
+  int orientationForce;
+  int orientationClamp;
+  int lateralForce1;
+  int lateralForce2;
+  int lateralAdjustment;
+  int lateralOrientation1;
+  int lateralOrientation2;
+  int currentLateralOrientation;
+  int newLateralOrientation;
+  int lateralOrientationForce;
+  int lateralOrientationClamp;
+  int totalWheelForce;
+  int orientationCounter;
+  int frontWheelForce;
+  int *orientationDataPtr;
+  int orientationIndex;
+  short *orientationValuePtr;
+  int rearWheelForce;
+  int vehicleHeight;
+  int suspensionScaling;
+  int wheelHeight;
+  int calculationValue;
+  byte groundContactBit;
+  uint wheelContactMask;
+  int wheelContactDepth;
+  int xOffsetSum;
+  int xOffsetAverage;
+  int yOffsetSum;
+  int yOffsetAverage;
+  int wheelContactForce1;
+  int wheelContactValue1;
+  int wheelContactForce2;
+  int wheelContactValue2;
+  int wheelContactResult1;
+  int wheelContactResult2;
+  int wheelContactAdjustment;
+  int wheelContactValue3;
+  int wheelContactValue4;
+  int wheelContactResult3;
+  int orientationForceCounter;
+  int orientationForceSum;
+  int orientationForceScaled;
+  int orientationForce1;
+  int orientationForce2;
 
   scratchPtr = 0x1f800000;
   calculationDataPtr = &xOffset;
@@ -4240,8 +4552,9 @@ void FUN_overlay0__80043ae0(int param_1,int param_2)
       *(int *)(matrixPtr + 4) = scaledValue;
 
       wheelOffset = 0x460;
-      xOffset = (int)*(short *)(currentVehiclePtr + 0x160) - (int)*(short *)(currentVehiclePtr + 0x410);
-      yOffset = (int)*(short *)(currentVehiclePtr + 0x194) - (int)*(short *)(currentVehiclePtr + 0x412);
+      xOffset._0_2_ = (short)((int)*(short *)(currentVehiclePtr + 0x160) - (int)*(short *)(currentVehiclePtr + 0x410));
+      xOffset._2_2_ = (short)((int)*(short *)(currentVehiclePtr + 0x194) - (int)*(short *)(currentVehiclePtr + 0x412));
+      xOffsetCopy = xOffset;
       vehicleYPos = *(int *)(currentVehiclePtr + 0x690);
       vehicleDataPtr = currentVehiclePtr + 0x2c;
       matrixIndex = dataIndex;
@@ -4307,7 +4620,7 @@ void FUN_overlay0__80043ae0(int param_1,int param_2)
         wheelOffset = wheelOffset + 0x68;
 
         FUN_overlay0__800438f0(vehicleDataPtr,wheelDataPtr,*(undefined4 *)((int)&DAT_1f800008 + dataIndex),
-                             vehicleDataPtr + (wheelIndex >> 1) * 0x34 + 300,wheelIndex);
+                             (ushort *)(vehicleDataPtr + (wheelIndex >> 1) * 0x34 + 300));
 
         validCondition = wheelIndex + 1 < 4;
         wheelIndex = wheelIndex + 1;
@@ -4401,7 +4714,7 @@ void FUN_overlay0__80043ae0(int param_1,int param_2)
               orientationValue = (short)((uint)(DAT_1f800000 * 0x155) >> 0x10);
 
               if (orientationAdjustment < orientationResult) {
-                *(short *)(currentVehiclePtr + 0x674) = *(short *)(currentVehiclePtr + 0x674) + orientationValue;
+                *(short *)(currentVehiclePtr + 0x674) = *(short *)(currentVehiclePtr + 0x674) + (int)orientationValue;
               }
               else if (orientationResult < -orientationAdjustment) {
                 *(short *)(currentVehiclePtr + 0x674) = *(short *)(currentVehiclePtr + 0x674) - orientationValue;
@@ -4535,9 +4848,10 @@ LAB_overlay0__800442b0:
       orientationIndex = vehicleDataPtr;
 
       do {
-        orientationValue = (short *)(orientationIndex + 0x678);
-        orientationIndex = orientationIndex + 2;
-        orientationForce = FUN_8007596c((int)*orientationValue,frontWheelForce);
+        orientationValuePtr = (short *)((char *)orientationIndex + 0x678);
+        orientationValue = *orientationValuePtr;
+        orientationIndex = (int)((char *)orientationIndex + 2);
+        orientationForce = FUN_8007596c((int)orientationValue,frontWheelForce);
         orientationCounter = orientationCounter + 1;
         *(int *)(orientationDataPtr + 0x628) = *(int *)(orientationDataPtr + 0x628) + orientationForce;
         orientationDataPtr = orientationDataPtr + 4;
@@ -4553,9 +4867,10 @@ LAB_overlay0__800442b0:
       orientationDataPtr = vehicleDataPtr;
 
       do {
-        orientationValue = (short *)(orientationDataPtr + 0x678);
+        orientationValuePtr = (short *)((char *)orientationDataPtr + 0x678);
+        orientationValue = *orientationValuePtr;
         orientationDataPtr = orientationDataPtr + 2;
-        orientationForce = FUN_8007596c((int)*orientationValue,rearWheelForce);
+        orientationForce = FUN_8007596c((int)orientationValue,rearWheelForce);
         rearWheelForce = rearWheelForce + 1;
         *(int *)(vehicleDataPtr + 0x628) = *(int *)(vehicleDataPtr + 0x628) + orientationForce;
         vehicleDataPtr = vehicleDataPtr + 4;
@@ -4591,8 +4906,9 @@ LAB_overlay0__80044454:
       wheelOffset = 0x460;
       suspensionScaling = *(undefined4 *)(scratchPtr + 4);
 
-      xOffset = (int)*(short *)(param_1 + 0x160) - (int)*(short *)(param_1 + 0x410);
-      yOffset = (int)*(short *)(param_1 + 0x194) - (int)*(short *)(param_1 + 0x412);
+      xOffset._0_2_ = (short)((int)*(short *)(param_1 + 0x160) - (int)*(short *)(param_1 + 0x410));
+      xOffset._2_2_ = (short)((int)*(short *)(param_1 + 0x194) - (int)*(short *)(param_1 + 0x412));
+      xOffsetCopy = xOffset;
       vehicleYPos = *(int *)(param_1 + 0x690);
       matrixIndex = dataIndex;
       calculationDataPtr = dataArrayPtr;
@@ -4644,20 +4960,20 @@ LAB_overlay0__80044454:
           matrixIndex = matrixIndex + 4;
         }
 
-        xOffsetSum = (int)(short)xOffset + (int)xOffset._2_2_;
+        xOffsetSum = (int)xOffset._0_2_ + (int)xOffset._2_2_;
         xOffsetAverage = (ushort)((uint)(xOffsetSum - (xOffsetSum >> 0x1f)) >> 1);
-        yOffsetSum = (int)(short)xOffsetCopy + (int)xOffsetCopy._2_2_;
+        yOffsetSum = (int)xOffsetCopy._0_2_ + (int)xOffsetCopy._2_2_;
         yOffsetAverage = (uint)(yOffsetSum - (yOffsetSum >> 0x1f)) >> 1;
 
-        wheelContactForce1 = FUN_8007596c((int)(short)xOffsetCopy - (int)(short)xOffset,
+        wheelContactForce1 = FUN_8007596c((int)xOffsetCopy._0_2_ - (int)xOffset._0_2_,
                                           (int)*(short *)(param_1 + 0x40));
-        wheelContactValue1 = xOffset & 0xffff;
+        wheelContactValue1 = (uint)xOffset._0_2_ & 0xffff;
         wheelContactForce2 = FUN_8007596c((int)xOffsetCopy._2_2_ - (int)xOffset._2_2_,
                                           (int)*(short *)(param_1 + 0x40));
-        wheelContactValue2 = (xOffset >> 0x10) + wheelContactForce2;
+        wheelContactValue2 = (int)xOffset._2_2_ + wheelContactForce2;
         wheelContactForce1 = (wheelContactValue1 + wheelContactForce1) * 0x10000;
         wheelContactResult1 = wheelContactForce1 >> 0x10;
-        wheelContactValue1 = (xOffset >> 0x10) + wheelContactForce2;
+        wheelContactValue1 = (int)xOffset._2_2_ + wheelContactForce2;
 
         if ((wheelContactResult1 != 0) || ((wheelContactValue1 & 0xffff) != 0)) {
           wheelContactValue2 = wheelContactValue1 * 0x10000;
@@ -4715,11 +5031,12 @@ LAB_overlay0__80044794:
       for (orientationIndex = 0; orientationIndex < 3; orientationIndex = orientationIndex + 1) {
         orientationForce = *(int *)(orientationDataPtr + 0x628);
         orientationForceScaled = FUN_80075bf4((int)*(short *)(vehicleDataPtr + 0x68c),orientationForce);
-        orientationValue = (short *)(vehicleDataPtr + 0x694);
+        orientationValuePtr = (short *)(vehicleDataPtr + 0x694);
+        orientationValue = *orientationValuePtr;
         orientationDataPtr = orientationDataPtr + 4;
         orientationForceSum = orientationForceSum + orientationForceScaled;
         vehicleDataPtr = vehicleDataPtr + 2;
-        orientationForceCounter = orientationForceCounter + (*orientationValue * orientationForce >> 0xc);
+        orientationForceCounter = orientationForceCounter + (orientationValue * orientationForce >> 0xc);
       }
 
       orientationForce1 = FUN_8007596c(orientationForceSum,(int)*(short *)(param_1 + 0x6bc));

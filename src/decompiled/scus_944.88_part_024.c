@@ -1,9 +1,150 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_024.h"
+#include <stdint.h>
+#include <stddef.h>
+
+// Forward declarations
+void FUN_8008cedc(undefined *param_1, undefined4 *param_2);
+undefined2 FUN_8005e0d0(undefined4 *param_1, undefined4 *param_2, undefined4 param_3);
+void FUN_8007f174(int param_1);
+int FUN_8006ecd8(int param_1, undefined *param_2);
+void FUN_8005eac0(undefined4 param_1, undefined4 param_2, undefined4 param_3);
+void FUN_8006ac68(undefined *param_1, int param_2);
+void FUN_8007da80(undefined *param_1, undefined4 *param_2);
+undefined4 FUN_8006b548(undefined *param_1, undefined4 *param_2, int param_3, int param_4);
+void FUN_8006ac90(undefined *param_1, undefined4 param_2, int param_3, int param_4, int param_5);
+int FUN_8005f7c8(undefined4 *param_1);
+int FUN_8005f790(undefined4 *param_1);
+undefined *FUN_overlay0__80052cb4(int param_1);
+
+// External variables and labels
+extern undefined4 DAT_801d5f58;
+extern undefined4 DAT_801c90a0;
+extern undefined4 DAT_801c90a8;
+extern undefined4 DAT_801c90d0;
+extern undefined4 DAT_801c90d4;
+extern undefined4 DAT_801c90d8;
+extern undefined4 LAB_overlay0__8005a980;
+extern undefined4 DAT_801c9120;
+extern undefined4 DAT_801c9150;
+extern void LAB_overlay0__8005b95e_2(void);
+extern undefined4 DAT_overlay0__8005b970;
+extern void LAB_overlay0__8005b95a_2(void);
+extern undefined4 DAT_overlay0__8005b96c;
+extern undefined4 DAT_8016e894;
+extern void ***PTR_PTR_DAT_overlay0__8005be54_overlay0__8005c3a4;
+extern void ***PTR_PTR_DAT_overlay0__8005be54_overlay0__8005c384;
+extern void ***PTR_PTR_DAT_overlay0__8005be54_overlay0__8005c364;
+extern undefined4 DAT_801c90c8;
+extern undefined2 DAT_801c90ca;
+extern undefined4 DAT_801c90cc;
+extern void LAB_overlay0__8005a9a8(void);
+extern undefined2 DAT_overlay0__8005c3dc;
+extern void LAB_overlay0__80052d84(void);
+extern undefined4 DAT_overlay0__8005c428;
+extern void LAB_overlay0__8005c42a_2(void);
+extern undefined4 DAT_overlay0__8005c44c;
+extern undefined4 DAT_overlay0__8005c410;
+extern undefined4 DAT_801c90e0;
+extern undefined2 DAT_801c90dc;
+extern undefined2 DAT_801c90de;
+extern undefined4 DAT_801c90e4;
+extern void LAB_overlay0__8005a9e0(void);
+extern undefined4 DAT_801c90e8;
+extern undefined4 DAT_801c90ec;
+extern undefined4 DAT_overlay0__8005d154;
+extern void LAB_overlay0__80055d50(void);
+extern undefined4 DAT_overlay0__8005d1a0;
+extern undefined4 DAT_overlay0__8005d140;
+extern undefined4 DAT_overlay0__8005d188;
+extern undefined4 DAT_overlay0__8005c46c;
+extern void LAB_overlay0__8005c47a_2(void);
+extern undefined4 DAT_overlay0__8005a9ac;
+extern void LAB_overlay0__8005c486_2(void);
+extern void LAB_overlay0__8005c48a_2(void);
+extern void LAB_overlay0__8005c47e_2(void);
+extern undefined4 DAT_overlay0__8005c490;
+extern undefined4 DAT_801c71c1;
+extern undefined4 DAT_801c71d9;
+extern undefined4 DAT_overlay0__8005c470;
+extern undefined4 DAT_801c71ee;
+extern undefined4 DAT_801c7a36;
+extern undefined4 DAT_overlay0__8005c478;
+extern undefined4 DAT_overlay0__8005c484;
+extern void **PTR_DAT_overlay0__8005c6e0;
+extern void **PTR_DAT_overlay0__8005c650;
+extern void ***PTR_PTR_DAT_overlay0__8005c770_overlay0__8005d144;
+extern void **PTR_DAT_overlay0__8005c770;
+extern void ***PTR_PTR_DAT_overlay0__8005c800_overlay0__8005d100;
+extern void ***PTR_PTR_DAT_overlay0__8005cbf0_overlay0__8005d120;
+extern void **PTR_DAT_overlay0__8005cfe0;
+extern void ***PTR_PTR_DAT_overlay0__8005c620_overlay0__8005d080;
+extern void **PTR_DAT_overlay0__8005c5f0;
+extern undefined4 DAT_overlay0__8005d084;
+extern void ***PTR_PTR_DAT_overlay0__8005c5f0_overlay0__8005d088;
+extern void **PTR_DAT_overlay0__8005c600;
+extern undefined4 DAT_overlay0__8005d08c;
+extern void ***PTR_PTR_DAT_overlay0__8005c600_overlay0__8005d090;
+extern void **PTR_DAT_overlay0__8005c610;
+extern undefined4 DAT_overlay0__8005d094;
+extern void **PTR_DAT_overlay0__8005c620;
+extern void **PTR_DAT_overlay0__8005c630;
+extern void **PTR_DAT_overlay0__8005c640;
+extern void **PTR_DAT_overlay0__8005d070;
+extern undefined4 DAT_801c90f0;
+extern void **PTR_DAT_overlay0__8005c4a4;
+extern undefined2 DAT_overlay0__8005d15a;
+extern undefined4 DAT_801c6f4c;
+extern undefined4 DAT_801c75f4;
+extern undefined4 DAT_801c75fe;
+extern undefined4 DAT_overlay0__8005b834;
+extern void LAB_overlay0__8005b836(void);
+extern undefined4 DAT_overlay0__8005b830;
+extern void LAB_overlay0__8005b836_2(void);
+extern undefined4 DAT_801c83fe;
+extern undefined4 DAT_overlay0__8005c49c;
+extern undefined4 DAT_801d58c0;
+extern undefined UNK_8016e914[];
+extern undefined _UNK_8016e914[];
+extern undefined4 DAT_801cd554;
+extern undefined4 DAT_801da4b8;
+extern undefined UNK_80170074[];
+extern undefined _UNK_80170074[];
+extern undefined4 DAT_overlay0__8005d208;
+extern undefined4 DAT_overlay0__8005d338;
+extern undefined4 DAT_overlay0__8005ab48;
+extern void LAB_overlay0__8005d33e_2(void);
+extern undefined4 DAT_801c7016;
+extern void LAB_overlay0__8005d33a_2(void);
+extern undefined4 DAT_801c6c87;
+extern void LAB_overlay0__8005d342_2(void);
+extern undefined4 DAT_801d1568;
+extern void LAB_overlay0__8005d3d8(void);
+extern void LAB_overlay0__8005d3f8(void);
+extern void **PTR_DAT_overlay0__8005ab5c;
+extern undefined4 DAT_overlay0__8005ab84;
+extern undefined4 DAT_overlay0__8005d414;
+extern void LAB_overlay0__8005d434(void);
+extern undefined4 DAT_overlay0__8005d46c;
+extern void LAB_overlay0__8005d470(void);
+extern void LAB_overlay0__8005d4a0(void);
+extern undefined4 DAT_801c9130;
+extern undefined4 uRam8005c44e;
+extern undefined4 uRam8005c450;
+extern undefined2 DAT_overlay0__8005c3e2;
+extern undefined4 DAT_80170044;
+extern undefined4 DAT_overlay0__8005b978;
+extern undefined4 DAT_801c83e6;
+extern undefined4 DAT_801c8442;
+extern undefined4 DAT_overlay0__8005b97c;
 
 void FUN_overlay0__80050cc4(int param_1,int param_2)
 
 {
 
-  *(ushort *)(param_1 + 0xae) = *(short *)(param_1 + 0xae) + 0xcU & 0x3fff;
+  *(ushort *)(param_1 + 0xae) = (*(short *)(param_1 + 0xae) + 0xcU) & 0x3fff;
 
   if (0xfb90 < param_2) {
 
@@ -42,7 +183,7 @@ void FUN_overlay0__80050d78(void)
   int iVar1;
   uint uVar2;
   undefined2 uVar3;
-  undefined *puVar4;
+  undefined4 *puVar4;
   undefined4 uVar5;
   uint uVar6;
   undefined4 local_30;
@@ -98,9 +239,9 @@ void FUN_overlay0__80052838(undefined4 param_1)
 
     FUN_8007f174(DAT_801c90a8);
 
-    FUN_8006ecd8(uVar1,param_1);
+    FUN_8006ecd8(uVar1,(undefined *)&param_1);
 
-    FUN_8006ecd8(uVar1,DAT_801c90d8);
+    FUN_8006ecd8(uVar1,(undefined *)&DAT_801c90d8);
   }
   return;
 }
@@ -118,9 +259,9 @@ void FUN_overlay0__800528b0(undefined4 param_1)
 
     FUN_8007f174(DAT_801c90a8);
 
-    FUN_8006ecd8(uVar1,DAT_801c90d4);
+    FUN_8006ecd8(uVar1,(undefined *)&DAT_801c90d4);
 
-    FUN_8006ecd8(uVar1,param_1);
+    FUN_8006ecd8(uVar1,(undefined *)&param_1);
   }
   return;
 }
@@ -194,7 +335,7 @@ void FUN_overlay0__800529c0
   uint local_34;
   uint local_30;
 
-  local_3c = FUN_overlay0__80052958();
+  local_3c = FUN_overlay0__80052958(param_1);
 
   FUN_8006ac68(auStack_60,6);
 
@@ -629,7 +770,7 @@ LAB_overlay0__80053c6c:
   iVar3 = FUN_overlay0__80052cb4((int)DAT_801c90c8);
   sVar2 = *(short *)(iVar3 + DAT_801c90ca * 0x10 + 0x1c);
   iVar8 = (int)sVar2;
-  iVar5 = FUN_overlay0__8005298c(iVar3);
+  iVar5 = FUN_overlay0__8005298c(iVar3, DAT_801c90ca);
   iVar3 = iVar3 + DAT_801c90ca * 0x10;
   DAT_801c90cc = *(byte *)(iVar3 + 0x1f) >> 7;
 
@@ -1296,7 +1437,7 @@ LAB_overlay0__8005513c:
   return;
 }
 
-void FUN_overlay0__800551bc(int param_1,int param_2,undefined4 param_3,int param_4)
+void FUN_overlay0__800551bc(int param_1,int param_2,undefined4 param_3,int param_4,int param_5)
 
 {
   uint uVar1;
@@ -1606,7 +1747,7 @@ void FUN_overlay0__80055840
   uint local_30;
   uint local_2c;
 
-  local_44 = FUN_overlay0__80055808();
+  local_44 = FUN_overlay0__80055808(param_1);
 
   iVar2 = param_6 >> 0x1f;
   local_3c = param_6 / 6 + iVar2;
@@ -2936,7 +3077,7 @@ void FUN_overlay0__800595e0(int param_1,int param_2,undefined4 param_3)
 
   puVar3 = DAT_801c90a0;
 
-  DAT_801c90a0[2] = (short)param_1;
+  *(short *)(DAT_801c90a0 + 2) = (short)param_1;
 
   iVar1 = DAT_801d1568;
 
@@ -3015,7 +3156,7 @@ void FUN_overlay0__8005a11c
     FUN_8007da80(auStack_48,&DAT_801c9130);
     local_3c = local_3c & 0xff9fffff | 0x200000;
 
-    local_34 = FUN_8006b548(local_28,&stack0x00000014,param_5,0xc);
+    local_34 = FUN_8006b548(local_28,&local_38,param_5,0xc);
 
     FUN_80068d0c(auStack_88,param_4);
 

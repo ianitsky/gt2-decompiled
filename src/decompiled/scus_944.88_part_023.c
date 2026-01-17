@@ -1,3 +1,224 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_023.h"
+#include "scus_944.88_part_020.h"
+#include "scus_944.88_part_021.h"
+#include "scus_944.88_part_022.h"
+#include <stdint.h>
+#include <stddef.h>
+
+// Forward declarations
+int FUN_80086084(int param_1, int param_2, int param_3, int param_4);
+int FUN_80086084_5(int param_1, int param_2, int param_3, int param_4, longlong param_5);
+undefined2 FUN_8007596c(int param_1, int param_2);
+undefined4 FUN_80075a5c(undefined4 param_1, undefined4 param_2);
+int FUN_80075a94(undefined4 param_1, undefined4 param_2);
+int FUN_80075bf4(int param_1, int param_2);
+undefined4 FUN_80075b04(undefined4 param_1, undefined4 param_2, int param_3);
+void FUN_8007bbd4(int param_1, undefined2 *param_2);
+void FUN_8006ac68(undefined *param_1, int param_2);
+void FUN_8007da80(undefined *param_1, undefined4 *param_2);
+int FUN_8006ad3c(undefined *param_1, undefined4 param_2, int param_3);
+undefined2 *FUN_8007d024(int param_1, undefined4 param_2);
+void FUN_8006ac90(undefined *param_1, undefined4 param_2, int param_3, int param_4, int param_5);
+uint *FUN_8007e0b0(int param_1);
+void FUN_8007da44(int param_1, int param_2);
+void FUN_8007fe8c(void);
+void FUN_8007fec8(void);
+void FUN_80080f24(undefined4 param_1, int param_2);
+void FUN_8007c570(void);
+void FUN_8007cfdc(undefined4 param_1, undefined4 param_2, undefined4 param_3, int param_4);
+void FUN_80081c5c(void);
+int FUN_8007c4ec(int param_1);
+int FUN_80081c94(void);
+void FUN_8007b008(int param_1, int param_2);
+void FUN_8007b994(short *param_1, int param_2, int param_3);
+void FUN_8007b8a0(int param_1, undefined2 param_2, undefined2 param_3, int param_4);
+uint FUN_8007b8f8(int param_1, int param_2, int param_3);
+void FUN_80063ef4(int param_1, short *param_2);
+void FUN_8007af60(undefined *param_1);
+void FUN_8007b14c(undefined *param_1, int param_2);
+void FUN_8007b0c4(undefined *param_1, int param_2);
+void FUN_8007b1d4(undefined *param_1, int param_2);
+void FUN_8007b050(undefined *param_1, undefined4 *param_2);
+void FUN_8007b320(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6, int param_7);
+void FUN_8007b374(int param_1, undefined *param_2, undefined4 param_3, int param_4);
+undefined4 FUN_80061544(undefined4 param_1);
+void FUN_80061490(undefined *param_1);
+void FUN_80067444(int param_1, undefined *param_2, int param_3);
+void FUN_8006c31c(undefined2 *param_1, int param_2, int param_3, int param_4, undefined4 param_5);
+uint *FUN_80081cc8(undefined4 param_1);
+uint FUN_8006b548(undefined *param_1, undefined4 *param_2, int param_3, int param_4);
+void FUN_8006c460(undefined4 *param_1, undefined *param_2, undefined4 param_3);
+int FUN_8006cd04(int param_1, undefined4 param_2);
+void FUN_8006c5dc(int param_1, int param_2, int param_3, int param_4, undefined4 param_5);
+void FUN_8006bef4(int param_1, int param_2, int param_3, int param_4);
+void FUN_8006c580(int param_1);
+void FUN_8006be64(int param_1);
+void FUN_80068734(undefined *param_1, undefined4 param_2);
+int FUN_8006b360(int param_1, undefined *param_2, int param_3, int param_4, int param_5);
+void FUN_8006b218(int param_1, undefined *param_2, int param_3, int param_4, int param_5, int param_6, int param_7, int param_8);
+void FUN_8008cedc(undefined *param_1, undefined4 *param_2);
+void FUN_8008cf34(undefined *param_1, undefined *param_2, int param_3);
+void FUN_8006af40(int param_1, undefined *param_2, int param_3, int param_4, int param_5, int param_6, int param_7);
+void FUN_8006adb4(int param_1, undefined *param_2, int param_3, int param_4, int param_5);
+int FUN_8006ae28(int param_1, undefined4 param_2, int param_3, int param_4, int param_5);
+void FUN_8006b3f4(int param_1, undefined *param_2, int param_3, int param_4, int param_5, int param_6, int param_7, int param_8);
+void FUN_8006b184(int param_1, undefined *param_2, int param_3, int param_4, int param_5, int param_6, int param_7);
+void FUN_8006ba48(undefined *param_1, undefined4 param_2, int param_3, int param_4, int param_5, int param_6, int param_7);
+void FUN_8006bb08(undefined4 param_1, short *param_2, undefined4 param_3);
+undefined4 FUN_8007d23c(int param_1);
+ushort FUN_80083ae0(undefined4 *param_1);
+int FUN_8007f18c(undefined4 param_1, int param_2);
+int FUN_8007f01c(int param_1, undefined4 param_2, undefined4 param_3);
+void FUN_8008ce30(undefined *param_1, int param_2, int param_3);
+undefined4 FUN_8007816c(int param_1, undefined2 param_2);
+void FUN_8005e548(undefined *param_1, undefined4 param_2);
+void FUN_8005e5f0(undefined *param_1, undefined4 param_2);
+undefined4 FUN_8007830c(int param_1, undefined *param_2);
+undefined4 FUN_800768c0(int param_1);
+void FUN_80076fc0(undefined4 param_1, undefined *param_2);
+int FUN_80076f2c(int param_1);
+void FUN_800771ac(undefined *param_1, undefined *param_2);
+undefined4 FUN_8005dd94(undefined4 param_1, int param_2);
+undefined4 FUN_80060924(char *param_1);
+int FUN_8005d950(undefined4 param_1);
+void FUN_8005d92c(undefined2 param_1, undefined4 param_2);
+void FUN_8007ba70(undefined2 *param_1, undefined4 param_2, int param_3);
+void FUN_8007af30(void);
+void FUN_80067960(undefined *param_1, undefined4 param_2, int param_3, int param_4);
+void FUN_80067824(undefined *param_1, int param_2, int param_3);
+void FUN_8006101c(undefined4 *param_1, int param_2);
+void FUN_8006c274(int param_1, int param_2);
+void FUN_80069ef8(void);
+undefined4 FUN_8007e738(undefined4 param_1, undefined4 param_2);
+uint *FUN_80081478(undefined4 param_1, undefined4 param_2);
+void FUN_8007284c(undefined4 *param_1);
+int FUN_8006ecd8(int param_1, undefined *param_2);
+void FUN_8007f174(int param_1);
+void FUN_800683fc(undefined4 param_1, undefined4 *param_2, int param_3);
+undefined4 FUN_8008cf00(undefined *param_1, undefined *param_2);
+int FUN_8003d7b8(int param_1, int param_2);
+
+// External variables and labels
+extern undefined4 DAT_801c9130;
+extern undefined4 DAT_801c9120;
+extern undefined4 DAT_801c9150;
+extern void LAB_overlay0__8005a7fc(void);
+extern void LAB_overlay0__8005a7b4(void);
+extern bitfield_16_t DAT_overlay0__8005abe8;
+extern undefined2 DAT_overlay0__8005ac02;
+extern undefined4 DAT_overlay0__8005ac00;
+extern undefined4 DAT_overlay0__8005ac1c;
+extern undefined4 DAT_801c6c50;
+extern undefined4 DAT_overlay0__8005a864;
+extern undefined4 DAT_801c6c87;
+extern undefined4 LAB_overlay0__8005ab56_2;
+extern undefined4 LAB_overlay0__8005abc8;
+extern undefined4 DAT_overlay0__8005b088;
+extern undefined1 DAT_801d55aa;
+extern undefined4 DAT_801d5e8c;
+extern undefined4 DAT_801d5f58;
+extern void **PTR_LAB_overlay0__8005a908_overlay0__8005b208;
+extern undefined4 DAT_801d58b6;
+extern undefined4 DAT_801d58bc;
+extern undefined4 DAT_801d5944;
+extern undefined4 DAT_801d5945;
+extern undefined4 DAT_801d58c0;
+extern undefined4 DAT_801d5946;
+extern undefined4 DAT_801d5947;
+extern undefined4 DAT_801d58dc;
+extern void **PTR_s_LIS_02d_overlay0__8005a8d8_overlay0__8005b1f0;
+extern undefined4 DAT_overlay0__8005b1c4;
+extern undefined4 DAT_overlay0__8005b1cc;
+extern void **PTR_DAT_overlay0__8005b220;
+extern undefined4 DAT_801c90a8;
+extern undefined4 DAT_801c90a0;
+extern undefined4 DAT_80173894;
+extern undefined4 DAT_8017389c;
+extern undefined4 DAT_8017389e;
+extern undefined4 DAT_801738a0;
+extern undefined4 DAT_801c98e0;
+extern undefined4 DAT_801c90c0;
+extern undefined4 DAT_801c90c4;
+extern undefined4 DAT_80178894;
+extern undefined4 DAT_801cacf8;
+extern undefined4 DAT_801da4b8;
+extern undefined4 DAT_801da4f8;
+extern undefined4 DAT_801da4fa;
+extern undefined4 DAT_801c7016;
+extern undefined4 DAT_801c70d2;
+extern undefined4 DAT_801c70d7;
+extern undefined4 DAT_801c70dc;
+extern undefined4 DAT_801c70e0;
+extern undefined4 DAT_801c70e4;
+extern undefined4 DAT_801c70e9;
+extern undefined4 DAT_801c70ee;
+extern undefined4 DAT_801d5867;
+extern undefined4 DAT_801d5868;
+extern undefined4 DAT_801d5869;
+extern undefined4 DAT_801d586a;
+extern undefined4 DAT_801d586b;
+extern undefined4 DAT_801d586c;
+extern undefined4 DAT_801d58a0;
+extern undefined4 DAT_801d5dd8;
+extern undefined4 DAT_801d5dde;
+extern undefined4 DAT_801d5de0;
+extern undefined4 DAT_801d5de2;
+extern undefined4 DAT_801d5ddc;
+extern undefined4 DAT_801d5de4;
+extern undefined4 DAT_801d5df0;
+extern undefined4 DAT_80092878;
+extern undefined4 DAT_80092870;
+extern undefined4 DAT_800a9f00;
+extern undefined4 DAT_overlay0__8005b1d8;
+extern undefined4 DAT_overlay0__8005b1d2_2;
+extern undefined4 DAT_overlay0__8005b1ce_2;
+extern undefined4 DAT_overlay0__8005b1de_2;
+extern undefined4 DAT_overlay0__8005b1e2_2;
+extern undefined4 DAT_overlay0__8005b1dc;
+extern undefined4 DAT_overlay0__8005b1c8;
+extern undefined4 LAB_overlay0__8005b1d8;
+extern undefined4 LAB_overlay0__8005b1d2_2;
+extern undefined4 LAB_overlay0__8005b1ce_2;
+extern undefined4 LAB_overlay0__8005b1de_2;
+extern undefined4 LAB_overlay0__8005b1e2_2;
+extern undefined4 DAT_overlay0__8005b150;
+extern undefined4 DAT_801cd554;
+extern undefined4 DAT_801d55cc;
+extern void **PTR_s_gt_sn_overlay0__8005a94c_overlay0__8005b3d4;
+extern undefined4 DAT_801c90ac;
+extern undefined4 DAT_overlay0__8005b3d0;
+extern undefined4 DAT_overlay0__8005b500;
+extern undefined4 DAT_overlay0__8005b504;
+extern undefined4 DAT_overlay0__8005b508;
+extern undefined4 DAT_overlay0__8005b220;
+extern undefined4 LAB_overlay0__8005a97a_2;
+extern undefined4 LAB_80081b5c;
+extern undefined4 LAB_8007f2fc;
+extern undefined4 DAT_801d5e88;
+extern undefined4 DAT_overlay0__8005b154;
+extern undefined4 LAB_overlay0__8005b156;
+extern undefined4 LAB_overlay0__8005b156_2;
+extern undefined4 DAT_1f800000;
+// Local array declarations for scratchpad memory (0x1f800000 region)
+// These are used as arrays in the code but declared as simple types in the header
+extern undefined4 DAT_1f800080_array[256];  // Array in scratchpad memory
+extern undefined4 DAT_1f80008c_array[256];  // Array in scratchpad memory
+extern undefined4 DAT_1f800074_array[256];  // Array in scratchpad memory
+#define DAT_1f800080 DAT_1f800080_array
+#define DAT_1f80008c DAT_1f80008c_array
+#define DAT_1f800074 DAT_1f800074_array
+extern undefined4 DAT_1f800070;
+extern undefined4 DAT_1f8003ac;
+extern undefined4 DAT_1f800398;
+extern undefined4 DAT_1f800399;
+extern undefined4 DAT_1f80039c;
+extern undefined4 DAT_1f8003a0;
+extern undefined4 DAT_1f8003a4;
+extern undefined4 DAT_1f8003a8;
+extern undefined4 DAT_1f8003ae;
 
 uint FUN_overlay0__800448c8(int param_1,int param_2)
 
@@ -293,12 +514,12 @@ void FUN_overlay0__80044ea4
   int iVar9;
   int iVar10;
 
-  iVar10 = (int)(short)(&DAT_80093950)[param_6 & 0xfff];
-  sVar1 = (&DAT_80093150)[param_5 & 0xfff];
-  iVar7 = (int)(short)(&DAT_80093150)[param_4 & 0xfff];
-  iVar8 = (int)(short)(&DAT_80093950)[param_4 & 0xfff];
-  iVar9 = (int)(short)(&DAT_80093950)[param_5 & 0xfff];
-  iVar6 = (int)(short)(&DAT_80093150)[param_6 & 0xfff];
+  iVar10 = (int)(short)DAT_80093950[param_6 & 0xfff];
+  sVar1 = DAT_80093150[param_5 & 0xfff];
+  iVar7 = (int)(short)DAT_80093150[param_4 & 0xfff];
+  iVar8 = (int)(short)DAT_80093950[param_4 & 0xfff];
+  iVar9 = (int)(short)DAT_80093950[param_5 & 0xfff];
+  iVar6 = (int)(short)DAT_80093150[param_6 & 0xfff];
 
   iVar3 = FUN_8007596c(iVar10,(int)sVar1);
   iVar4 = FUN_8007596c(iVar6,(int)sVar1);
@@ -411,8 +632,8 @@ void FUN_overlay0__80045138(int param_1)
   uVar3 = *(uint *)(param_1 + 0x624);
 
   iVar4 = FUN_80086084(uVar3 << 0xc,((int)uVar3 >> 0x1f) << 0xc | uVar3 >> 0x14,
-                       (&DAT_1f800080)[(uint)*(byte *)(param_1 + 0x45c) * 0x24],
-                       (int)(&DAT_1f800080)[(uint)*(byte *)(param_1 + 0x45c) * 0x24] >> 0x1f);
+                       DAT_1f800080[(uint)*(byte *)(param_1 + 0x45c) * 0x24],
+                       (int)DAT_1f800080[(uint)*(byte *)(param_1 + 0x45c) * 0x24] >> 0x1f);
 
   if (iVar4 < 0x1001) {
 
@@ -426,7 +647,7 @@ LAB_overlay0__800451dc:
     iVar4 = iVar7;
   }
 
-  iVar6 = (&DAT_1f800080)[(uint)*(byte *)(param_1 + 0x45c) * 0x24];
+  iVar6 = DAT_1f800080[(uint)*(byte *)(param_1 + 0x45c) * 0x24];
 
   uVar3 = ((uint)*(ushort *)(param_1 + 0x398) * 0x1000) / 0x3c;
   iVar7 = 0x1000;
@@ -460,7 +681,7 @@ LAB_overlay0__800451dc:
 
 LAB_overlay0__800452b8:
 
-  (&DAT_1f80008c)[(uint)*(byte *)(param_1 + 0x45c) * 0x24] = iVar4;
+  DAT_1f80008c[(uint)*(byte *)(param_1 + 0x45c) * 0x24] = iVar4;
 
   sVar1 = *(short *)(param_1 + 0x708);
   uVar5 = FUN_overlay0__8003533c(param_1,(int)sVar1);
@@ -518,7 +739,7 @@ int FUN_overlay0__8004530c(int param_1)
 
       lVar1 = (longlong)(iVar10 + -0x2c74) *
               (longlong)((int)((*(ushort *)(param_1 + 0x396) - 1000) * 0x1000) / 0x3c);
-      iVar10 = FUN_80086084((int)lVar1,(int)((ulonglong)lVar1 >> 0x20),0x21570,0,lVar1);
+      iVar10 = FUN_80086084_5((int)lVar1,(int)((ulonglong)lVar1 >> 0x20),0x21570,0,lVar1);
       uVar12 = iVar10 + 0x10aaa;
     }
     else {
@@ -910,7 +1131,8 @@ switchD_overlay0__80045b90_caseD_7:
 
         if (*(char *)(local_2c + 0x39e) == '\x02') {
 
-          iVar3 = FUN_overlay0__80045138(iVar12);
+          FUN_overlay0__80045138(iVar12);
+          iVar3 = 0;
         }
         else {
 
@@ -1463,8 +1685,7 @@ LAB_overlay0__80046990:
       }
       else if (uVar9 == 1) {
 
-        uVar3 = FUN_80075a5c((int)*(short *)(local_40 + 0x74),*(undefined4 *)(local_48 + 0x634),
-                             0xfffffffd);
+        uVar3 = FUN_80075a5c((int)*(short *)(local_40 + 0x74),*(undefined4 *)(local_48 + 0x634));
 
         *(undefined4 *)(iVar13 + local_4c + 0x478) = uVar3;
         *(undefined4 *)(iVar12 + 0x478) = uVar3;
@@ -1473,7 +1694,7 @@ LAB_overlay0__80046990:
       }
       else {
 
-        uVar3 = FUN_80075b04(local_68[3] - *(int *)(local_64 + 0xc),*(undefined4 *)(iVar5 + 0x88));
+        uVar3 = FUN_80075b04(local_68[3] - *(int *)(local_64 + 0xc),*(undefined4 *)(iVar5 + 0x88),0xfffffffc);
         iVar2 = FUN_80075a94(uVar3,DAT_1f800000);
 
         iVar8 = iVar11 / 2 + (*(short *)(iVar12 + 0x476) + iVar2) / 2;
@@ -1519,7 +1740,7 @@ void FUN_overlay0__80046b58(undefined4 param_1,undefined4 param_2)
 
 {
 
-  FUN_overlay0__80045688();
+  FUN_overlay0__80045688((int)param_1,(int)param_2);
 
   FUN_overlay0__800457b0(param_1,param_2);
 
@@ -1648,7 +1869,7 @@ void FUN_overlay0__80047024(int param_1,int param_2,int param_3,int param_4,int 
     *(int *)(param_1 + 0x1c8) = param_2;
 
     if (*(code **)(param_2 + 8) != (code *)0x0) {
-      (**(code **)(param_2 + 8))(param_3);
+      ((void (*)(int))*(code **)(param_2 + 8))(param_3);
     }
   }
 
@@ -2030,7 +2251,7 @@ void FUN_overlay0__80048528(int vertexDataPtr,int renderConfigPtr)
   FUN_8007b8a0(0x1f800000,*(undefined2 *)(textureDataPtr + 0x4e),*(undefined2 *)(textureDataPtr + 0x4c),0xc);
 
   DAT_1f800070 = *(undefined4 *)(textureDataPtr + 0x14);
-  DAT_1f800074 = *(undefined4 *)(textureDataPtr + 0x18);
+  DAT_1f800074_array[0] = *(undefined4 *)(textureDataPtr + 0x18);
 
   DAT_1f800068 = DAT_801c93ec;
   DAT_1f80006c = DAT_801c93f0 + -0x2000;
@@ -2244,14 +2465,17 @@ void FUN_overlay0__80048d14(undefined4 *graphicsConfigPtr,undefined4 *configData
 
   *(undefined2 *)((int)graphicsConfigPtr + 0x4e) = *(undefined2 *)(configDataPtr + 6);
 
-  DAT_overlay0__8005abe8 =
-       CONCAT22(DAT_overlay0__8005abe8._2_2_,*(undefined2 *)((int)configDataPtr + 0x1e));
+  {
+    undefined2 temp_val = DAT_overlay0__8005abe8._2_2_;
+    DAT_overlay0__8005abe8._0_2_ = CONCAT22(temp_val,*(undefined2 *)((int)configDataPtr + 0x1e)) >> 16;
+    DAT_overlay0__8005abe8._2_2_ = CONCAT22(temp_val,*(undefined2 *)((int)configDataPtr + 0x1e)) & 0xffff;
+  }
   DAT_overlay0__8005ac02 = *(undefined2 *)((int)configDataPtr + 0x1e);
 
   FUN_8006c460(graphicsConfigPtr + 7,&DAT_overlay0__8005ac00,configDataPtr[2]);
   graphicsConfigPtr[0xc] = configDataPtr[3];
 
-  colorValue = DAT_overlay0__8005abe8;
+  colorValue = (DAT_overlay0__8005abe8._0_2_ << 16) | DAT_overlay0__8005abe8._2_2_;
   *graphicsConfigPtr = 0x160000;
   graphicsConfigPtr[1] = colorValue;
   graphicsConfigPtr[2] = 0x21018b6;
@@ -2403,7 +2627,8 @@ void FUN_overlay0__800490f8
 
     *(undefined4 *)(param_3 + 0x14) = param_6[1];
 
-    renderOffset = FUN_8006ac90(param_3,&DAT_801c6c50,param_4 - textureOffset,param_5,1);
+    FUN_8006ac90(param_3,&DAT_801c6c50,param_4 - textureOffset,param_5,1);
+    renderOffset = 0;
 
     FUN_8008cf34(textureMatrix,&DAT_overlay0__8005a864,(int)*(short *)(param_1 + 1));
 
@@ -2577,7 +2802,7 @@ void FUN_overlay0__800495e4
 
   if (0 < *param_1) {
 
-    FUN_8008cf34(transformMatrix,&DAT_overlay0__8005a864);
+    FUN_8008cf34(transformMatrix,&DAT_overlay0__8005a864,0);
 
     textureData = FUN_8006b548(&LAB_overlay0__8005ab56_2,param_1 + 4,param_6,0x80);
 
@@ -2876,8 +3101,8 @@ undefined4 * FUN_overlay0__8004c7a0(int param_1)
 
   FUN_8008ce30(&DAT_801d585c,0,0x58c);
 
-  DAT_801d585c = DAT_801c98e1;
-  DAT_801d5860 = DAT_801c98e5;
+  DAT_801d585c = *(undefined4 *)&DAT_801c98e1;
+  DAT_801d5860 = *(undefined4 *)&DAT_801c98e5;
   DAT_801d5864 = 2;
   DAT_801d5865 = 1;
   DAT_801d5866 = 3;
@@ -2982,7 +3207,7 @@ void FUN_overlay0__8004ca90(ushort *param_1,int param_2)
   undefined2 *sourcePtr;
   undefined dataBuffer [16];
 
-  FUN_8008cf34(dataBuffer,(&PTR_s_LIS_02d_overlay0__8005a8d8_overlay0__8005b1f0)[param_2]);
+  FUN_8008cf34(dataBuffer,(&PTR_s_LIS_02d_overlay0__8005a8d8_overlay0__8005b1f0)[param_2],0);
 
   configValue = _LAB_80092e6a_2;
 
@@ -3033,7 +3258,8 @@ void FUN_overlay0__8004cb6c
 
   FUN_8008cf34(auStack_90,(&PTR_DAT_overlay0__8005b220)[param_4],param_5 + 1);
 
-  iVar1 = FUN_8006af40(auStack_50,auStack_90,param_2,param_3,2,1,4);
+  FUN_8006af40(auStack_50,auStack_90,param_2,param_3,2,1,4);
+  iVar1 = 0;
 
   if (-1 < param_7) {
 
@@ -3303,7 +3529,8 @@ void FUN_overlay0__8004d6e4
   *(undefined4 *)(param_6 + 0x14) = uVar2;
 
   FUN_80068734(auStack_70,param_2);
-  sVar1 = FUN_8006b3f4(param_6,auStack_70,param_4,0x124,6,5,0,0);
+  FUN_8006b3f4(param_6,auStack_70,param_4,0x124,6,5,0,0);
+  sVar1 = 0;
 
   local_30 = ((short)param_4 - sVar1) + -10;
   local_2e = 0x116;
@@ -3751,7 +3978,7 @@ void FUN_overlay0__8004fc8c(int param_1,int param_2)
   undefined4 local_38 [6];
 
   sVar5 = 0;
-  FUN_overlay0__8004ccf8();
+  FUN_overlay0__8004ccf8(0,0);
   iVar1 = 1;
   puVar2 = local_38;
   local_38[0] = 0x2004650;

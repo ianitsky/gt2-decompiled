@@ -134,7 +134,7 @@ void PadInitDirect(uchar *port1Buffer, uchar *port2Buffer);
 void PadSetAct(int portNumber, uchar *actionData, int actionType);
 void PadStartCom(void);
 void PadStopCom(void);
-void S_016_OBJ_38C(void);
+int S_016_OBJ_38C(void);
 void StartCARD2(void);
 void StopCARD2(void);
 void _bu_init(void);

@@ -1,3 +1,45 @@
+// Include common types and global variables
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include "scus_944.88_part_014.h"
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+
+// Forward declarations
+void FUN_overlay0__80016598(int *param_1, int param_2);
+void FUN_overlay0__8001882c(int param_1);
+
+// External variables and labels
+extern void LAB_overlay0__8002f4f8(void);
+extern undefined4 DAT_801d58b6;
+extern undefined4 DAT_800a951c;
+extern void LAB_overlay0__8002f000(void);
+extern undefined1 UNK_801d58e8[];
+extern void *PTR_LAB_overlay0__80057d24_overlay0__8005d348;
+extern void *PTR_LAB_overlay0__80050e94_overlay0__8005b7a0;
+extern undefined4 DAT_801d5df6;
+extern void *PTR_LAB_overlay0__8005947c_overlay0__8005d558;
+extern void *PTR_LAB_overlay0__8005947c_overlay0__8005d4c8;
+extern void *PTR_LAB_overlay0__80049c68_overlay0__8005ae0c;
+extern void *PTR_LAB_overlay0__8004e09c_overlay0__8005b404;
+extern void LAB_overlay0__8002f110(void);
+extern undefined4 DAT_80091a70;
+extern undefined4 DAT_801d58c0;
+extern undefined4 DAT_8017d894;
+extern undefined4 DAT_overlay0__8002f528;
+extern undefined4 DAT_801e306e;
+extern undefined4 DAT_801d58d8;
+extern undefined4 DAT_801d58dc;
+extern undefined4 DAT_overlay0__8002f531;
+extern undefined4 DAT_overlay0__8002f530;
+extern undefined4 DAT_801c6c38;
+extern void LAB_overlay0__80018b00(void);
+extern undefined4 DAT_801c6c40;
+extern undefined4 DAT_801c6c30;
+extern undefined4 DAT_overlay0__8002f534;
+extern void LAB_80008000(void);
+extern undefined4 _DAT_1f8003ac;
 
 void FUN_overlay0__800166cc(int *param_1,char *param_2)
 
@@ -40,7 +82,7 @@ void FUN_overlay0__800166cc(int *param_1,char *param_2)
         return;
       }
 
-      FUN_overlay0__80016598(param_1);
+      FUN_overlay0__80016598(param_1, 0);
     }
 
     *(undefined *)(param_1 + 5) = uVar6;
@@ -64,7 +106,7 @@ void FUN_overlay0__800167d0(int param_1,int param_2)
 
     if (((sVar1 == 0) && (param_2 == 0)) && (-1 < *(int *)(param_1 + 8))) {
 
-      FUN_overlay0__80016598();
+      FUN_overlay0__80016598(param_1, 0);
     }
   }
   return;
@@ -219,7 +261,7 @@ void FUN_overlay0__80016abc(int param_1)
 
   if (*(char *)(param_1 + 0x11d701) == '\0') {
     *(undefined *)(param_1 + 0x11d701) = 1;
-    FUN_overlay0__8001882c();
+    FUN_overlay0__8001882c(0);
     FUN_overlay0__80028ddc(param_1 + 4);
   }
 
@@ -308,7 +350,7 @@ void FUN_overlay0__80017098(int param_1)
 
   iVar1 = 300;
   for (iVar2 = 1; iVar2 < *(short *)(param_1 + 0x5d4); iVar2 = iVar2 + 1) {
-    (&UNK_801d58e8)[iVar1] = 0;
+    UNK_801d58e8[iVar1] = 0;
     iVar1 = iVar1 + 0xd0;
   }
   return;
@@ -329,7 +371,7 @@ void FUN_overlay0__8001710c(int param_1,undefined2 param_2,undefined param_3)
 
   iVar1 = 0x5c;
   for (iVar2 = 0; iVar2 < *(short *)(param_1 + 0x5d4); iVar2 = iVar2 + 1) {
-    (&UNK_801d58e8)[iVar1] = 1;
+    UNK_801d58e8[iVar1] = 1;
     iVar1 = iVar1 + 0xd0;
   }
   return;
@@ -1402,6 +1444,7 @@ void FUN_overlay0__800196bc(undefined4 param_1,int param_2,int param_3)
   undefined2 uVar17;
   undefined2 uVar18;
   undefined2 uVar19;
+  int iVar8;
 
   uVar1 = *(ushort *)(param_2 + 0x66);
   uVar14 = (uint)uVar1;
@@ -2068,8 +2111,8 @@ void FUN_overlay0__80019b58(int *param_1)
             puVar16 = puVar16 + 4;
           } while (puVar15 != &DAT_1f8000f4);
           DAT_1f80038c = DAT_1f800388;
-          DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-          DAT_1f800390 = CONCAT13(7,(undefined3)DAT_1f800390);
+          memcpy(&DAT_1f800390.bitfield._0_3_, SUB43(&DAT_1f800388, 0), 3);
+          DAT_1f800390.value = CONCAT13(7, DAT_1f800390.bitfield._0_3_);
 LAB_overlay0__8001a4c8:
           pSVar39 = (SVECTOR *)(ppsVar45 + 4);
           psVar31 = *ppsVar45;
@@ -2428,8 +2471,8 @@ LAB_overlay0__8001a930:
               puVar16 = puVar16 + 4;
             } while (puVar15 != (undefined4 *)&DAT_1f8000f8);
             DAT_1f80038c = DAT_1f800388;
-            DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-            DAT_1f800390 = CONCAT13(9,(undefined3)DAT_1f800390);
+            memcpy(&DAT_1f800390.bitfield._0_3_, SUB43(&DAT_1f800388, 0), 3);
+            DAT_1f800390.value = CONCAT13(9, DAT_1f800390.bitfield._0_3_);
 LAB_overlay0__8001abdc:
             pSVar39 = (SVECTOR *)(ppsVar45 + 4);
             psVar31 = *ppsVar45;
@@ -2802,8 +2845,8 @@ LAB_overlay0__8001b114:
             puVar16 = puVar16 + 4;
           } while (puVar15 != &DAT_1f8000f4);
           DAT_1f80038c = DAT_1f800388;
-          DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-          DAT_1f800390 = CONCAT13(9,(undefined3)DAT_1f800390);
+          memcpy(&DAT_1f800390.bitfield._0_3_, SUB43(&DAT_1f800388, 0), 3);
+          DAT_1f800390.value = CONCAT13(9, DAT_1f800390.bitfield._0_3_);
 LAB_overlay0__8001b360:
           pSVar39 = (SVECTOR *)(ppsVar45 + 4);
           psVar31 = *ppsVar45;
@@ -3184,8 +3227,8 @@ LAB_overlay0__8001b868:
               puVar16 = puVar16 + 4;
             } while (puVar15 != (undefined4 *)&DAT_1f8000f8);
             DAT_1f80038c = DAT_1f800388;
-            DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-            DAT_1f800390 = CONCAT13(0xc,(undefined3)DAT_1f800390);
+            memcpy(&DAT_1f800390.bitfield._0_3_, SUB43(&DAT_1f800388, 0), 3);
+            DAT_1f800390.value = CONCAT13(0xc, DAT_1f800390.bitfield._0_3_);
 LAB_overlay0__8001bb48:
             pSVar39 = (SVECTOR *)(ppsVar45 + 4);
             psVar36 = *ppsVar45;

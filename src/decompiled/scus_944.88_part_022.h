@@ -26,7 +26,7 @@ void FUN_overlay0__8003e0c4(int param_1,int param_2);
 void FUN_overlay0__8003e7ec(int param_1);
 void FUN_overlay0__8003e8e4(int param_1,int param_2);
 void FUN_overlay0__8003ebf0(void);
-void FUN_overlay0__8003eff0(int param_1,undefined4 param_2,int param_3,undefined4 param_4);
+undefined4 FUN_overlay0__8003eff0(int param_1,undefined4 param_2,int param_3,undefined4 param_4);
 void FUN_overlay0__8003f09c(undefined4 *param_1,int param_2);
 void FUN_overlay0__8003f16c(int param_1,undefined4 *param_2);
 void FUN_overlay0__8003f2f0(int param_1);

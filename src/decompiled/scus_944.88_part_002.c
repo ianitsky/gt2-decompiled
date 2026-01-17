@@ -1,17 +1,48 @@
+#include "gt2_types.h"
+#include "gt2_global_vars_clean.h"
+#include <string.h>
+#include <stdint.h>
+
+// Forward declarations from scus_944.88_part_001.h to avoid including the whole header
+// (which would cause struct redefinition errors)
+void FUN_8005d92c(undefined4 param_1,undefined4 param_2);
+void FUN_8005d908(undefined4 param_1,undefined4 param_2);
+void FUN_8006101c(int param_1,uint param_2);
+uint FUN_80060d74(uint param_1);
+
+// Forward declarations for GTE (Geometry Transformation Engine) functions
+// These are PS1-specific coprocessor functions
+void gte_ldTRX(int value);
+void gte_ldTRY(int value);
+void gte_ldTRZ(int value);
+void gte_ldR11R12(undefined4 value);
+void gte_ldR13R21(undefined4 value);
+void gte_ldR22R23(undefined4 value);
+void gte_ldR31R32(undefined4 value);
+void gte_ldR33(undefined4 value);
+void gte_ldsv_(int x, int y, int z);
+void gte_rtirtr_b(void);
+int gte_stIR1(void);
+int gte_stIR2(void);
+
+// Forward declaration for FUN_80060d74
+// Note: Function takes a parameter but is called without one in some places
+// Using 0 as default parameter value
+uint FUN_80060d74(uint param_1);
 
 void FUN_80061504(int param_1,undefined2 *param_2,undefined2 *param_3)
 
 {
   undefined2 uVar1;
 
-  *param_2 = *(undefined2 *)(param_1 + 0x18);
-  uVar1 = *(undefined2 *)(param_1 + 0x1a);
+  *param_2 = *(undefined2 *)((intptr_t)param_1 + 0x18);
+  uVar1 = *(undefined2 *)((intptr_t)param_1 + 0x1a);
   param_2[2] = 0xc00;
   param_2[3] = 0x7a;
   param_2[1] = uVar1;
 
-  *param_3 = *(undefined2 *)(param_1 + 0x1c);
-  uVar1 = *(undefined2 *)(param_1 + 0x1e);
+  *param_3 = *(undefined2 *)((intptr_t)param_1 + 0x1c);
+  uVar1 = *(undefined2 *)((intptr_t)param_1 + 0x1e);
   param_3[2] = 0xc00;
   param_3[3] = 0x7a;
   param_3[1] = uVar1;
@@ -23,14 +54,14 @@ int FUN_80061544(int param_1)
 
 {
 
-  return ((int)*(short *)(param_1 + 0x18) - (int)*(short *)(param_1 + 0x22)) * 0x10;
+  return ((int)*(short *)((intptr_t)param_1 + 0x18) - (int)*(short *)((intptr_t)param_1 + 0x22)) * 0x10;
 }
 
 void FUN_8006155c(int param_1,int param_2,uint param_3)
 
 {
 
-  *(uint *)(param_1 + param_2 * 4 + 8) =
+  *(uint *)((intptr_t)param_1 + param_2 * 4 + 8) =
        (param_3 & 0x1f) << 3 |
        (param_3 & 0x3e0) << 6 |
        (param_3 & 0x7c00) << 9;
@@ -41,7 +72,7 @@ void FUN_8006155c(int param_1,int param_2,uint param_3)
 void FUN_8006158c(undefined4 param_1,undefined4 param_2,undefined4 param_3)
 
 {
-  FUN_8005d92c();
+  FUN_8005d92c(0, 0);
   FUN_8006101c(param_2,param_3);
   return;
 }
@@ -49,7 +80,7 @@ void FUN_8006158c(undefined4 param_1,undefined4 param_2,undefined4 param_3)
 void FUN_800615c8(int param_1)
 
 {
-  FUN_8005d92c(param_1 + 1);
+  FUN_8005d92c(param_1 + 1, 0);
   return;
 }
 
@@ -63,7 +94,7 @@ bool FUN_800615e8(uint param_1,undefined4 param_2)
 
   if (bVar1) {
 
-    uVar2 = FUN_80060d74();
+    uVar2 = FUN_80060d74(0);
     FUN_8005d908(uVar2,param_2);
   }
 
@@ -89,7 +120,7 @@ uint FUN_80061634(ushort *param_1,uint param_2)
       return param_2 % (uint)*param_1;
     }
 
-    uVar1 = (uint)*(char *)((int)param_1 + uVar2 + 2);
+    uVar1 = (uint)*(char *)((intptr_t)param_1 + uVar2 + 2);
 
     if (uVar1 - 0x41 < 0x1a) {
       uVar1 = uVar1 + 0x20;
@@ -125,9 +156,9 @@ void FUN_800616c4(int param_1,undefined4 *param_2,undefined *param_3)
   gte_ldR31R32(param_2[3]);
   gte_ldR33(param_2[4]);
 
-  piVar4 = *(int **)(param_1 + 0x18);
+  piVar4 = *(int **)((intptr_t)param_1 + 0x18);
   DAT_1f800074 = param_3 + 2;
-  uVar1 = *(ushort *)(param_1 + 2);
+  uVar1 = *(ushort *)((intptr_t)param_1 + 2);
 
   if (piVar4 != piVar4 + uVar1) {
     uVar10 = 0;
@@ -222,7 +253,7 @@ void FUN_80061798(int param_1,undefined4 param_2)
   gte_ldTRY(DAT_1f80007c);
   gte_ldTRZ(DAT_1f800080);
   gte_ldR11R12(DAT_1f800084);
-  gte_ldR13R21(DAT_1f800088);
+  gte_ldR13R21((undefined4)DAT_1f800088);
   gte_ldR22R23(DAT_1f80008c);
   gte_ldR31R32(_DAT_1f800090);
   gte_ldR33(DAT_1f800094);
@@ -825,8 +856,8 @@ void FUN_80061798(int param_1,undefined4 param_2)
             DAT_1f8000f0 = &DAT_1f8000c8;
             DAT_1f800388 = DAT_1f800068;
             DAT_1f80038c = DAT_1f800068;
-            DAT_1f800390._0_3_ = SUB43(DAT_1f800068,0);
-            DAT_1f800390 = CONCAT13(7,(undefined3)DAT_1f800390);
+            memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800068,0), 3);
+            DAT_1f800390.value = CONCAT13(7, DAT_1f800390.bitfield._0_3_);
 LAB_800623a0:
             pSVar45 = (SVECTOR *)(ppuVar48 + 4);
             puVar21 = *ppuVar48;
@@ -1179,8 +1210,8 @@ LAB_80062760:
               DAT_1f8000f4 = &DAT_1f8000d8;
               DAT_1f800388 = DAT_1f800068;
               DAT_1f80038c = DAT_1f800068;
-              DAT_1f800390._0_3_ = SUB43(DAT_1f800068,0);
-              DAT_1f800390 = CONCAT13(9,(undefined3)DAT_1f800390);
+              memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800068,0), 3);
+              DAT_1f800390.value = CONCAT13(9, DAT_1f800390.bitfield._0_3_);
 LAB_80062a84:
               pSVar45 = (SVECTOR *)(ppuVar48 + 4);
               puVar21 = *ppuVar48;
@@ -1532,8 +1563,8 @@ LAB_80062f14:
             DAT_1f8000f0 = &DAT_1f8000c8;
             DAT_1f800388 = DAT_1f800068;
             DAT_1f80038c = DAT_1f800068;
-            DAT_1f800390._0_3_ = SUB43(DAT_1f800068,0);
-            DAT_1f800390 = CONCAT13(9,(undefined3)DAT_1f800390);
+            memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800068,0), 3);
+            DAT_1f800390.value = CONCAT13(9, DAT_1f800390.bitfield._0_3_);
 LAB_800631a4:
             pSVar45 = (SVECTOR *)(ppuVar48 + 4);
             puVar21 = *ppuVar48;
@@ -1918,8 +1949,8 @@ LAB_80063604:
               DAT_1f8000f4 = &DAT_1f8000d8;
               DAT_1f800388 = DAT_1f800068;
               DAT_1f80038c = DAT_1f800068;
-              DAT_1f800390._0_3_ = SUB43(DAT_1f800068,0);
-              DAT_1f800390 = CONCAT13(0xc,(undefined3)DAT_1f800390);
+              memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800068,0), 3);
+              DAT_1f800390.value = CONCAT13(0xc, DAT_1f800390.bitfield._0_3_);
 LAB_80063954:
               pSVar45 = (SVECTOR *)(ppuVar48 + 4);
               puVar43 = *ppuVar48;
@@ -2261,7 +2292,7 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
   uint uVar17;
   uint uVar18;
   int in_v1;
-  undefined4 uVar19;
+  bitfield_16_t uVar19;
   int iVar20;
   byte *pbVar21;
   int iVar22;
@@ -2269,7 +2300,7 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
   uint uVar24;
   uint uVar25;
   int iVar26;
-  undefined4 uVar27;
+  bitfield_16_t uVar27;
   undefined4 **ppuVar28;
   int *piVar29;
   ushort uVar30;
@@ -2365,8 +2396,8 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
       in_t5 = gte_stIR2();
       gte_lcv1_b();
       puVar34[2] = uVar30;
-      gte_ldVXY0(uVar27);
-      gte_ldVZ0(uVar19);
+      gte_ldVXY0(*(undefined4 *)&uVar27);
+      gte_ldVZ0(*(undefined4 *)&uVar19);
       pSVar44 = pSVar43 + 1;
       puVar34 = puVar34 + 8;
       uVar19._0_2_ = pSVar43[2].vz;
@@ -2378,7 +2409,7 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
       pSVar43 = pSVar44;
     } while (pSVar44 != pSVar38);
 
-    FUN_800616c4(puVar53);
+    FUN_800616c4((int)puVar53, (undefined4 *)puVar53, (undefined *)puVar53);
     gte_ldtr(0,0,0);
     gte_ldR11R12(0x1000);
     gte_ldR13R21(0);
@@ -2403,11 +2434,11 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
         uVar40 = DAT_1f8000f0[1];
 
         DAT_1f8000ac = DAT_1f8000ac & 0xffff0000 | uVar17 >> 0x10;
-        DAT_1f8000b4._3_1_ = (undefined)uVar17;
+        DAT_1f8000b4.bytes._3_1_ = (undefined)uVar17;
         DAT_1f8000bc = DAT_1f8000bc & 0xffff0000 | uVar36 >> 0x10;
-        DAT_1f8000c4._3_1_ = (undefined)uVar36;
+        DAT_1f8000c4.bytes._3_1_ = (undefined)uVar36;
         DAT_1f8000cc = DAT_1f8000cc & 0xffff0000 | uVar40 >> 0x10;
-        DAT_1f8000d4._3_1_ = (undefined)uVar40;
+        DAT_1f8000d4.bytes._3_1_ = (undefined)uVar40;
 
         if ((uVar17 & uVar36 & uVar40 & 0x1f) == 0) {
           DAT_1f8000b0 = DAT_1f8000e8[2];
@@ -2527,13 +2558,13 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
         uVar24 = DAT_1f800208[1];
 
         DAT_1f8000ac = DAT_1f8000ac & 0xffff0000 | uVar17 >> 0x10;
-        DAT_1f8000b4._3_1_ = (undefined)uVar17;
+        DAT_1f8000b4.bytes._3_1_ = (undefined)uVar17;
         DAT_1f8000bc = DAT_1f8000bc & 0xffff0000 | uVar36 >> 0x10;
-        DAT_1f8000c4._3_1_ = (undefined)uVar36;
+        DAT_1f8000c4.bytes._3_1_ = (undefined)uVar36;
         DAT_1f8000cc = DAT_1f8000cc & 0xffff0000 | uVar40 >> 0x10;
-        DAT_1f8000d4._3_1_ = (undefined)uVar40;
+        DAT_1f8000d4.bytes._3_1_ = (undefined)uVar40;
         DAT_1f8000dc = DAT_1f8000dc & 0xffff0000 | uVar24 >> 0x10;
-        DAT_1f8000e4._3_1_ = (undefined)uVar24;
+        DAT_1f8000e4.bytes._3_1_ = (undefined)uVar24;
 
         if ((uVar17 & uVar36 & uVar40 & uVar24 & 0x1f) == 0) {
           DAT_1f8000b0 = DAT_1f8000e8[2];
@@ -2675,11 +2706,11 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
         uVar40 = DAT_1f8000f0[1];
 
         DAT_1f8000ac = DAT_1f8000ac & 0xffff0000 | uVar17 >> 0x10;
-        DAT_1f8000b4._3_1_ = (undefined)uVar17;
+        DAT_1f8000b4.bytes._3_1_ = (undefined)uVar17;
         DAT_1f8000bc = DAT_1f8000bc & 0xffff0000 | uVar36 >> 0x10;
-        DAT_1f8000c4._3_1_ = (undefined)uVar36;
+        DAT_1f8000c4.bytes._3_1_ = (undefined)uVar36;
         DAT_1f8000cc = DAT_1f8000cc & 0xffff0000 | uVar40 >> 0x10;
-        DAT_1f8000d4._3_1_ = (undefined)uVar40;
+        DAT_1f8000d4.bytes._3_1_ = (undefined)uVar40;
 
         if ((uVar17 & uVar36 & uVar40 & 0x1f) == 0) {
           DAT_1f8000b0 = DAT_1f8000e8[2];
@@ -2806,13 +2837,13 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
         uVar55 = DAT_1f800208[1];
 
         DAT_1f8000ac = DAT_1f8000ac & 0xffff0000 | uVar17 >> 0x10;
-        DAT_1f8000b4._3_1_ = (undefined)uVar17;
+        DAT_1f8000b4.bytes._3_1_ = (undefined)uVar17;
         DAT_1f8000bc = DAT_1f8000bc & 0xffff0000 | uVar36 >> 0x10;
-        DAT_1f8000c4._3_1_ = (undefined)uVar36;
+        DAT_1f8000c4.bytes._3_1_ = (undefined)uVar36;
         DAT_1f8000cc = DAT_1f8000cc & 0xffff0000 | uVar40 >> 0x10;
-        DAT_1f8000d4._3_1_ = (undefined)uVar40;
+        DAT_1f8000d4.bytes._3_1_ = (undefined)uVar40;
         DAT_1f8000dc = DAT_1f8000dc & 0xffff0000 | uVar55 >> 0x10;
-        DAT_1f8000e4._3_1_ = (undefined)uVar55;
+        DAT_1f8000e4.bytes._3_1_ = (undefined)uVar55;
 
         if ((uVar17 & uVar36 & uVar40 & uVar55 & 0x1f) == 0) {
           DAT_1f8000b0 = DAT_1f8000e8[2];
@@ -2976,16 +3007,18 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
         *(char *)(iVar54 + 0xd7) = (char)uVar55;
 
         if ((uVar36 & uVar40 & uVar55 & 0x1f) == 0) {
-          uVar19 = puVar45[2];
-          uVar27 = puVar37[2];
+          uVar19._0_2_ = (ushort)puVar45[2];
+          uVar19._2_2_ = (ushort)(puVar45[2] >> 16);
+          uVar27._0_2_ = (ushort)puVar37[2];
+          uVar27._2_2_ = (ushort)(puVar37[2] >> 16);
           gte_ldSXY0(puVar50[2]);
-          gte_ldSXY1(uVar27);
-          gte_ldSXY2(uVar19);
+          gte_ldSXY1(*(undefined4 *)&uVar27);
+          gte_ldSXY2(*(undefined4 *)&uVar19);
           gte_nclip_b();
 
           *(undefined4 *)(iVar54 + 0xb0) = puVar50[2];
-          *(undefined4 *)(iVar54 + 0xc0) = uVar19;
-          *(undefined4 *)(iVar54 + 0xd0) = uVar27;
+          *(undefined4 *)(iVar54 + 0xc0) = *(undefined4 *)&uVar19;
+          *(undefined4 *)(iVar54 + 0xd0) = *(undefined4 *)&uVar27;
 
           uVar17 = uVar36;
           if ((uint)((int)uVar36 < (int)uVar40) == (uVar24 & 1)) {
@@ -3012,12 +3045,14 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
               uVar40 = -uVar40;
             }
             if (-1 < (int)(uVar40 & uVar36 - 0x20)) {
-              uVar19 = *puVar45;
-              uVar27 = *puVar37;
+              uVar19._0_2_ = (ushort)*puVar45;
+              uVar19._2_2_ = (ushort)(*puVar45 >> 16);
+              uVar27._0_2_ = (ushort)*puVar37;
+              uVar27._2_2_ = (ushort)(*puVar37 >> 16);
               *(undefined4 *)(iVar54 + 0xa8) = *puVar50;
 
-              *(undefined4 *)(iVar54 + 0xb8) = uVar19;
-              *(undefined4 *)(iVar54 + 200) = uVar27;
+              *(undefined4 *)(iVar54 + 0xb8) = *(undefined4 *)&uVar19;
+              *(undefined4 *)(iVar54 + 200) = *(undefined4 *)&uVar27;
               if ((int)uVar17 < 0) {
                 uVar17 = -uVar17;
               }
@@ -3069,8 +3104,8 @@ LAB_80064dbc:
                 } while (ppuVar28 != (undefined4 **)&DAT_1f8000f4);
 
                 DAT_1f80038c = DAT_1f800388;
-                DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-                DAT_1f800390 = CONCAT13(7,(undefined3)DAT_1f800390);
+                memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800388,0), 3);
+                DAT_1f800390.value = CONCAT13(7, DAT_1f800390.bitfield._0_3_);
 LAB_80064ea0:
 
                 pSVar38 = (SVECTOR *)(ppuVar41 + 4);
@@ -3441,14 +3476,16 @@ LAB_80065348:
 
         if ((uVar36 & uVar40 & uVar55 & uVar24 & 0x1f) == 0) {
 
-          uVar19 = puVar45[2];
-          uVar27 = puVar37[2];
+          uVar19._0_2_ = (ushort)puVar45[2];
+          uVar19._2_2_ = (ushort)(puVar45[2] >> 16);
+          uVar27._0_2_ = (ushort)puVar37[2];
+          uVar27._2_2_ = (ushort)(puVar37[2] >> 16);
           uVar33 = puVar51[2];
-          gte_ldSXY0(uVar19);
-          gte_ldSXY1(uVar27);
+          gte_ldSXY0(*(undefined4 *)&uVar19);
+          gte_ldSXY1(*(undefined4 *)&uVar27);
           gte_ldSXY2(puVar50[2]);
           *(undefined4 *)(iVar54 + 0xb0) = puVar50[2];
-          *(undefined4 *)(iVar54 + 0xc0) = uVar19;
+          *(undefined4 *)(iVar54 + 0xc0) = *(undefined4 *)&uVar19;
           gte_nclip_b();
           uVar18 = uVar25 & 1;
           uVar17 = uVar36;
@@ -3461,7 +3498,7 @@ LAB_80065348:
           iVar26 = gte_stMAC0();
           gte_ldSXYP(uVar33);
           uVar16 = -iVar26;
-          *(undefined4 *)(iVar54 + 0xd0) = uVar27;
+          *(undefined4 *)(iVar54 + 0xd0) = *(undefined4 *)&uVar27;
           *(uint *)(iVar54 + 0xe0) = uVar33;
           gte_nclip_b();
           if ((int)uVar17 < (int)uVar24 == uVar18) {
@@ -3490,12 +3527,14 @@ LAB_80065348:
               if (iVar20 < 0) {
                 iVar20 = -iVar20;
               }
-              uVar19 = *puVar45;
-              uVar27 = *puVar37;
+              uVar19._0_2_ = (ushort)*puVar45;
+              uVar19._2_2_ = (ushort)(*puVar45 >> 16);
+              uVar27._0_2_ = (ushort)*puVar37;
+              uVar27._2_2_ = (ushort)(*puVar37 >> 16);
               uVar17 = *puVar51;
               *(undefined4 *)(iVar54 + 0xa8) = *puVar50;
-              *(undefined4 *)(iVar54 + 0xb8) = uVar19;
-              *(undefined4 *)(iVar54 + 200) = uVar27;
+              *(undefined4 *)(iVar54 + 0xb8) = *(undefined4 *)&uVar19;
+              *(undefined4 *)(iVar54 + 200) = *(undefined4 *)&uVar27;
               *(uint *)(iVar54 + 0xd8) = uVar17;
 
               if (uVar36 != 0) {
@@ -3544,8 +3583,8 @@ LAB_8006560c:
                 } while (ppuVar28 != (undefined4 **)&DAT_1f8000f8);
 
                 DAT_1f80038c = DAT_1f800388;
-                DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-                DAT_1f800390 = CONCAT13(9,(undefined3)DAT_1f800390);
+                memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800388,0), 3);
+                DAT_1f800390.value = CONCAT13(9, DAT_1f800390.bitfield._0_3_);
 LAB_800656ec:
 
                 pSVar38 = (SVECTOR *)(ppuVar41 + 4);
@@ -3924,15 +3963,17 @@ LAB_80065c5c:
         *puVar48 = *puVar48 & -1 << (uVar17 + 1) * 8 | uVar55 >> (3 - uVar17) * 8;
         *(char *)(iVar54 + 0xd7) = (char)uVar55;
         if ((uVar36 & uVar40 & uVar55 & 0x1f) == 0) {
-          uVar19 = puVar45[2];
-          uVar27 = puVar37[2];
+          uVar19._0_2_ = (ushort)puVar45[2];
+          uVar19._2_2_ = (ushort)(puVar45[2] >> 16);
+          uVar27._0_2_ = (ushort)puVar37[2];
+          uVar27._2_2_ = (ushort)(puVar37[2] >> 16);
           gte_ldSXY0(puVar50[2]);
-          gte_ldSXY1(uVar27);
-          gte_ldSXY2(uVar19);
+          gte_ldSXY1(*(undefined4 *)&uVar27);
+          gte_ldSXY2(*(undefined4 *)&uVar19);
           gte_nclip_b();
           *(undefined4 *)(iVar54 + 0xb0) = puVar50[2];
-          *(undefined4 *)(iVar54 + 0xc0) = uVar19;
-          *(undefined4 *)(iVar54 + 0xd0) = uVar27;
+          *(undefined4 *)(iVar54 + 0xc0) = *(undefined4 *)&uVar19;
+          *(undefined4 *)(iVar54 + 0xd0) = *(undefined4 *)&uVar27;
           uVar17 = uVar36;
           if ((uint)((int)uVar36 < (int)uVar40) == (uVar24 & 1)) {
             uVar17 = uVar40;
@@ -3957,11 +3998,13 @@ LAB_80065c5c:
               uVar40 = -uVar40;
             }
             if (-1 < (int)(uVar40 & uVar36 - 0x20)) {
-              uVar19 = *puVar45;
-              uVar27 = *puVar37;
+              uVar19._0_2_ = (ushort)*puVar45;
+              uVar19._2_2_ = (ushort)(*puVar45 >> 16);
+              uVar27._0_2_ = (ushort)*puVar37;
+              uVar27._2_2_ = (ushort)(*puVar37 >> 16);
               *(undefined4 *)(iVar54 + 0xa8) = *puVar50;
-              *(undefined4 *)(iVar54 + 0xb8) = uVar19;
-              *(undefined4 *)(iVar54 + 200) = uVar27;
+              *(undefined4 *)(iVar54 + 0xb8) = *(undefined4 *)&uVar19;
+              *(undefined4 *)(iVar54 + 200) = *(undefined4 *)&uVar27;
               if ((int)uVar17 < 0) {
                 uVar17 = -uVar17;
               }
@@ -4015,8 +4058,8 @@ LAB_80065ea4:
                 } while (ppuVar28 != (undefined4 **)&DAT_1f8000f4);
 
                 DAT_1f80038c = DAT_1f800388;
-                DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-                DAT_1f800390 = CONCAT13(9,(undefined3)DAT_1f800390);
+                memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800388,0), 3);
+                DAT_1f800390.value = CONCAT13(9, DAT_1f800390.bitfield._0_3_);
 LAB_80065f88:
 
                 pSVar38 = (SVECTOR *)(ppuVar41 + 4);
@@ -4386,14 +4429,16 @@ LAB_800664d4:
         *(char *)(iVar54 + 0xe7) = (char)uVar24;
 
         if ((uVar36 & uVar40 & uVar55 & uVar24 & 0x1f) == 0) {
-          uVar19 = puVar45[2];
-          uVar27 = puVar37[2];
+          uVar19._0_2_ = (ushort)puVar45[2];
+          uVar19._2_2_ = (ushort)(puVar45[2] >> 16);
+          uVar27._0_2_ = (ushort)puVar37[2];
+          uVar27._2_2_ = (ushort)(puVar37[2] >> 16);
           uVar33 = puVar51[2];
-          gte_ldSXY0(uVar19);
-          gte_ldSXY1(uVar27);
+          gte_ldSXY0(*(undefined4 *)&uVar19);
+          gte_ldSXY1(*(undefined4 *)&uVar27);
           gte_ldSXY2(puVar50[2]);
           *(undefined4 *)(iVar54 + 0xb0) = puVar50[2];
-          *(undefined4 *)(iVar54 + 0xc0) = uVar19;
+          *(undefined4 *)(iVar54 + 0xc0) = *(undefined4 *)&uVar19;
           gte_nclip_b();
 
           uVar18 = uVar25 & 1;
@@ -4407,7 +4452,7 @@ LAB_800664d4:
           iVar26 = gte_stMAC0();
           gte_ldSXYP(uVar33);
           uVar16 = -iVar26;
-          *(undefined4 *)(iVar54 + 0xd0) = uVar27;
+          *(undefined4 *)(iVar54 + 0xd0) = *(undefined4 *)&uVar27;
           *(uint *)(iVar54 + 0xe0) = uVar33;
           gte_nclip_b();
 
@@ -4436,12 +4481,14 @@ LAB_800664d4:
               if (iVar20 < 0) {
                 iVar20 = -iVar20;
               }
-              uVar19 = *puVar45;
-              uVar27 = *puVar37;
+              uVar19._0_2_ = (ushort)*puVar45;
+              uVar19._2_2_ = (ushort)(*puVar45 >> 16);
+              uVar27._0_2_ = (ushort)*puVar37;
+              uVar27._2_2_ = (ushort)(*puVar37 >> 16);
               uVar17 = *puVar51;
               *(undefined4 *)(iVar54 + 0xa8) = *puVar50;
-              *(undefined4 *)(iVar54 + 0xb8) = uVar19;
-              *(undefined4 *)(iVar54 + 200) = uVar27;
+              *(undefined4 *)(iVar54 + 0xb8) = *(undefined4 *)&uVar19;
+              *(undefined4 *)(iVar54 + 200) = *(undefined4 *)&uVar27;
               *(uint *)(iVar54 + 0xd8) = uVar17;
               if (uVar36 != 0) {
 LAB_80066798:
@@ -4485,8 +4532,8 @@ LAB_80066798:
                 } while (ppuVar28 != (undefined4 **)&DAT_1f8000f8);
 
                 DAT_1f80038c = DAT_1f800388;
-                DAT_1f800390._0_3_ = SUB43(DAT_1f800388,0);
-                DAT_1f800390 = CONCAT13(0xc,(undefined3)DAT_1f800390);
+                memcpy(DAT_1f800390.bitfield._0_3_, SUB43(DAT_1f800388,0), 3);
+                DAT_1f800390.value = CONCAT13(0xc, DAT_1f800390.bitfield._0_3_);
 LAB_80066878:
 
                 pSVar38 = (SVECTOR *)(ppuVar41 + 4);
