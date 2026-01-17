@@ -1,0 +1,67 @@
+#ifndef SCUS_944_88_PART_023_H
+#define SCUS_944_88_PART_023_H
+
+bool FUN_overlay0__80047c88(void);
+bool FUN_overlay0__8004a738(void);
+int FUN_overlay0__800449c8(int param_1,char *param_2);
+int FUN_overlay0__800450a0(int param_1);
+int FUN_overlay0__800450e0(undefined4 param_1,undefined4 param_2);
+int FUN_overlay0__8004530c(int param_1);
+int FUN_overlay0__800459a8(int param_1,int param_2,undefined4 param_3,int param_4);
+int FUN_overlay0__800483d8(int vehicleDataPtr);
+int FUN_overlay0__8004c728(undefined4 param_1);
+undefined4 FUN_overlay0__80047c44(void);
+undefined4 FUN_overlay0__80048460(undefined *audioStatePtr);
+undefined4 FUN_overlay0__8004dcac(int param_1);
+undefined4 FUN_overlay0__8004dd14(int param_1);
+void FUN_overlay0__80045138(int param_1);
+void FUN_overlay0__80045688(int param_1,int param_2);
+void FUN_overlay0__800457b0(int param_1,int param_2);
+void FUN_overlay0__80045ae8(int param_1,int param_2);
+void FUN_overlay0__800465e0(int param_1,int param_2);
+void FUN_overlay0__80046b58(undefined4 param_1,undefined4 param_2);
+void FUN_overlay0__80046fb0(int param_1,uint param_2);
+void FUN_overlay0__80047024(int param_1,int param_2,int param_3,int param_4,int param_5);
+void FUN_overlay0__800472ac(undefined4 *param_1);
+void FUN_overlay0__800472d4(int param_1,undefined4 param_2);
+void FUN_overlay0__800477c4(int param_1,undefined2 *param_2,undefined2 *param_3);
+void FUN_overlay0__80047b18(undefined4 *param_1);
+void FUN_overlay0__800481c8(undefined4 param_1);
+void FUN_overlay0__800481e8(void);
+void FUN_overlay0__80048374(int vehicleDataPtr,undefined4 newState);
+void FUN_overlay0__800483a4(int vehicleDataPtr,undefined4 newState);
+void FUN_overlay0__80048418(undefined *audioStatePtr);
+void FUN_overlay0__80048424(int audioStatePtr,undefined4 audioData,undefined4 audioConfig,undefined4 audioParams);
+void FUN_overlay0__80048528(int vertexDataPtr,int renderConfigPtr);
+void FUN_overlay0__80048bd8(undefined4 *colorPalettePtr,undefined4 paletteData);
+void FUN_overlay0__80048c60(int textDataPtr,int textX,int textY,int textWidth,undefined4 textData);
+void FUN_overlay0__80048d14(undefined4 *graphicsConfigPtr,undefined4 *configDataPtr);
+void FUN_overlay0__80048e14(int animationDataPtr);
+void FUN_overlay0__80048e84(short *spriteDataPtr,int renderX,int renderY,int renderWidth,int renderContext);
+void FUN_overlay0__80049274(short *param_1);
+void FUN_overlay0__80049780(undefined4 *param_1,int param_2,int param_3);
+void FUN_overlay0__80049874(int param_1,int param_2);
+void FUN_overlay0__8004a718(undefined param_1);
+void FUN_overlay0__8004ac20(uint *param_1);
+void FUN_overlay0__8004ad40(undefined4 *param_1,int param_2,undefined4 param_3,uint *param_4);
+void FUN_overlay0__8004ca90(ushort *param_1,int param_2);
+void FUN_overlay0__8004ccf8(int param_1,int param_2);
+void FUN_overlay0__8004ce94(undefined4 param_1,short param_2,short param_3,undefined4 param_4);
+void FUN_overlay0__8004d0ec(undefined4 param_1,int param_2,int param_3,int param_4);
+void FUN_overlay0__8004d2ec(undefined4 param_1,undefined4 param_2,int param_3,undefined4 param_4);
+void FUN_overlay0__8004dd80(void);
+void FUN_overlay0__8004df04(void);
+void FUN_overlay0__8004df34(undefined param_1);
+void FUN_overlay0__8004df40(int param_1);
+void FUN_overlay0__8004e444(void);
+void FUN_overlay0__8004e804(int param_1,int param_2);
+void FUN_overlay0__8004f408(undefined4 param_1,undefined2 param_2,undefined4 param_3);
+void FUN_overlay0__8004fb30(undefined4 param_1,int param_2,int param_3,int param_4);
+void FUN_overlay0__8004fc8c(int param_1,int param_2);
+void FUN_overlay0__80050494(undefined4 param_1);
+void FUN_overlay0__800504d8(undefined4 param_1);
+void FUN_overlay0__80050560(undefined4 param_1,undefined4 param_2);
+void FUN_overlay0__80050b4c(int param_1);
+void FUN_overlay0__80050bc4(undefined4 *param_1);
+
+#endif /* SCUS_944_88_PART_023_H */

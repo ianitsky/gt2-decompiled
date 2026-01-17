@@ -1,0 +1,64 @@
+#ifndef SCUS_944_88_PART_020_H
+#define SCUS_944_88_PART_020_H
+
+bool FUN_overlay0__80035714(int param_1);
+bool FUN_overlay0__800360c8(int param_1,undefined4 param_2);
+int FUN_overlay0__80030ba4(ushort param_1);
+int FUN_overlay0__80030c2c(int param_1);
+int FUN_overlay0__80030c44(int param_1);
+int FUN_overlay0__80030f50(int param_1);
+int FUN_overlay0__80033e6c(int param_1,int *param_2,int *param_3,int param_4);
+int FUN_overlay0__8003533c(int param_1,undefined4 param_2);
+int FUN_overlay0__800353dc(int param_1,int param_2);
+int FUN_overlay0__800357c8(int param_1,undefined4 *param_2);
+int FUN_overlay0__80035874(int param_1,int param_2);
+int FUN_overlay0__800358e0(uint param_1);
+int FUN_overlay0__80035948(int param_1,int param_2);
+int FUN_overlay0__8003643c(int param_1,undefined4 param_2,undefined4 *param_3);
+undefined4 FUN_overlay0__80030d18(undefined4 param_1);
+undefined4 FUN_overlay0__800319a8(int *param_1,int param_2,int param_3,undefined4 param_4,undefined4 param_5);
+undefined4 FUN_overlay0__8003373c(int *param_1,int *param_2);
+undefined4 FUN_overlay0__80034740(int param_1);
+undefined4 FUN_overlay0__80035c48(int param_1,int param_2,int param_3,int *param_4,int *param_5);
+undefined4 FUN_overlay0__800367cc(int param_1);
+undefined4 FUN_overlay0__80036808(int param_1);
+undefined4 FUN_overlay0__800368dc(int param_1);
+undefined4 FUN_overlay0__80036910(int param_1);
+undefined4 FUN_overlay0__80036948(int param_1);
+undefined4 FUN_overlay0__80036980(int param_1,undefined4 param_2);
+void FUN_overlay0__80030308(int param_1,undefined param_2,int param_3);
+void FUN_overlay0__80030330(int param_1,int param_2);
+void FUN_overlay0__80030424(int param_1,undefined4 *param_2,undefined4 param_3);
+void FUN_overlay0__800304dc(int param_1);
+void FUN_overlay0__800306c0(int param_1,int param_2);
+void FUN_overlay0__80030950(int param_1);
+void FUN_overlay0__80030c5c(int param_1);
+void FUN_overlay0__80030d10(int param_1,undefined param_2);
+void FUN_overlay0__80030d64(int param_1,undefined param_2);
+void FUN_overlay0__80030d70(int param_1,undefined param_2);
+void FUN_overlay0__80030f94(int param_1,undefined *param_2,uint param_3,undefined4 param_4);
+void FUN_overlay0__800312fc(int param_1,short *param_2,int param_3,int param_4);
+void FUN_overlay0__80031440(int param_1);
+void FUN_overlay0__800316f4(undefined *param_1,undefined *param_2,uint param_3,ushort *param_4);
+void FUN_overlay0__80032a1c(int param_1);
+void FUN_overlay0__80032aac(int param_1);
+void FUN_overlay0__80032e44(int param_1);
+void FUN_overlay0__80032e6c(int param_1);
+void FUN_overlay0__8003311c(int param_1,int param_2);
+void FUN_overlay0__8003360c(int param_1);
+void FUN_overlay0__80033634(int param_1,int param_2,int param_3,int param_4,int param_5,int param_6);
+void FUN_overlay0__80033d34(int param_1);
+void FUN_overlay0__800340a4(int param_1,undefined4 param_2,undefined4 param_3,int param_4);
+void FUN_overlay0__80034320(int param_1,int param_2);
+void FUN_overlay0__80034480(int param_1,int param_2);
+void FUN_overlay0__800347c4(int param_1,byte *param_2,short *param_3,undefined4 param_4);
+void FUN_overlay0__800350fc(undefined4 *param_1,int param_2);
+void FUN_overlay0__8003519c(int param_1,undefined4 *param_2);
+void FUN_overlay0__80035b68(int param_1);
+void FUN_overlay0__80036340(int param_1);
+void FUN_overlay0__800367ac(int param_1,undefined param_2);
+void FUN_overlay0__80036844(undefined4 param_1,undefined4 param_2,undefined4 param_3);
+void FUN_overlay0__80036890(undefined4 param_1,undefined4 param_2,undefined4 param_3);
+void FUN_overlay0__80036acc(int param_1);
+
+#endif /* SCUS_944_88_PART_020_H */
