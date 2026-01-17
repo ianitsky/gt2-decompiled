@@ -1,0 +1,168 @@
+---
+name: compilation
+description: Compilation rules and guidelines for GT2 decompiled project
+---
+
+# Compilation Rules
+
+## Overview
+
+This project contains decompiled Gran Turismo 2 source code adapted to compile on Linux. The build system uses CMake with modern practices.
+
+## Build System
+
+### CMake Configuration
+
+- **Minimum CMake Version**: 3.20
+- **C Standard**: C11 (required)
+- **Build Types**: Debug, Release, RelWithDebInfo, MinSizeRel
+
+### Project Structure
+
+```
+GT2/_decompiled/
+├── CMakeLists.txt              # Main build configuration
+├── include/                    # Public headers
+│   ├── gt2_types.h            # Common type definitions
+│   ├── gt2_global_vars_clean.h # Global variable declarations
+│   └── ps1_stubs.h            # PS1 function stubs
+├── src/
+│   ├── decompiled/            # Decompiled source files
+│   │   ├── scus_944.88_part_001.c through part_025.c
+│   │   └── gt2_global_vars.c  # Global variable definitions
+│   ├── platform/              # Platform-specific code
+│   │   ├── linux_main.c       # Linux entry point
+│   │   └── ps1_stubs.c        # PS1 stub implementations
+│   └── CMakeLists.txt         # Source build configuration
+└── build/                     # Build directory (gitignored)
+```
+
+## Compilation Flags
+
+### Debug Build
+```cmake
+-Wall -Wextra -Wpedantic -g -O0 -DDEBUG
+```
+
+### Release Build
+```cmake
+-Wall -Wextra -Wpedantic -O2 -DNDEBUG
+```
+
+### Additional Warnings
+- `-Wunused-variable` - Warn about unused variables
+- `-Wunused-function` - Warn about unused functions
+- `-Wstrict-prototypes` - Require strict function prototypes
+- `-Wmissing-prototypes` - Warn about missing prototypes
+
+## Building
+
+### Standard Build
+```bash
+mkdir -p build
+cd build
+cmake ..
+make
+```
+
+### Build Types
+```bash
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
+```
+
+## Entry Point
+
+The entry point is `main()` in `src/platform/linux_main.c`, which calls the original `start()` function from `scus_944.88_part_001.c:2185`.
+
+## Global Variables
+
+Global variables follow this pattern:
+
+1. **Declaration**: In `include/gt2_global_vars_clean.h` as `extern`
+2. **Definition**: In `src/decompiled/gt2_global_vars.c`
+
+When adding new global variables:
+- Add `extern` declaration to the header
+- Add definition to the .c file
+- Initialize to zero or appropriate default value
+
+## PS1 Stubs
+
+PlayStation 1 specific functions are stubbed in `src/platform/ps1_stubs.c`:
+- CD-ROM functions (CdControl, CdInit, etc.)
+- Pad/Controller functions (PadGetState, etc.)
+- Memory card functions
+- BIOS functions
+- DCT/JPEG decoding functions
+
+Stubs return default values (0, NULL, etc.) and can log calls when `ps1_stub_debug` is enabled.
+
+## Common Issues and Solutions
+
+### Missing Global Variables
+
+**Error**: `'DAT_XXXXX' undeclared`
+
+**Solution**: 
+1. Add `extern undefined4 DAT_XXXXX;` to `include/gt2_global_vars_clean.h`
+2. Add `undefined4 DAT_XXXXX = 0;` to `src/decompiled/gt2_global_vars.c`
+
+### Missing Function Declarations
+
+**Error**: `implicit declaration of function 'FUN_XXXXX'`
+
+**Solution**:
+1. Check if function exists in decompiled code
+2. Add declaration to appropriate header file
+3. If PS1-specific, add stub to `src/platform/ps1_stubs.c`
+
+### Type Mismatches
+
+**Error**: Type conflicts or size mismatches
+
+**Solution**:
+1. Check `include/gt2_types.h` for type definitions
+2. Verify PS1 vs Linux type sizes (32-bit vs 64-bit)
+3. Adjust types as needed for compatibility
+
+### Register Variables
+
+**Error**: `register0xXXXXX` undeclared
+
+**Solution**: Replace with local stack variable or appropriate pointer:
+```c
+// Before:
+DAT_80091168 = (undefined *)register0x00000074;
+
+// After:
+DAT_80091168 = (undefined *)&auStackX_0;  // Use local stack variable
+```
+
+## Code Style
+
+- Use `.clang-format` for consistent formatting
+- Follow existing code style in decompiled files
+- Keep new code in English (comments and code)
+- Document decisions in code comments
+
+## Incremental Compilation
+
+When fixing compilation errors:
+1. Compile to see errors
+2. Fix errors one at a time
+3. Add missing declarations/definitions
+4. Recompile and repeat
+
+## Dependencies
+
+- CMake 3.20+
+- GCC or Clang with C11 support
+- Standard C library
+
+## Notes
+
+- This is decompiled code - variable names and types may be incorrect
+- Many functions are stubbed and return default values
+- Global variables are initialized to zero by default
+- The code may have bugs from decompilation that need fixing

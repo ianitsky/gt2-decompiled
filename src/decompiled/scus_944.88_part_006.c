@@ -2165,7 +2165,7 @@ undefined4 FUN_8007ad58(undefined4 *contextBuffer)
   undefined stackBuffer[16];
 
   *contextBuffer = savedRetAddr;
-  contextBuffer[1] = register0x00000074;
+  contextBuffer[1] = (undefined4)&stackBuffer;  // Use local stack variable instead of register
   contextBuffer[2] = savedS8;
   contextBuffer[3] = savedS0;
   contextBuffer[4] = savedS1;

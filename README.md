@@ -10,6 +10,41 @@ Gran Turismo 2  is a racing game developed by Polyphony Digital and published by
 
 The original PlayStation 1 executable (`scus_944.88`) was analyzed and decompiled using Ghidra, a software reverse engineering framework developed by the National Security Agency (NSA).
 
+## Building
+
+This project can be compiled for Linux using CMake. See [BUILD.md](BUILD.md) for detailed build instructions.
+
+### Quick Start
+
+```bash
+mkdir -p build
+cd build
+cmake ..
+make
+```
+
+The executable will be created as `build/src/gt2_executable` (or `gt2`).
+
+### Requirements
+
+- CMake 3.20+
+- GCC or Clang with C11 support
+- Make or Ninja
+
+## Project Structure
+
+- `include/` - Public headers (types, global variables, stubs)
+- `src/decompiled/` - Decompiled source files (25 parts)
+- `src/platform/` - Platform-specific code (Linux entry point, PS1 stubs)
+- `build/` - Build directory (gitignored)
+
+## Notes
+
+- The code is decompiled and may contain bugs or incorrect variable names
+- PlayStation 1 specific functions are stubbed for Linux compatibility
+- Global variables are declared in headers and defined in `gt2_global_vars.c`
+- See BUILD.md for detailed build instructions and troubleshooting
+
 ## Disclaimer
 
 This project is for educational and research purposes only. The decompiled code is provided as-is for the purpose of understanding game mechanics and reverse engineering techniques. This project is not affiliated with Sony Computer Entertainment or Polyphony Digital.

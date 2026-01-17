@@ -69,7 +69,7 @@ void EVENT_OBJ_80(void);
 void EVENT_OBJ_BC(void);
 void EVENT_OBJ_CC(void);
 void EVENT_OBJ_F4(void);
-void FUN_80085974(void);
+void FUN_80085974(undefined4 param);
 void FUN_80085990(void);
 void FUN_800859fc(void);
 void FUN_80085a98(void);

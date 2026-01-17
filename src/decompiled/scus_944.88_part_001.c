@@ -1,87 +1,12 @@
-
-typedef unsigned char   undefined;
-
-typedef unsigned char    byte;
-typedef unsigned int    dword;
-typedef unsigned char    uchar;
-typedef unsigned long    ulong;
-typedef unsigned char    undefined1;
-typedef unsigned short    undefined2;
-typedef unsigned int    undefined4;
-typedef unsigned long long    undefined8;
-typedef unsigned short    word;
-typedef unsigned short    wchar16;
-
+// Include common types and global variables
+#include "gt2_types.h"
 #include "gt2_global_vars_clean.h"
-typedef uchar u_char;
 
-typedef ulong u_long;
-
-typedef struct MATRIX MATRIX, *PMATRIX;
-
-struct MATRIX {
-    short m[3][3];
-    long t[3];
-};
-
-typedef struct VECTOR VECTOR, *PVECTOR;
-
-struct VECTOR {
-    long vx;
-    long vy;
-    long vz;
-    long pad;
-};
-
-typedef struct SVECTOR SVECTOR, *PSVECTOR;
-
-struct SVECTOR {
-    short vx;
-    short vy;
-    short vz;
-    short pad;
-};
-
-typedef struct CVECTOR CVECTOR, *PCVECTOR;
-
-struct CVECTOR {
-    u_char r;
-    u_char g;
-    u_char b;
-    u_char cd;
-};
-
-typedef struct DVECTOR DVECTOR, *PDVECTOR;
-
-struct DVECTOR {
-    short vx;
-    short vy;
-};
-
-typedef struct VERTC VERTC, *PVERTC;
-
-struct VERTC {
-    short vx;
-    short vy;
-    short vz;
-    u_char tu;
-    u_char tv;
-    struct CVECTOR col;
-};
-
-typedef struct DECDCTENV DECDCTENV, *PDECDCTENV;
-
-struct DECDCTENV {
-    u_char iq_y[64];
-    u_char iq_c[64];
-    short dct[64];
-};
-
-#define __WORDSIZE 32
-
+// Keep local type aliases for compatibility
+// Note: __WORDSIZE is already defined by system headers, so we don't redefine it
+#ifndef __GLIBC_HAVE_LONG_LONG
 #define __GLIBC_HAVE_LONG_LONG 1
-
-typedef ulong size_t;
+#endif
 
 void FUN_80010000(int *param_1)
 
@@ -2035,7 +1960,7 @@ undefined4 FUN_8003e8c4(undefined4 param_1,undefined4 param_2)
   DAT_80091158 = unaff_s5;
   DAT_8009115c = unaff_s6;
   DAT_80091160 = unaff_s7;
-  DAT_80091168 = (undefined *)register0x00000074;
+  DAT_80091168 = (undefined *)&auStackX_0;  // Use local stack variable instead of register
   DAT_8009116c = unaff_s8;
   DAT_80091170 = unaff_retaddr;
 
@@ -2081,7 +2006,7 @@ undefined4 FUN_800400a0(undefined4 param_1,undefined4 param_2)
   DAT_80091158 = unaff_s5;
   DAT_8009115c = unaff_s6;
   DAT_80091160 = unaff_s7;
-  DAT_80091168 = (undefined *)register0x00000074;
+  DAT_80091168 = (undefined *)&auStackX_0;  // Use local stack variable instead of register
   DAT_8009116c = unaff_s8;
   DAT_80091170 = unaff_retaddr;
 
@@ -2127,7 +2052,7 @@ undefined4 FUN_8004243c(undefined4 param_1,undefined4 param_2)
   DAT_80091158 = unaff_s5;
   DAT_8009115c = unaff_s6;
   DAT_80091160 = unaff_s7;
-  DAT_80091168 = (undefined *)register0x00000074;
+  DAT_80091168 = (undefined *)&auStackX_0;  // Use local stack variable instead of register
   DAT_8009116c = unaff_s8;
   DAT_80091170 = unaff_retaddr;
 
@@ -2212,7 +2137,7 @@ undefined4 start(undefined4 param_1,undefined4 param_2)
   DAT_80091158 = unaff_s5;
   DAT_8009115c = unaff_s6;
   DAT_80091160 = unaff_s7;
-  DAT_80091168 = (undefined *)register0x00000074;
+  DAT_80091168 = (undefined *)&auStackX_0;  // Use local stack variable instead of register
   DAT_8009116c = unaff_s8;
   DAT_80091170 = unaff_retaddr;
 

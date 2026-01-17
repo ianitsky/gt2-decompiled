@@ -38,7 +38,7 @@ int FUN_80085890(int inputValue)
   return (inputValue << 7) / 0x5b + baseOffset;
 }
 
-void FUN_80085974(void)
+void FUN_80085974(undefined4 param)
 
 {
   code **functionPointer;
