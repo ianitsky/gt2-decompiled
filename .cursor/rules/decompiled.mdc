@@ -1,0 +1,31 @@
+---
+alwaysApply: true
+---
+# Overview
+
+This project contains decompiled source code from Gran Turismo 2 (GT2).
+
+## File Structure
+
+### Decompiled Source Files
+- **scus_944.88_part_001.c** through **scus_944.88_part_025.c**: These files contain the decompiled C source code from the original GT2 game binary.
+
+### Disassemble File
+- **GT2.dis**: This file contains the disassembled code with default values that are not present in the decompiled source files.
+
+## Important Notes
+
+1. **Decompiled Files (scus_944.88_part_*.c)**:
+   - Contain decompiled C source code
+   - May be missing some default values or constants that were optimized away during compilation
+
+2. **Disassemble File (GT2.dis)**:
+   - Contains disassembled code with default values
+   - Use this file as a reference when the decompiled source is missing default values or constants
+   - Cross-reference with decompiled files to ensure accuracy
+
+3. **When Working with This Codebase**:
+   - Always check both decompiled source files and the disassemble file when looking for default values
+   - The disassemble file is the authoritative source for values that may be missing in decompiled code
+   - When in doubt, prefer the disassemble file for default values and constants
+                                                                                                                                
