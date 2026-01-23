@@ -630,7 +630,7 @@ LAB_overlay0__8001c5bc:
             DAT_1f8000a8 = uVar85;
             DAT_1f8000b8 = uVar67.value;
             DAT_1f8000c8 = (uint *)(uintptr_t)uVar51.value;
-            _DAT_1f8000d8 = uVar39.value;
+            DAT_1f8000d8 = uVar39.value;
             if ((uVar27.value != 0) && ((int)DAT_1f8003b0 < 0)) {
               DAT_1f8000b8_b16->_0_2_ = (short)uVar67.value;
               DAT_1f8000b8_b16->_2_2_ = (short)(uVar67.value >> 0x10);

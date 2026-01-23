@@ -70,7 +70,7 @@ void FUN_8008c918(void);
 void FUN_8008c948(void);
 void FUN_8008cc90(void);
 void FUN_8008ce08(void);
-void FUN_8008cf34(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4);
+void FUN_8008cf34(undefined4 param_1,undefined4 param_2,undefined4 param_3);
 int FUN_8008d590(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh, uint mantissaLow,char signChar,int exponent);
 int FUN_8008d6e4(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh,uint mantissaLow,uint signChar);
 int FUN_8008d7a4(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh,uint mantissaLow,int hexChar);

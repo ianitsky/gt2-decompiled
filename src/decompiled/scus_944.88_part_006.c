@@ -245,7 +245,7 @@ int FUN_800788e4(int *audioChannelArray,int channelIndex)
   return *(int *)(*audioChannelArray + 0x1c) + channelIndex * 0x14;
 }
 
-void FUN_80078900(undefined4 channelId,undefined4 soundId,undefined4 audioBuffer,undefined4 volume,undefined4 channelOverride)
+void FUN_80078900(u_long channelId,undefined4 soundId,u_long audioBuffer,undefined4 volume,undefined4 channelOverride)
 
 {
   undefined4 channelOffset;
@@ -3835,7 +3835,7 @@ void FUN_8007ca58(int param_1)
   *(undefined *)(param_1 + 0x74) = 0;
   *(undefined *)(param_1 + 0x162) = 0;
   *(undefined *)(param_1 + 0x15f) = 1;
-  *(undefined ***)(param_1 + 0x80) = &PTR_DAT_800903b4;
+  *(undefined ***)(param_1 + 0x80) = &PTR_LAB_800903e4;
   *(undefined4 *)(param_1 + 0x84) = 0;
   *(undefined *)(param_1 + 0x166) = 1;
   *(undefined *)(param_1 + 0x163) = 0;
@@ -3848,14 +3848,7 @@ void FUN_8007ca58(int param_1)
   return;
 }
 
-int CdGetSector(void *madr,int size)
 
-{
-  int iVar1;
-
-  iVar1 = CD_getsector();
-  return (uint)(iVar1 == 0);
-}
 
 void FUN_8007cfdc(undefined4 dataBuffer,int startSector,int dataSize,int transferMode)
 
@@ -4448,7 +4441,7 @@ void FUN_8007e020(undefined2 spuConfig)
   return;
 }
 
-int FUN_8007e0b0(int commandBuffer,uint commandData)
+uint * FUN_8007e0b0(int commandBuffer,uint commandData)
 
 {
   uint alignment1;
@@ -4472,7 +4465,7 @@ int FUN_8007e0b0(int commandBuffer,uint commandData)
 
   result = DAT_801c93ec + 4;
   DAT_801c93ec = DAT_801c93ec + 0x24;
-  return result;
+  return (uint *)result;
 }
 
 int FUN_8007e0e0(int commandBuffer,uint commandType,uint commandData)

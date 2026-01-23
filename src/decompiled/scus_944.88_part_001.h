@@ -186,7 +186,7 @@ void FUN_8005d7d0(undefined4 param_1,int param_2);
 void FUN_8005d848(int param_1,undefined4 param_2,code *param_3);
 void FUN_8005d8a0(int param_1);
 void FUN_8005d8d4(int param_1);
-void FUN_8005d908(undefined4 param_1,undefined4 param_2);
+void FUN_8005d908(undefined4 param_1,u_long param_2);
 void FUN_8005d92c(undefined4 param_1,undefined4 param_2);
 void FUN_8005d9bc(void);
 void FUN_8005d9f0(void);

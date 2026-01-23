@@ -34,7 +34,7 @@ extern undefined2 DAT_801c8690[];
 extern undefined2 DAT_801c8692[];
 extern undefined4 DAT_801c8694[];
 extern undefined2 DAT_801c86b6[];
-extern undefined4 DAT_800af231;
+extern undefined DAT_800af231;
 
 void FUN_overlay0__80030308(int param_1,undefined param_2,int param_3)
 

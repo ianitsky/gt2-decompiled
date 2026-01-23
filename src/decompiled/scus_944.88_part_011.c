@@ -132,7 +132,7 @@ extern void LAB_arcade__80025e48(void);
 extern void LAB_arcade__80025cbc(void);
 extern void LAB_arcade__80052908(void);
 extern void LAB_arcade__80053508(void);
-extern undefined4 DAT_801d58b6;
+extern undefined DAT_801d58b6;
 extern void *PTR_DAT_arcade__800529dc;
 extern undefined1 UNK_801d58eb[];
 extern undefined4 DAT_801d586c;

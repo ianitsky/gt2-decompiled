@@ -253,9 +253,9 @@ void FUN_80061798(int param_1,undefined4 param_2)
   gte_ldTRY(DAT_1f80007c);
   gte_ldTRZ(DAT_1f800080);
   gte_ldR11R12(DAT_1f800084);
-  gte_ldR13R21((undefined4)DAT_1f800088);
+  gte_ldR13R21(DAT_1f800088.value);
   gte_ldR22R23(DAT_1f80008c);
-  gte_ldR31R32(_DAT_1f800090);
+  gte_ldR31R32(DAT_1f800090);
   gte_ldR33(DAT_1f800094);
 
   puVar47 = *(uint **)(param_1 + 0x1c);
@@ -2613,7 +2613,7 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
               DAT_1f8000a8 = *DAT_1f8000e8;
               uVar36 = *DAT_1f800148;
               DAT_1f8000c8 = *DAT_1f8001a8;
-              _DAT_1f8000d8 = *DAT_1f800208;
+              DAT_1f8000d8 = *DAT_1f800208;
               DAT_1f8000b8 = uVar36;
 
               if (uVar17 == 0) {
@@ -2892,7 +2892,7 @@ void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
               DAT_1f8000a8 = *DAT_1f8000e8;
               DAT_1f8000b8 = *DAT_1f800148;
               DAT_1f8000c8 = *DAT_1f8001a8;
-              _DAT_1f8000d8 = *DAT_1f800208;
+              DAT_1f8000d8 = *DAT_1f800208;
               if (uVar17 == 0) {
                 uVar17 = 0;
                 if ((int)(uVar24 & (int)DAT_1f800399) < 0) {

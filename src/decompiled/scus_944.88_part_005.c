@@ -46,7 +46,7 @@ void FUN_8006daf8(short *param_1,undefined4 param_2,int param_3)
 
     if (param_1[2] != param_1[4]) {
 
-      alphaIndex = FUN_8007e0e0((int)param_2, alphaMask | ((int)alphaMask >> 1) << 8 | 0x2000000);
+      alphaIndex = FUN_8007e0e0((int)param_2, alphaMask | ((int)alphaMask >> 1) << 8 | 0x2000000, 0);
       adjustedX = textX + (ushort)alphaValue * 2;
       *(short *)((intptr_t)alphaIndex + 4) = adjustedX;
       *(short *)((intptr_t)alphaIndex + 0xc) = adjustedX;
@@ -58,7 +58,7 @@ void FUN_8006daf8(short *param_1,undefined4 param_2,int param_3)
 
     if (param_1[2] != param_1[3]) {
 
-      alphaIndex = FUN_8007e0e0((int)param_2, alphaMask | ((int)alphaMask >> 1) << 8 | 0x2000000);
+      alphaIndex = FUN_8007e0e0((int)param_2, alphaMask | ((int)alphaMask >> 1) << 8 | 0x2000000, 0);
       textX = textX + (ushort)alphaValue * -2;
       *(short *)((intptr_t)alphaIndex + 4) = textX;
       *(short *)((intptr_t)alphaIndex + 0xc) = textX;
@@ -277,7 +277,7 @@ void FUN_8006deec(short *param_1,int param_2,undefined4 param_3)
     colorValue1 = *(uint *)(param_1 + 0x1c);
     colorValue2 = 0;
     FUN_8006b6e4(param_2 + 8,&vertexX3);
-    FUN_8007da44(param_2,0x200);
+    FUN_8007da44(param_2,0x200, 0);
     *(char *)(param_1 + 0x12) = (char)alphaValue;
 
     FUN_8006c5dc(param_1 + 2,param_2,centerX + (uint)((ushort)param_1[0x17] >> 1),
@@ -299,7 +299,7 @@ void FUN_8006deec(short *param_1,int param_2,undefined4 param_3)
     }
     colorValue4 = FUN_8006b548(&colorValue4,&DAT_80091ec4,animationIndex,0xc);
 
-    vertexPointer = (short *)FUN_8007d024(param_2);
+    vertexPointer = (short *)FUN_8007d024(param_2, 0, 0);
     *vertexPointer = animationX;
     vertexPointer[1] = param_1[1];
     vertexPointer[2] = param_1[0x17];
@@ -307,7 +307,7 @@ void FUN_8006deec(short *param_1,int param_2,undefined4 param_3)
     vertexPointer[3] = param_1[0x18];
   }
 
-  FUN_8007da44(param_2,renderFlags);
+  FUN_8007da44(param_2,renderFlags, 0);
 
   return;
 }
@@ -575,7 +575,7 @@ void FUN_8006e5b8(short *param_1,int param_2,undefined4 param_3)
       colorValue2 = colorValue1;
       colorValue4 = colorValue1;
       FUN_8006b6e4(param_2,&vertexX3);
-      FUN_8007da44(param_2,0x20);
+      FUN_8007da44(param_2,0x20, 0);
       FUN_8006c5dc(param_1 + 2,param_2,(int)*param_1,param_1[1] + offsetY1,param_3);
     }
   }
@@ -611,7 +611,7 @@ void FUN_8006e5b8(short *param_1,int param_2,undefined4 param_3)
     FUN_8006b6e4(bufferOffset,&vertexX3);
     vertexX3 = animationX3;
     FUN_8006b6e4(bufferOffset,&vertexX3);
-    FUN_8007da44(param_2,0x200);
+    FUN_8007da44(param_2,0x200, 0);
     FUN_8006c5dc(param_1 + 2,param_2,(int)*param_1,animationX1 + offsetY1,param_3);
     *(char *)(param_1 + 0x26) = (char)alphaValue;
     animationIndex = (int)animationX1 + (uint)animationHeight + offsetY2;
@@ -636,7 +636,7 @@ void FUN_8006e5b8(short *param_1,int param_2,undefined4 param_3)
     }
     colorValue4 = FUN_8006b548(&colorValue4,&DAT_80091ee4,widthCalculation,0xc);
 
-    vertexPointer = (short *)FUN_8007d024(param_2);
+    vertexPointer = (short *)FUN_8007d024(param_2, 0, 0);
     *vertexPointer = animationX2;
     if (*(char *)((int)param_1 + 0x7d) != '\0') {
       *vertexPointer = animationX3;
@@ -659,7 +659,7 @@ void FUN_8006e5b8(short *param_1,int param_2,undefined4 param_3)
       vertexY3 = animationX1;
       FUN_8006b6e4(param_2,&vertexX3);
     }
-    FUN_8007da44(param_2,0x220);
+    FUN_8007da44(param_2,0x220, 0);
   }
 
   return;
@@ -854,7 +854,7 @@ void FUN_8006ee08(undefined4 param_1,char *param_2,int param_3,short param_4,int
       param_3 = param_3 + 0xc;
     }
 
-    FUN_8007da44(param_1,0x220);
+    FUN_8007da44(param_1,0x220, 0);
   }
 
   return;
@@ -1245,16 +1245,16 @@ void FUN_80072b78(undefined4 param_1)
   if (renderingValue != 0) {
     if (DAT_801c98e0 == '\0') {
 
-      FUN_8006ee08(param_1,(&PTR_DAT_800921b4)[*(short *)(systemDataPointer + 0x10)],0x1c,0x66,0,
+      FUN_8006ee08(param_1,(&PTR_LAB_800921d4)[*(short *)(systemDataPointer + 0x10)],0x1c,0x66,0,
                    renderingValue | renderingValue << 8 | renderingValue << 0x10);
     }
     else {
 
       renderingParam2 = FUN_8006b548(&renderingParam3,&renderingParam4,renderingValue,0x80);
-      FUN_8006ac90(renderingBuffer,(&PTR_DAT_800921b4)[*(short *)(systemDataPointer + 0x10)],0x1c,0x7e,1);
+      FUN_8006ac90(renderingBuffer,(&PTR_LAB_800921d4)[*(short *)(systemDataPointer + 0x10)],0x1c,0x7e,1);
     }
     FUN_8006bef4(systemDataPointer + 0x34,param_1,0x18,0x6e);
-    FUN_8007da44(param_1,0x220);
+    FUN_8007da44(param_1,0x220, 0);
   }
 
   FUN_8006e5b8(systemDataPointer + 0x50,param_1,renderingBuffer);
@@ -1262,7 +1262,7 @@ void FUN_80072b78(undefined4 param_1)
   FUN_8006e5b8(systemDataPointer + 0x180,param_1,renderingBuffer);
   FUN_8006e5b8(systemDataPointer + 0x218,param_1,renderingBuffer);
   FUN_8006daf8(&LAB_80091fc4,param_1,renderingBuffer);
-  FUN_8007da44(param_1,0x20);
+  FUN_8007da44(param_1,0x20, 0);
   FUN_8006d50c(&DAT_80091fe4,param_1);
   FUN_8006e5b8(systemDataPointer + 0x2b0,param_1,renderingBuffer);
   FUN_8006e5b8(systemDataPointer + 0x348,param_1,renderingBuffer);
@@ -1477,7 +1477,7 @@ void FUN_80073548(undefined4 *param_1,undefined4 *param_2)
 
   *destDataPointer = 0;
 
-  FUN_8006cdcc(param_1 + 0x11,&LAB_8007306c);
+  FUN_8006cdcc(param_1 + 0x11,&LAB_8007306c, 0);
 
   return;
 }
@@ -1531,7 +1531,7 @@ undefined4 FUN_80073720(undefined4 *param_1,int param_2)
   uint uintValue;
   undefined processingBuffer[32];
 
-  FUN_8006cfc4(param_1 + 0x11);
+  FUN_8006cfc4(param_1 + 0x11, 0);
   FUN_8006be64(param_1 + 10);
 
   if (*(short *)(param_1 + 5) < 0) {
@@ -1614,7 +1614,7 @@ undefined4 FUN_80073720(undefined4 *param_1,int param_2)
           else {
 
             *(undefined *)((int)param_1 + 0x1a) = 0xc;
-            FUN_8006d400(param_1 + 0x11);
+            FUN_8006d400(param_1 + 0x11, 0);
             *(undefined *)((int)param_1 + 0x1b) = 8;
           }
           FUN_80060840(5);
@@ -1685,7 +1685,7 @@ void FUN_80073afc(undefined4 *param_1,undefined4 param_2)
   uint colorComponent;
   undefined crosshairBuffer[8];
 
-  FUN_8006d50c(param_1 + 0x11);
+  FUN_8006d50c(param_1 + 0x11, 0);
 
   colorValue = (uint)*(short *)(param_1 + 5);
   if (colorValue != 0xffffffff) {
@@ -1714,7 +1714,7 @@ void FUN_80073afc(undefined4 *param_1,undefined4 param_2)
                  (int)*(short *)(param_1 + 3));
 
     FUN_8006bef4(param_1 + 10,param_2,positionY,*(short *)(param_1 + 4) + -6);
-    FUN_8007da44(param_2,0x220);
+    FUN_8007da44(param_2,0x220, 0);
 
     dataPointer = (undefined *)(param_1[9] + (int)*(short *)(param_1 + 7));
     dataValue = *dataPointer;
@@ -1724,7 +1724,7 @@ void FUN_80073afc(undefined4 *param_1,undefined4 param_2)
 
     FUN_8006b988(crosshairBuffer,param_2,positionY + colorIntensity,*(short *)(param_1 + 4) + 10,4,0xfffffff9,
                  (int)*(short *)(param_1 + 6));
-    FUN_8007da44(param_2,0x20);
+    FUN_8007da44(param_2,0x20, 0);
   }
 
   return;
@@ -1892,7 +1892,7 @@ void FUN_80073edc(short *param_1,undefined4 param_2,int param_3)
     colorValue2 = FUN_8006b548(dataPointer2,&DAT_80092388,calculationValue,0x10);
 
     calculationValue2 = (param_1[2] + value44) - (value44 * accumulatorValue) / value48;
-    pointerVar = (short *)FUN_8007d024(param_2,colorValue1);
+    pointerVar = (short *)FUN_8007d024(param_2,colorValue1, 0);
     value4 = (short)baseValue;
     *pointerVar = value4;
     value6 = (short)calculationValue2;
@@ -1904,7 +1904,7 @@ void FUN_80073edc(short *param_1,undefined4 param_2,int param_3)
     calculationValue2 = calculationValue2 + (calculationValue >> 0x19);
     if (calculationValue2 < positionValue && positionY + (calculationValue >> 0x18) + (calculationValue >> 0x1a) < calculationValue2) {
 
-      FUN_8008cf34(renderingBuffer,&DAT_8008fb38,accumulatorValue);
+      FUN_8008cf34(renderingBuffer,&DAT_8008faac,(int)param_1[2]);
       positionValue = baseValue + 4;
       if (param_3 == 0) {
 
@@ -1918,7 +1918,7 @@ void FUN_80073edc(short *param_1,undefined4 param_2,int param_3)
       }
       colorParam = colorValue2;
       FUN_8006af40(textBuffer,renderingBuffer,positionValue,calculationValue2,0,(int)*(char *)(param_1 + 6),0);
-      pointerVar = (short *)FUN_8007d024(param_2,colorValue1);
+      pointerVar = (short *)FUN_8007d024(param_2,colorValue1, 0);
       *pointerVar = value4;
       pointerVar[1] = value6;
       pointerVar[2] = 2;
@@ -1978,7 +1978,7 @@ void FUN_8007421c(undefined *param_1,undefined4 param_2,int param_3)
 
     param11 = param16;
     param5 = 1;
-    FUN_8006ac90(param_1,param_2,param_3,param18);
+    FUN_8006ac90(param_1,param_2,param_3,param18, 0);
 
     do {
 
@@ -1998,7 +1998,7 @@ void FUN_8007421c(undefined *param_1,undefined4 param_2,int param_3)
       param16 = FUN_8006b548(param20,&DAT_80092388,calculationValue,0x10);
 
       calculationValue3 = (unaffPointer5[2] + param14) - (param14 * unaffValue7) / param13;
-      pointerVar = (short *)FUN_8007d024(param31,param15);
+      pointerVar = (short *)FUN_8007d024(param31,param15, 0);
       value4 = (short)unaffValue4;
       *pointerVar = value4;
       value5 = (short)calculationValue3;
@@ -2010,7 +2010,7 @@ void FUN_8007421c(undefined *param_1,undefined4 param_2,int param_3)
       calculationValue3 = calculationValue3 + (calculationValue >> 0x19);
       if (calculationValue3 < unaffValue2 && param18 + (calculationValue >> 0x18) + (calculationValue >> 0x1a) < calculationValue3) {
 
-        FUN_8008cf34(stackBuffer1,&DAT_8008fb38,unaffValue7);
+        FUN_8008cf34(stackBuffer1,&DAT_8008faac,(int)param_1[2]);
         calculationValue2 = unaffValue4 + 4;
         if (param32 == 0) {
 
@@ -2024,8 +2024,8 @@ void FUN_8007421c(undefined *param_1,undefined4 param_2,int param_3)
         }
         param11 = param16;
         param5 = 0;
-        FUN_8006af40(&stackBuffer2[0x100],&stackBuffer1[0],calculationValue2,calculationValue3);
-        pointerVar = (short *)FUN_8007d024(param31,param15);
+        FUN_8006af40(&stackBuffer2[0x100],&stackBuffer1[0],calculationValue2,calculationValue3, 0, 0, 0);
+        pointerVar = (short *)FUN_8007d024(param31,param15, 0);
         *pointerVar = value4;
         pointerVar[1] = value5;
         pointerVar[2] = 2;
@@ -2098,7 +2098,7 @@ void FUN_80074274(short *param_1,undefined4 param_2)
     colorValue2 = FUN_8006b548(&DAT_8009238c,colorPointer,calculationValue2,0x20);
 
     positionX = (int)param_1[1] + (param_1[3] * loopCounter) / loopLimit;
-    pointerVar = (undefined2 *)FUN_8007d024(param_2,colorValue);
+    pointerVar = (undefined2 *)FUN_8007d024(param_2,colorValue, 0);
     positionValue = (undefined2)positionX;
     *pointerVar = positionValue;
     value1 = param_1[2];
@@ -2107,7 +2107,7 @@ void FUN_80074274(short *param_1,undefined4 param_2)
     pointerVar[2] = (undefined2)heightValue;
     pointerVar[1] = value1 + value2;
 
-    FUN_8008cf34(renderingBuffer,&DAT_8008fb38,loopCounter);
+    FUN_8008cf34(renderingBuffer,&DAT_8008faac,(int)param_1[2]);
     calculationValue = FUN_8006ad3c(textBuffer,renderingBuffer,(int)*(char *)(param_1 + 6));
     positionX = (positionX - (calculationValue >> 1)) + -1;
 
@@ -2224,7 +2224,7 @@ void FUN_800745b0(short *param_1,undefined4 param_2,short *param_3,int param_4,u
       } while (loopCounter < param_1[0x1b]);
     }
 
-    FUN_8007da44(param_2,0x20);
+    FUN_8007da44(param_2,0x20, 0);
   }
 
   return;
@@ -2242,7 +2242,7 @@ void FUN_800747d0(int param_1,undefined4 param_2)
 
     FUN_80074274(param_1,param_2);
 
-    FUN_8007da44(param_2,0x20);
+    FUN_8007da44(param_2,0x20, 0);
   }
 
   return;

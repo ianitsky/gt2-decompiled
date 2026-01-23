@@ -21,10 +21,16 @@ set(CMAKE_C_FLAGS_RELWITHDEBINFO "-Wall -Wextra -Wpedantic -O2 -g -DNDEBUG")
 set(CMAKE_C_FLAGS_MINSIZEREL "-Wall -Wextra -Wpedantic -Os -DNDEBUG")
 
 # Additional warning flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-variable -Wunused-function -Wstrict-prototypes -Wmissing-prototypes -D__psyz")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error -Wunused-variable -Wunused-function -Wstrict-prototypes -Wmissing-prototypes -D__psyz -Wno-int-conversion -Wno-pointer-sign -Wno-char-subscripts -Wno-sign-compare -Wno-parentheses -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -Wno-incompatible-pointer-types -Wno-implicit-function-declaration")
+
+# Linker flags to allow undefined symbols (for incomplete decompiled code)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--unresolved-symbols=ignore-all -no-pie")
+
+# Disable PIE for executable (needed for decompiled code with absolute addresses)
+set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 
 # Include directories
-include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src/external/psyz/include)
+include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src/external/psyz/psyz/include)
 # Add subdirectories
 add_subdirectory(src)
 add_subdirectory(src/external/psyz/psyz)

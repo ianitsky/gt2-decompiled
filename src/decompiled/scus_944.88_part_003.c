@@ -17,7 +17,7 @@ uint gte_stMAC0(void);
 // Forward declaration for read_sz_fifo4
 void read_sz_fifo4(uint param_1, uint param_2, uint param_3, uint param_4);
 
-void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
+void FUN_80066ef8(int param_1,int *param_2,uint param_3)
 {
 
   char cVar1;
@@ -82,7 +82,7 @@ void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
       gte_stSXY0();
       gte_stSXY2();
       uVar7 = gte_stSXY1();
-      read_sz_fifo4(uVar8,uVar10,uVar11,param_4);
+      read_sz_fifo4(uVar8,uVar10,uVar11,param_3);
       gte_rtps_b();
       iVar14 = piVar17[2];
       *(undefined4 *)((intptr_t)iVar18 + 8) = uVar24;
@@ -105,8 +105,8 @@ void FUN_80066ef8(int param_1,int *param_2,undefined4 param_3,uint param_4)
       gte_rtps_b();
       uVar19 = piVar17[4];
 
-      if ((int)uVar8 < (int)param_4 == uVar13) {
-        uVar8 = param_4;
+      if ((int)uVar8 < (int)param_3 == uVar13) {
+        uVar8 = param_3;
       }
       iVar14 = (int)(uVar8 << (uVar2 & 0x1f)) >> 0xd;
       iVar9 = iVar14 << 2;

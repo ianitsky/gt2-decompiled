@@ -18,7 +18,7 @@ int FUN_8007d024(int commandBuffer,uint commandType,uint commandData);
 int FUN_8007d060(int commandBuffer,uint commandType,uint commandData);
 int FUN_8007da44(int commandBuffer,uint commandType,uint commandData);
 int FUN_8007dc78(int *audioData,uint param1,uint param2);
-int FUN_8007e0b0(int commandBuffer,uint commandData);
+uint * FUN_8007e0b0(int commandBuffer, uint commandData);
 int FUN_8007e0e0(int commandBuffer,uint commandType,uint commandData);
 int FUN_8007e708(int commandBuffer,uint commandData);
 int FUN_8007e738(int commandBuffer,uint commandType,uint commandData);
@@ -54,7 +54,7 @@ void FUN_80078790(undefined4 *audioBuffer,undefined4 soundData,undefined4 buffer
 void FUN_800787a8(int audioBuffer);
 int FUN_800787cc(int *audioBuffer,undefined4 soundData,undefined4 bufferSize,int loadMethod);
 void FUN_80078840(undefined4 audioBuffer,undefined4 soundData,undefined4 bufferSize,undefined4 loadMethod);
-void FUN_80078900(undefined4 channelId,undefined4 soundId,undefined4 audioBuffer,undefined4 volume,undefined4 channelOverride);
+void FUN_80078900(u_long channelId,undefined4 soundId,u_long audioBuffer,undefined4 volume,undefined4 channelOverride);
 void FUN_80078960(undefined4 memoryPtr,undefined4 memorySize);
 void FUN_80078a54(int *audioChannelArray,int channelIndex,int volumeMultiplier,int enableLimiting);
 void FUN_80078b00(int *audioChannelArray,int channelIndex,int timePosition,int enableLimiting);

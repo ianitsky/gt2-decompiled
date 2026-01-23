@@ -62,7 +62,7 @@ int FUN_8007bca0(undefined4 audioData, undefined4 processingFlags, undefined4 ou
 extern undefined4 DAT_801d589c;
 extern undefined1 DAT_801d5865;
 extern undefined4 DAT_801d58a0;
-extern undefined1 DAT_800a951c;
+extern undefined4 DAT_800a951c;
 extern undefined4 DAT_801d58b0;
 extern undefined4 DAT_801e2f7c;
 extern undefined4 DAT_801e2fc8;

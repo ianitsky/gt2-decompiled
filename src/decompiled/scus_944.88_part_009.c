@@ -22,65 +22,6 @@
 // Forward declarations for functions used in this file
 int CheckCallback(void);
 int VSync(int mode);
-void CD_flush(void);
-uint BIOS_1_OBJ_0(void);
-void BIOS_1_OBJ_14A4(void);
-void BIOS_1_OBJ_1320(void);
-undefined4 CD_cw(byte, byte *, undefined *, int);
-undefined4 CD_sync(int, undefined *);
-int syscall(int);
-int FUN_8008d590(code_output_func outputFunction,uint formatFlags,int fieldWidth,int precision,uint mantissaHigh, uint mantissaLow,char signChar,int exponent);
-void FUN_80010998(void);
-char * FUN_8008cedc(char *, char *);
-void halt_baddata(void);
-undefined4 getCopReg(int copNumber, undefined4 registerNumber);
-void trap(void);
-void halt_unimplemented(void);
-void prefetch(void *, int);
-void func_0x80410040(undefined4);
-void gte_ldVXY0(undefined4 *);
-void FUN_800780f8(int, undefined4 *);
-int FUN_80060bec(undefined4, int *, int *);
-int FUN_80060b70(undefined4);
-undefined2 FUN_80060d28(undefined4, int);
-int FUN_80078138(int);
-uint FUN_80083ae0(uint *);
-undefined4 * FUN_80078038(int, int);
-ushort FUN_arcade__80010238(undefined4 *, undefined4, undefined4, undefined4 *, int *, int);
-undefined4 FUN_8007816c(undefined4, undefined4);
-void FUN_8005e548(undefined4 *, undefined4);
-void FUN_8005e5f0(undefined4 *, undefined4);
-undefined4 FUN_800768c0(undefined2);
-void FUN_80076f5c(undefined4, undefined4 *);
-int FUN_80076f2c(int, undefined2);
-void FUN_arcade__800104a8(int outputBuffer, undefined4 colorData, uint colorType, undefined4 randomSeed);
-undefined4 * FUN_arcade__80010554(int, int, undefined2 *, undefined4, uint *, undefined4, uint *);
-void FUN_80076fc0(undefined4, undefined4 *);
-undefined4 FUN_80060ae8(uint);
-undefined2 * FUN_8007830c(undefined4, undefined4 *);
-void FUN_800771ac(undefined4 *, undefined4 *);
-void FUN_8005e590(undefined4 *, undefined4);
-undefined4 * FUN_arcade__80010a34(int, int, int, undefined, undefined, undefined4, undefined4, undefined4);
-int FUN_8005e764(void);
-void FUN_80082fac(undefined4 *, undefined4 *);
-// Note: FUN_8007e0b0 is declared in scus_944.88_part_006.h as int FUN_8007e0b0(int commandBuffer,uint commandData)
-// This wrapper function provides the uint * FUN_8007e0b0(void) interface used in this file
-// Forward declaration for the wrapper
-uint * FUN_8007e0b0_wrapper(void);
-#define FUN_8007e0b0() FUN_8007e0b0_wrapper()
-uint * FUN_8007e0b0_graphics(undefined4 *);
-uint * FUN_8007e0b0_with_context(undefined4 *);
-// Note: FUN_8007e864 is declared in scus_944.88_part_007.h as int FUN_8007e864(int commandBuffer,uint commandType,uint commandData)
-// This wrapper function provides the uint * FUN_8007e864(undefined4 *, uint) interface used in this file
-static inline uint * FUN_8007e864_wrapper(undefined4 *context, uint data) {
-    // This is a wrapper that calls the graphics buffer allocation function
-    // The actual implementation should return a pointer to a graphics buffer
-    extern int FUN_8007e864(int commandBuffer,uint commandType,uint commandData);
-    (void)context;  // Suppress unused parameter warning
-    (void)data;     // Suppress unused parameter warning
-    // For now, return NULL as this needs proper implementation
-    return (uint *)0;
-}
 #define FUN_8007e864(context, data) FUN_8007e864_wrapper(context, data)
 // Note: FUN_8007d024 is declared in scus_944.88_part_006.h as int FUN_8007d024(int commandBuffer,uint commandType,uint commandData)
 // This wrapper function provides the interface for calls with 2 arguments (commandType is used as commandData, commandData defaults to 0)
@@ -169,7 +110,7 @@ extern undefined4 DAT_801d5de2;
 extern undefined4 DAT_801d5ddc;
 extern undefined4 DAT_801d5de4;
 extern undefined4 DAT_801d585c;
-extern undefined4 DAT_801d58b6;
+extern undefined DAT_801d58b6;
 extern undefined4 DAT_801d586c;
 extern undefined4 DAT_801cd554;
 extern undefined4 PTR_DAT_arcade__8002678c_arcade__80027470;
@@ -405,119 +346,10 @@ void BIOS_1_OBJ_E90(void)
   return;
 }
 
-undefined4 CD_vol(int param_1)
 
-{
-  CDROM_REG0 = 3;
-  CDROM_REG1 = *(byte *)((uintptr_t)param_1 + 2);
-  CDROM_REG2 = *(byte *)((uintptr_t)param_1 + 3);
-  CDROM_REG3 = 0x20;
-  return 0;
-}
 
-void CD_flush(void)
 
-{
 
-  if ((CDROM_REG3 & 7) != 0) {
-    do {
-
-    } while( true );
-  }
-
-  DAT_800a7aea = 0;
-  DAT_800a7ae9 = 0;
-  DAT_800a7ae8 = 2;
-  CDROM_REG0 = 0;
-  CDROM_REG3 = 0;
-  COMMON_DELAY = 0x1325;
-  return;
-}
-
-undefined4 CD_initvol(void)
-
-{
-
-  if ((CURR_MAIN_VOL_L == 0) && (CURR_MAIN_VOL_R == 0)) {
-    SPU_MAIN_VOL_L = 0x3fff;
-    SPU_MAIN_VOL_R = 0x3fff;
-  }
-
-  CD_VOL_L = 0x3fff;
-  CD_VOL_R = 0x3fff;
-
-  SPU_CTRL_REG_CPUCNT = 0xc001;
-
-  CDROM_REG0 = 3;
-  CDROM_REG1 = 0x80;
-  CDROM_REG2 = 0;
-  CDROM_REG3 = 0x20;
-
-  return 0;
-}
-
-void CD_initintr(void)
-
-{
-
-  DAT_800a7810 = 0;
-  DAT_800a780c = 0;
-  DAT_800a781c = 0;
-  DAT_800a7818 = 0;
-
-  ResetCallback();
-
-  INTR_OBJ_43C(2,(int)(uintptr_t)BIOS_1_OBJ_14A4);
-  return;
-}
-
-undefined4 CD_init(void)
-
-{
-  int iVar1;
-
-  FUN_8008e00c("CD_init:");
-  printf("addr=%08" PRIxPTR "\n",(uintptr_t)&PTR_DAT_800a7aec);
-
-  DAT_800a7829 = 0;
-  DAT_800a7828 = 0;
-  DAT_800a7810 = 0;
-  DAT_800a780c = 0;
-  DAT_800a781c = 0;
-  DAT_800a7818 = 0;
-
-  ResetCallback();
-  INTR_OBJ_43C(2,(int)(uintptr_t)BIOS_1_OBJ_14A4);
-
-  if ((CDROM_REG3 & 7) != 0) {
-    do {
-
-    } while( true );
-  }
-
-  DAT_800a7aea = 0;
-  DAT_800a7ae9 = 0;
-  DAT_800a7ae8 = 2;
-  CDROM_REG0 = 0;
-  CDROM_REG3 = 0;
-  COMMON_DELAY = 0x1325;
-
-  CD_cw(1,0,0,0);
-
-  if ((DAT_800a7818 & 0x10) != 0) {
-    CD_cw(1,0,0,0);
-  }
-
-  iVar1 = CD_cw(10,0,0,0);
-
-  if (((iVar1 == 0) && (iVar1 = CD_cw(0xc,0,0,0), iVar1 == 0)) && (iVar1 = CD_sync(0,0), iVar1 == 2)) {
-
-    BIOS_1_OBJ_1320();
-    return 0;
-  }
-
-  return 0xffffffff;
-}
 
 void BIOS_1_OBJ_1320(void)
 
@@ -525,39 +357,6 @@ void BIOS_1_OBJ_1320(void)
   return;
 }
 
-undefined4 CD_datasync(int param_1)
-
-{
-  bool bVar1;
-  int iVar2;
-  undefined4 uVar3;
-
-  iVar2 = VSync(-1);
-  DAT_801c9850 = iVar2 + 0x3c0;
-  DAT_801c9854 = 0;
-  DAT_801c9858 = "CD_datasync";
-
-  while (iVar2 = VSync(-1), iVar2 <= (int)DAT_801c9850) {
-    iVar2 = DAT_801c9854 + 1;
-    bVar1 = 0x3c0000 < DAT_801c9854;
-    DAT_801c9854 = iVar2;
-    if (bVar1) break;
-
-    uVar3 = 0;
-    if (((DMA_CDROM_CHCR & 0x1000000) == 0) || (uVar3 = 1, param_1 != 0)) {
-
-      return uVar3;
-    }
-  }
-
-  FUN_8008e00c("CD timeout: ");
-  printf("%s:(%p) Sync=%p, Ready=%p\n",DAT_801c9858,(void *)(&PTR_s_CdlSync_800a7830)[DAT_800a7829],
-         (void *)(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae8],(void *)(&PTR_s_NoIntr_800a78b0)[DAT_800a7ae9]);
-
-  CD_flush();
-  uVar3 = BIOS_1_OBJ_1448();
-  return uVar3;
-}
 
 undefined4 BIOS_1_OBJ_1448(void)
 
@@ -1809,13 +1608,12 @@ uint FUN_8008cf00(char *param_1,char *param_2)
   return 0;
 }
 
-void FUN_8008cf34(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4)
+void FUN_8008cf34(undefined4 param_1,undefined4 param_2,undefined4 param_3)
 
 {
   undefined4 localParameter3;
 
   localParameter3 = param_3;
-  (void)param_4;
   FUN_8008dec4(param_1,param_2,&localParameter3);
   return;
 }
@@ -2738,12 +2536,11 @@ void FUN_8008df80(int blockPointer)
   return;
 }
 
-// Note: bcopy, strncmp, bzero, printf are standard library functions
+// Note: bcopy, strncmp, printf are standard library functions
 // These implementations are stubs that will be replaced by standard library
 // Using #undef to avoid conflicts with standard library declarations
 #undef bcopy
 #undef strncmp
-#undef bzero
 #undef printf
 
 static void * bcopy_stub(uchar *source,uchar *destination,int size)
@@ -2770,7 +2567,7 @@ static int strncmp_stub(char *string1,char *string2,int maxLength)
   return result;
 }
 
-void * bzero(uchar *memory,int size)
+void * bzero_stub(uchar *memory,int size)
 
 {
   void *result;
@@ -4241,7 +4038,7 @@ void FUN_arcade__80011a50(undefined4 graphicsParam __attribute__((unused)),short
   colorValue1 = *(uint *)(coordinateData + 4);
   colorValue2 = *(uint *)(coordinateData + 6);
 
-  graphicsBuffer = (uint *)FUN_8007e0b0();
+  graphicsBuffer = (uint *)FUN_8007e0b0(0, 0);
 
   colorValue1 = colorValue1 | colorValue1 << 8 | colorValue1 << 0x10 | 0x3a000000;
   graphicsBuffer[4] = colorValue1;
@@ -4280,7 +4077,7 @@ void FUN_arcade__80011b18(undefined4 graphicsParam __attribute__((unused)),short
   uint *graphicsBuffer;
   uint colorValue;
 
-  graphicsBuffer = (uint *)FUN_8007e0b0();
+  graphicsBuffer = (uint *)FUN_8007e0b0(0, 0);
 
   colorValue = *(uint *)(coordinateData + 4);
   graphicsBuffer[4] = colorValue | 0x3a000000;

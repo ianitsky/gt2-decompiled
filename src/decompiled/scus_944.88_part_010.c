@@ -43,7 +43,7 @@ extern void LAB_arcade__8004f606_2(void);
 extern void LAB_arcade__8004f60a_2(void);
 
 // Global variable declarations
-extern undefined DAT_80129850[];
+extern undefined4 DAT_80129850;
 extern undefined4 DAT_801cd554;
 extern undefined4 DAT_arcade__8004f5fc;
 extern undefined4 DAT_arcade__8004f600;

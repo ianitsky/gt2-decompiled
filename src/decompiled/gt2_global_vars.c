@@ -4,7 +4,6 @@
 // Definitions of global variables used in the decompiled code
 // These are initialized to zero by default
 // Note: Many variables are defined here - this file will be expanded as needed
-
 // Variables used in start() function and initialization
 undefined4 DAT_80091164 = 0;
 undefined4 DAT_8009113c = 0;
@@ -17,10 +16,9 @@ undefined4 DAT_80091154 = 0;
 undefined4 DAT_80091158 = 0;
 undefined4 DAT_8009115c = 0;
 undefined4 DAT_80091160 = 0;
-undefined *DAT_80091168 = NULL;
+undefined4 DAT_80091168 = 0;
 undefined4 DAT_8009116c = 0;
 undefined4 DAT_80091170 = 0;
-
 // Memory management variables
 undefined4 DAT_801c93b0 = 0;
 undefined4 DAT_801c93d0 = 0;
@@ -38,10 +36,7 @@ undefined4 DAT_801c945c = 0;
 undefined4 DAT_801c9460 = 0;
 undefined4 DAT_801c9af8 = 0;
 undefined4 DAT_801c93c3 = 0;
-
-// Memory pool variables
 undefined4 DAT_801f0d60 = 0;
-
 // Game state variables
 undefined4 DAT_801c98e0 = 0;
 bitfield_8_t DAT_801c98e1 = {0};
@@ -69,14 +64,13 @@ undefined4 DAT_801c9992 = 0;
 undefined4 DAT_801c9993 = 0;
 undefined4 DAT_801c9994 = 0;
 undefined4 DAT_801c9995 = 0;
+undefined4 DAT_801c9424 = 0;
 undefined4 DAT_801c9998 = 0;
 undefined4 DAT_801c98a0 = 0;
 undefined4 DAT_801c98a4 = 0;  // Array element
 undefined4 DAT_801c98a8 = 0;  // Array element
-undefined2 DAT_801c86b4[256] = {0};  // Array (estimated size)
 undefined4 DAT_801c9916 = 0;
 undefined4 DAT_801c9968 = 0;
-
 // Data arrays and buffers
 undefined4 DAT_800a97d0 = 0;
 undefined4 DAT_800a8d5c = 0;
@@ -84,8 +78,7 @@ undefined4 DAT_800a97f0 = 0;
 undefined4 DAT_800b57d0 = 0;
 undefined4 DAT_801357d0 = 0;
 undefined4 DAT_800a6f18 = 0;
-undefined2 DAT_800a6f1a = 0;
-
+undefined4 DAT_800a6f1a = 0;
 // Graphics and rendering variables
 undefined4 DAT_801e2ef0 = 0;
 undefined4 DAT_801e35f0 = 0;
@@ -103,37 +96,32 @@ undefined4 DAT_801d589c = 0;
 undefined4 DAT_801cd368 = 0;
 undefined4 DAT_801cd40c = 0;
 undefined4 DAT_801cd4b0 = 0;
-
-// Memory and data management
 undefined4 DAT_801ef5f0 = 0;
-undefined1 DAT_801ef5f1 = 0;
-undefined1 DAT_801ef5f2 = 0;
+undefined4 DAT_801ef5f1 = 0;
+undefined4 DAT_801ef5f2 = 0;
 undefined4 DAT_801ef5f8 = 0;
-undefined2 DAT_801ef5fc = 0;
-undefined2 DAT_801ef5fe = 0;
+undefined4 DAT_801ef5fc = 0;
+undefined4 DAT_801ef5fe = 0;
 undefined4 DAT_801ef600 = 0;
 undefined4 DAT_801ef610 = 0;
 undefined4 DAT_801ef618 = 0;
 undefined4 DAT_801ef61c = 0;
 undefined4 DAT_801ef630 = 0;
-
-// Data arrays
 undefined4 DAT_801e18e6 = 0;
 undefined4 DAT_801e18e8 = 0;
 undefined4 DAT_801e18e4 = 0;
 undefined4 DAT_8009160c = 0;
-undefined1 DAT_8009160d = 0;
+undefined4 DAT_8009160d = 0;
 undefined4 DAT_80091660 = 0;
 undefined4 DAT_800915a0 = 0;
 undefined4 DAT_800915bc = 0;
 undefined4 DAT_80091878 = 0;
-
 // PS1 hardware register addresses (stubs for Linux - these would be memory-mapped on PS1)
-undefined4 _DAT_1f801130 = 0;
+undefined4 DAT_1f801130 = 0;
 undefined4 DAT_1f8001c0 = 0;
 undefined4 DAT_1f8001c4 = 0;
 bitfield_16_t DAT_1f800058 = {0};
-bitfield_8_t DAT_1f800088 = {0};
+bitfield_8_union_t DAT_1f800088 = {0};
 undefined4 DAT_1f800070 = 0;
 undefined4 DAT_1f800074 = 0;
 undefined4 DAT_1f800078 = 0;
@@ -146,32 +134,32 @@ undefined4 DAT_1f800094 = 0;
 undefined4 DAT_1f800398 = 0;
 undefined4 DAT_1f800062 = 0;
 undefined4 DAT_1f800064 = 0;
-uint *DAT_1f800068 = NULL;  // Array/pointer used with indexing
-undefined4 **DAT_1f80006c = NULL;  // Pointer to pointer array
+undefined4 *DAT_1f800068 = NULL;  // Array/pointer used with indexing
+undefined4 DAT_1f80006c = 0;  // Pointer to pointer array
 undefined4 DAT_1f800098 = 0;
 undefined4 DAT_1f8000a0 = 0;
 undefined4 DAT_1f8000a8 = 0;
 undefined4 DAT_1f8000ac = 0;
 undefined4 DAT_1f8000b0 = 0;
-bitfield_32_t DAT_1f8000b4 = {0};  // Structure with _3_1_ field
+bitfield_8_union_t DAT_1f8000b4 = {0};  // Structure with _3_1_ field
 undefined4 DAT_1f8000b8 = 0;
 undefined4 DAT_1f8000bc = 0;
-uint *DAT_1f8000c0 = NULL;  // Pointer used with indexing and assignment
-bitfield_32_t DAT_1f8000c4 = {0};  // Structure with _3_1_ field
+undefined4 DAT_1f8000c0 = 0;  // Pointer used with indexing and assignment
+bitfield_8_union_t DAT_1f8000c4 = {0};  // Structure with _3_1_ field
 uint *DAT_1f8000c8 = NULL;  // Pointer
 undefined4 DAT_1f8000cc = 0;
 undefined4 DAT_1f8000d0 = 0;
-bitfield_32_t DAT_1f8000d4 = {0};  // Structure with _3_1_ field
+bitfield_8_union_t DAT_1f8000d4 = {0};  // Structure with _3_1_ field
 undefined4 DAT_1f8000d8 = 0;
 undefined4 DAT_1f8000dc = 0;
 undefined4 DAT_1f8000e0 = 0;
-bitfield_32_t DAT_1f8000e4 = {0};  // Structure with _3_1_ field
+bitfield_8_union_t DAT_1f8000e4 = {0};  // Structure with _3_1_ field
 undefined4 *DAT_1f8000e8 = NULL;  // Pointer used with indexing
-uint *DAT_1f8000ec = NULL;  // Pointer used with assignment and indexing
-uint *DAT_1f8000f0 = NULL;  // Pointer used with assignment and indexing
+undefined4 *DAT_1f8000ec = NULL;  // Pointer used with assignment and indexing
+undefined4 *DAT_1f8000f0 = NULL;  // Pointer used with assignment and indexing
 undefined4 DAT_1f8000f4 = 0;
 undefined4 DAT_1f8000f8 = 0;
-uint *DAT_1f800148 = NULL;  // Pointer used with indexing
+undefined4 *DAT_1f800148 = NULL;  // Pointer used with indexing
 undefined4 *DAT_1f8001a8 = NULL;  // Pointer used with indexing
 undefined4 *DAT_1f800208 = NULL;  // Pointer used with indexing
 undefined4 DAT_1f800388 = 0;
@@ -186,14 +174,12 @@ undefined4 DAT_1f8003ac = 0;
 undefined4 DAT_1f8003ae = 0;
 undefined4 DAT_1f8003b4 = 0;
 undefined4 _DAT_1f8000d8 = 0;
-
 // Timer registers (PS1 hardware - stubs)
 bitfield_16_t TMR_SYSCLOCK_MAX = {0};
 bitfield_16_t TMR_SYSCLOCK_MODE = {0};
 undefined2 TMR_DOTCLOCK_VAL = 0;
-undefined2 TMR_HRETRACE_VAL = 0;
+uint TMR_HRETRACE_VAL = 0;
 undefined2 TMR_SYSCLOCK_VAL = 0;
-
 // String/pointer constants (initialized as NULL for now)
 char *PTR_s___carcolor_8009118c = NULL;
 undefined4 *PTR_LAB_8003322a_2_80033da0 = NULL;
@@ -212,7 +198,7 @@ undefined4 UNK_801c9926 = 0;
 undefined4 UNK_801e18e4 = 0;
 undefined4 DAT_000014a0 = 0;
 undefined4 DAT_000017cc = 0;
-undefined2 DAT_80033dcc = 0;
+undefined4 DAT_80033dcc = 0;
 undefined4 DAT_80033dc0 = 0;
 undefined4 LAB_80033dc8 = 0;
 undefined4 DAT_80011d38 = 0;
@@ -229,7 +215,6 @@ undefined4 DAT_801c9464 = 0;
 undefined4 DAT_801c9468 = 0;
 undefined4 *PTR_LAB_80091174 = NULL;
 undefined4 DAT_801c93c8 = 0;
-
 // Additional variables from part_005
 undefined4 DAT_801d5948 = 0;
 undefined4 DAT_801c94d4 = 0;
@@ -242,13 +227,12 @@ undefined4 DAT_801c94c4 = 0;
 undefined4 DAT_801c94c8 = 0;
 undefined4 DAT_801c94cc = 0;
 undefined4 DAT_801c94e0 = 0;
-undefined2 DAT_800921a8 = 0;
+undefined4 DAT_800921a8 = 0;
 undefined4 DAT_80091fe4 = 0;
 undefined4 DAT_80092354 = 0;
-undefined DAT_8009226c = 0;
-undefined4 *DAT_80092168 = NULL;
+undefined4 DAT_8009226c = 0;
+undefined4 DAT_80092168 = 0;
 undefined4 *PTR_DAT_800921b4 = NULL;
-
 // Labels (function pointers or addresses) from part_005
 undefined4 LAB_80091f04 = 0;
 undefined4 LAB_80091f34 = 0;
@@ -265,8 +249,6 @@ undefined4 LAB_80092138 = 0;
 undefined4 LAB_8008fac8 = 0;
 undefined4 LAB_8007306c = 0;
 undefined4 LAB_8006f060 = 0;
-
-// Additional variables from part_005 (continued)
 undefined4 DAT_801ef6b0 = 0;
 undefined4 DAT_80092388 = 0;
 undefined4 DAT_8008fb38 = 0;
@@ -295,8 +277,6 @@ undefined4 LAB_80092970 = 0;
 undefined4 LAB_80092978 = 0;
 undefined4 DAT_80092a48 = 0;
 undefined4 LAB_8008fb3a_2 = 0;
-
-// Additional variables from part_005 compilation errors
 undefined4 DAT_80092b1c = 0;
 undefined4 DAT_8009286c = 0;
 undefined4 DAT_80092878 = 0;
@@ -348,14 +328,14 @@ undefined4 DAT_80092e88 = 0;
 undefined4 DAT_80092e8c = 0;
 undefined4 VOICE_00_LEFT_RIGHT = 0;
 undefined4 DAT_800900b8 = 0;
-undefined DAT_801efe64 = 0;
-undefined DAT_801efe66 = 0;
-undefined4 DAT_801f0230 = 0;
+undefined4 DAT_801efe64 = 0;
+undefined4 DAT_801efe66 = 0;
+undefined4 *DAT_801f0230 = NULL;
 undefined4 DAT_801f0234 = 0;
-undefined DAT_801f0236 = 0;
+undefined4 DAT_801f0236 = 0;
 undefined4 DAT_801f023c = 0;
-undefined DAT_801f0262 = 0;
-undefined DAT_801f0263 = 0;
+undefined4 DAT_801f0262 = 0;
+undefined4 DAT_801f0263 = 0;
 undefined4 DAT_80093072 = 0;
 undefined4 SPU_MAIN_VOL_L = 0;
 undefined4 SPU_MAIN_VOL_R = 0;
@@ -367,10 +347,10 @@ undefined4 SPU_CTRL_REG_CPUCNT = 0;
 undefined4 SOUND_RAM_REVERB_WORK_ADDR = 0;
 undefined4 LAB_80092e90 = 0;
 undefined4 LAB_80092eb0 = 0;
-undefined DAT_801efe61 = 0;
+undefined4 DAT_801efe61 = 0;
 undefined DAT_801efe6b[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes
 undefined DAT_801efe6d[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes
-undefined DAT_801efe6e[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes
+undefined4 DAT_801efe6e = 0;  // 24 channels * 40 bytes = 960 bytes
 undefined DAT_801efe69[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes
 undefined4 DAT_801efe70[0x180] = {0};  // 24 channels * 40 bytes = 960 bytes (10 * 4 * 24)
 undefined4 DAT_801efe74[0x180] = {0};  // 24 channels * 40 bytes = 960 bytes (10 * 4 * 24)
@@ -380,8 +360,8 @@ undefined4 DAT_801efe84[0x180] = {0};  // 24 channels * 40 bytes = 960 bytes (10
 undefined4 DAT_801efe88[0x180] = {0};  // 24 channels * 40 bytes = 960 bytes (10 * 4 * 24)
 undefined4 DAT_801f0530 = 0;
 undefined4 DAT_801f0548 = 0;
-undefined DAT_801f06a4 = 0;
-undefined DAT_801f06a5 = 0;
+undefined4 DAT_801f06a4 = 0;
+undefined4 DAT_801f06a5 = 0;
 undefined4 GPU_REG0 = 0;
 undefined4 GPU_REG1 = 0;
 undefined4 DMA_GPU_CHCR = 0;
@@ -407,14 +387,14 @@ undefined4 DAT_801f052a = 0;
 undefined4 DAT_801f052c = 0;
 undefined4 DAT_801f052e = 0;
 undefined4 DAT_801f0675 = 0;
-undefined DAT_801f0676 = 0;
+undefined4 DAT_801f0676 = 0;
 undefined4 LAB_8007cf38 = 0;
 undefined4 LAB_8007c42c = 0;
 undefined4 LAB_8007c434 = 0;
 undefined4 LAB_8007caa4 = 0;
 undefined4 LAB_8007cdf4 = 0;
-undefined4 PTR_LAB_800903e4 = 0;
-undefined DAT_801f0531 = 0;
+undefined4 *PTR_LAB_800903e4 = NULL;
+undefined4 DAT_801f0531 = 0;
 undefined4 DAT_801f0534 = 0;
 undefined4 DAT_801f0538 = 0;
 undefined4 DAT_801f0540 = 0;
@@ -430,12 +410,12 @@ undefined4 LAB_8007d2d4 = 0;
 undefined4 LAB_80090526_2 = 0;
 undefined4 LAB_8009051e_2 = 0;
 undefined4 DAT_801f0724 = 0;
-undefined DAT_801f0981 = 0;
+undefined4 DAT_801f0981 = 0;
 undefined4 DAT_801f0984 = 0;
-undefined DAT_801f097e = 0;
+undefined4 DAT_801f097e = 0;
 undefined4 DAT_801c94e8 = 0;
 undefined4 DAT_801f06c8 = 0;
-undefined DAT_801f06de = 0;
+undefined4 DAT_801f06de = 0;
 undefined4 *DAT_801f06b0 = (undefined4 *)0x0;
 undefined4 DAT_801f06d4 = 0;
 undefined4 DAT_801f06d8 = 0;
@@ -443,8 +423,8 @@ undefined4 DAT_801f06d0 = 0;
 undefined4 DAT_801f06c4 = 0;
 undefined4 DAT_801f06cc = 0;
 undefined4 DAT_801f06b4 = 0;
-undefined DAT_801f06b5 = 0;
-undefined DAT_801f06dd = 0;
+undefined4 DAT_801f06b5 = 0;
+undefined4 DAT_801f06dd = 0;
 undefined4 DAT_8009314c = 0;
 undefined4 DAT_80093148 = 0;
 undefined4 DAT_800b4a48 = 0;
@@ -452,13 +432,13 @@ undefined4 DAT_1f8003f0 = 0;
 undefined4 DAT_1f8003f2 = 0;
 undefined4 DAT_800a951c = 0;
 undefined4 DAT_801c9504 = 0;
-undefined DAT_801c9506 = 0;
+undefined4 DAT_801c9506 = 0;
 undefined4 DAT_801c9508 = 0;
-undefined DAT_801c950a = 0;
+undefined4 DAT_801c950a = 0;
 undefined4 DAT_801c950c = 0;
-undefined DAT_801c950e = 0;
+undefined4 DAT_801c950e = 0;
 undefined4 DAT_801c9510 = 0;
-undefined DAT_801c9512 = 0;
+undefined4 DAT_801c9512 = 0;
 undefined4 DAT_801c9500 = 0;
 undefined4 LAB_8007df18 = 0;
 undefined4 LAB_8007d550 = 0;
@@ -468,23 +448,21 @@ undefined4 LAB_8008fdb8 = 0;
 undefined4 LAB_8007abb8 = 0;
 undefined4 LAB_800901b6_2 = 0;
 undefined4 DAT_801efe60 = 0;
-undefined DAT_801efe76 = 0;
+undefined4 DAT_801efe76 = 0;
 undefined4 DAT_801f0238 = 0;
 undefined4 DAT_801f0248 = 0;
 bitfield_16_t SPU_VOICE_KEY_OFF = {0};
 bitfield_16_t SPU_VOICE_KEY_ON = {0};
 bitfield_16_t SPU_VOICE_CHN_REVERB_MODE = {0};
 undefined4 VOICE_00_ADPCM_START_ADDR = 0;
-undefined DAT_801efe62 = 0;
+undefined4 DAT_801efe62 = 0;
 undefined DAT_801efe68[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes
 undefined DAT_801efe6c[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes
-undefined4 DAT_801efe7c[0x180] = {0};  // 24 channels * 40 bytes = 960 bytes (10 * 4 * 24)
+undefined4 DAT_801efe7c[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes (10 * 4 * 24)
 undefined DAT_801efe8c[0x3c0] = {0};  // 24 channels * 40 bytes = 960 bytes
-
 // Pad structures
 undefined4 DAT_801f0c98 = 0;
 undefined4 DAT_801f0cba = 0;
-
 // Other variables
 undefined4 DAT_80011df4 = 0;
 undefined4 DAT_801c717a = 0;
@@ -492,16 +470,12 @@ undefined4 DAT_801c7185 = 0;
 undefined4 DAT_801c9110 = 0;
 undefined4 DAT_801c9120 = 0;
 undefined4 DAT_801c9150 = 0;
-
-// Additional PS1 hardware registers
 undefined4 DAT_1f800000 = 0;  // Memory-mapped register (scratchpad memory base)
 undefined4 DAT_1f80000c = 0;  // Memory-mapped register (array element)
 undefined4 DAT_1f800014 = 0;  // Array/pointer used with indexing
 undefined4 DAT_1f8003a0 = 0;  // Memory-mapped register
 undefined4 DAT_1f8003b0 = 0;  // Memory-mapped register (can be used as bitfield or uint)
 undefined4 _DAT_1f800398 = 0;  // Pointer variant of DAT_1f800398
-
-// Graphics command buffer variables
 undefined4 *DAT_801c93ec = NULL;  // Pointer to graphics command buffer
 undefined4 *DAT_801c93f0 = NULL;  // Pointer to graphics command buffer end
 undefined4 DAT_801c9474 = 0;
@@ -515,12 +489,10 @@ undefined4 DAT_801c9498 = 0;
 undefined4 DAT_801c94a4 = 0;
 undefined4 DAT_801c94a8 = 0;
 undefined4 DAT_801c99dc = 0;
-
-// Additional variables
 undefined4 DAT_8008fa74 = 0;
 undefined4 DAT_8008faac = 0;
-undefined2 DAT_80091a78 = 0;
-undefined2 DAT_80091a7a = 0;
+undefined4 DAT_80091a78 = 0;
+undefined4 DAT_80091a7a = 0;
 undefined4 DAT_80091acc = 0;
 undefined4 DAT_80091b0c = 0;
 undefined4 DAT_80091c0c = 0;
@@ -533,7 +505,7 @@ undefined4 DAT_80091e98 = 0;
 undefined4 DAT_80091e9c = 0;
 undefined4 DAT_80091ea0 = 0;
 undefined4 DAT_80091ea4 = 0;
-undefined2 DAT_80093150[] = {0};  // Sine table array
+short DAT_80093150[0x800] = {0};  // Sine table array
 undefined4 DAT_800a6eec = 0;
 undefined4 DAT_800a6ef0 = 0;
 undefined4 DAT_800a6ef4 = 0;
@@ -546,7 +518,7 @@ undefined4 DAT_800a6f0c = 0;
 undefined4 DAT_800a6f10 = 0;
 undefined4 DAT_801d157c = 0;
 undefined1 DAT_801d5865 = 0;
-undefined1 DAT_801d5866 = 0;
+undefined4 DAT_801d5866 = 0;
 undefined4 DAT_801d5988 = 0;
 undefined4 DAT_801d5a16 = 0;
 undefined4 DAT_801d5e88 = 0;
@@ -557,30 +529,28 @@ undefined4 DAT_801da49c = 0;
 undefined4 DAT_801da4a0 = 0;
 undefined4 DAT_801da580 = 0;
 undefined4 DAT_801da590 = 0;
-undefined2 DAT_801de8ba = 0;
-undefined2 DAT_801dea7a = 0;
-undefined2 DAT_801e30b2 = 0;
-undefined1 DAT_801efccd = 0;
+undefined4 DAT_801de8ba = 0;
+undefined4 DAT_801dea7a = 0;
+undefined4 DAT_801e30b2 = 0;
+undefined4 DAT_801efccd = 0;
 undefined4 DAT_801efcdc = 0;
 undefined4 DAT_801efcf0 = 0;
 undefined4 DAT_801efcfc = 0;
-undefined2 DAT_801efd16 = 0;
-undefined2 DAT_801efd26 = 0;
-undefined1 DAT_801efd2e = 0;
-undefined1 DAT_801efd3f = 0;
+undefined4 DAT_801efd16 = 0;
+undefined4 DAT_801efd26 = 0;
+undefined4 DAT_801efd2e = 0;
+undefined4 DAT_801efd3f = 0;
 undefined4 DAT_801efd4c = 0;
-undefined2 DAT_801efdee = 0;
-undefined2 DAT_801efe0e = 0;
-undefined1 DAT_801efe18 = 0;
-undefined1 DAT_801efe23 = 0;
+undefined4 DAT_801efdee = 0;
+undefined4 DAT_801efe0e = 0;
+undefined4 DAT_801efe18 = 0;
+undefined4 DAT_801efe23 = 0;
 undefined4 DAT_801f053c = 0;
 undefined4 DAT_801f0688 = 0;
 undefined4 UNK_801c99ec = 0;
 undefined4 UNK_801d5f78 = 0;
 undefined4 UNK_801da65c = 0;
 undefined4 *PTR_DAT_80091e80 = NULL;
-
-// Labels (function pointers or addresses)
 undefined4 LAB_80068260 = 0;
 undefined4 LAB_800682ec = 0;
 undefined4 LAB_800686a0 = 0;
@@ -595,7 +565,7 @@ undefined4 LAB_80091e6a_2 = 0;
 undefined4 LAB_80091e6e_2 = 0;
 undefined4 LAB_80091e76_2 = 0;
 undefined4 LAB_80091ea6_2 = 0;
-undefined DAT_80091eb3 = 0;
+undefined4 DAT_80091eb3 = 0;
 undefined4 DAT_80091eb8 = 0;
 undefined4 DAT_80091ebc = 0;
 undefined4 DAT_80091ec4 = 0;
@@ -610,21 +580,19 @@ undefined4 LAB_8007f2fc = 0;
 undefined4 *DAT_801c94ac = NULL;
 undefined DAT_801efb39 = 0;
 undefined DAT_801efb4a = 0;
-undefined DAT_801efaba = 0;
-undefined DAT_801efad1 = 0;
-undefined DAT_801efaea = 0;
-undefined DAT_801efb00 = 0;
-undefined DAT_801efb15 = 0;
-undefined DAT_801efd50 = 0;
-undefined DAT_801efd61 = 0;
-undefined DAT_801efdb7 = 0;
-undefined DAT_801efdc4 = 0;
+undefined4 DAT_801efaba = 0;
+undefined4 DAT_801efad1 = 0;
+undefined4 DAT_801efaea = 0;
+undefined4 DAT_801efb00 = 0;
+undefined4 DAT_801efb15 = 0;
+undefined4 DAT_801efd50 = 0;
+undefined4 DAT_801efd61 = 0;
+undefined4 DAT_801efdb7 = 0;
+undefined4 DAT_801efdc4 = 0;
 undefined4 *PTR_LAB_800921d4 = NULL;
 undefined4 DAT_801d58b8 = 0;
-
-// Variables from scus_944.88_part_007.c
 undefined4 DAT_801f06e0 = 0;  // System data array/structure
-ulong DAT_80090530[] = {0};  // Source buffer data (array)
+undefined4 DAT_80090530[] = {0};  // Source buffer data (array)
 func *DAT_801f0710 = NULL;  // Function pointer
 undefined4 DAT_801f0714 = 0;  // Value
 undefined4 DAT_801f0718 = 0;  // Value (used with bitwise operations)
@@ -634,25 +602,25 @@ func LAB_8007f6e8 = NULL;  // Function label
 func LAB_8007f900 = NULL;  // Function label
 func LAB_8007f978 = NULL;  // Function label
 func LAB_80090630 = NULL;  // Function label
-undefined DAT_801f097f = 0;
-undefined DAT_801f0be3 = 0;
-undefined DAT_801f0be5 = 0;
+undefined4 DAT_801f097f = 0;
+undefined4 DAT_801f0be3 = 0;
+undefined4 DAT_801f0be5 = 0;
 undefined4 DAT_800a0a68 = 0;  // Data pointer
 undefined4 DAT_801f0c70 = 0;  // Data
-undefined DAT_801f0c78 = 0;  // Data
-undefined DAT_801f0c7c = 0;  // Data
-undefined DAT_801f0c80 = 0;  // Data
-undefined DAT_801f0c84 = 0;  // Data
-undefined DAT_801f0c99 = 0;  // Data
-undefined DAT_801f0c9a = 0;  // Data
-undefined DAT_801f0c9c = 0;  // Data
-undefined DAT_801f0c9d = 0;  // Data
-undefined DAT_801f0c9e = 0;  // Data
-undefined DAT_801f0c9f = 0;  // Data
+undefined4 DAT_801f0c78 = 0;  // Data
+undefined4 DAT_801f0c7c = 0;  // Data
+undefined4 DAT_801f0c80 = 0;  // Data
+undefined4 DAT_801f0c84 = 0;  // Data
+undefined4 DAT_801f0c99 = 0;  // Data
+undefined4 DAT_801f0c9a = 0;  // Data
+undefined4 DAT_801f0c9c = 0;  // Data
+undefined4 DAT_801f0c9d = 0;  // Data
+undefined4 DAT_801f0c9e = 0;  // Data
+undefined4 DAT_801f0c9f = 0;  // Data
 undefined4 DAT_801c93f8 = 0;  // Data
-undefined DAT_801c93fa = 0;  // Data
+undefined4 DAT_801c93fa = 0;  // Data
 undefined4 DAT_801c93fc = 0;  // Data
-undefined DAT_801c93fe = 0;  // Data
+undefined4 DAT_801c93fe = 0;  // Data
 undefined4 DAT_801f0ce0 = 0;  // Data
 undefined4 DAT_801f0cf0 = 0;  // Data
 undefined4 DMA_DPCR = 0;  // DMA register
@@ -669,25 +637,25 @@ undefined4 DAT_8009599c = 0;  // Data
 undefined4 LAB_800906c8 = 0;  // Function label
 undefined4 LAB_80080820 = 0;  // Function label
 undefined4 DAT_800959b4 = 0;  // Data
-undefined DAT_800959ad = 0;  // Data
-undefined DAT_800959ac = 0;  // Data
+undefined4 DAT_800959ad = 0;  // Data
+undefined4 DAT_800959ac = 0;  // Data
 undefined4 DAT_800959b0 = 0;  // Data
-undefined DAT_80095abc = 0;  // Data
+undefined4 DAT_80095abc = 0;  // Data
 undefined4 DAT_80095ac0 = 0;  // Data
-undefined DAT_801f0532 = 0;  // Data
-undefined DAT_801f0533 = 0;  // Data
+undefined4 DAT_801f0532 = 0;  // Data
+undefined4 DAT_801f0533 = 0;  // Data
 undefined4 LAB_8008107c = 0;  // Function label
 undefined4 DAT_800a0a88 = 0;  // Data
 undefined2 DAT_80093950[] = {0};  // Data array (sine/cosine table)
 undefined4 DAT_801c951c = 0;  // Data
-undefined2 DAT_801c951e = 0;  // Data
+undefined4 DAT_801c951e = 0;  // Data
 undefined4 DAT_801c9520 = 0;  // Data
 undefined4 DAT_801c9524 = 0;  // Data
 undefined4 DAT_801c9528 = 0;  // Data
 undefined4 DAT_801c952c = 0;  // Data
 undefined4 DAT_801f0564 = 0;  // Data
-undefined DAT_801f0677 = 0;  // Data
-undefined DAT_80095ac4 = 0;  // Data
+undefined4 DAT_801f0677 = 0;  // Data
+undefined4 DAT_80095ac4 = 0;  // Data
 undefined4 DAT_800a8d50 = 0;  // Data
 undefined4 DAT_800a8d54 = 0;  // Data
 undefined4 LAB_80082ee4 = 0;  // Function label
@@ -711,7 +679,6 @@ undefined4 DAT_801c9534 = 0;  // Data
 undefined4 DAT_801c9538 = 0;  // Data
 undefined4 DAT_801c9568 = 0;  // Data
 undefined4 LAB_80083b7c = 0;  // Function label
-
 // CD-ROM related variables (used in scus_944.88_part_009.c)
 // Function pointer type for CD-ROM callbacks: void (*)(int, void *)
 typedef void (*code_int_ptr)(int, void *);
@@ -730,32 +697,15 @@ undefined4 DAT_800a781c = 0;  // CD-ROM callback data
 undefined4 DAT_800a7818 = 0;  // CD-ROM callback data
 undefined4 DAT_800a7828 = 0;  // CD-ROM status data
 undefined4 *PTR_DAT_800a7aec = NULL;  // CD-ROM pointer
-
-// PS1 hardware register addresses (stubs for Linux)
 uint CDROM_REG0 = 0;
 uint CDROM_REG1 = 0;
 uint CDROM_REG2 = 0;
 uint CDROM_REG3 = 0;
 uint CURR_MAIN_VOL_L = 0;
 uint CURR_MAIN_VOL_R = 0;
-uint SPU_MAIN_VOL_L = 0;
-uint SPU_MAIN_VOL_R = 0;
-uint CD_VOL_L = 0;
-uint CD_VOL_R = 0;
-uint SPU_CTRL_REG_CPUCNT = 0;
 uint COMMON_DELAY = 0;
-
 // Interrupt and timer related variables (used in scus_944.88_part_009.c)
 undefined4 DAT_800a7bae = 0;
-undefined4 DAT_800a7bb0 = 0;
-undefined4 DAT_800a8c34 = 0;
-undefined4 DAT_800a8c38 = 0;
-undefined4 DAT_800a8c64 = 0;
-uint DMA_DPCR = 0;
-uint GPU_REG1 = 0;
-uint TMR_HRETRACE_VAL = 0;
-uint TMR_HRETRACE_MODE = 0;
-undefined4 DAT_800a8c44 = 0;
 undefined4 DAT_800a8c78 = 0;
 uint DMA_DICR = 0;
 uint DMA_MDEC_IN_MADR = 0;
@@ -782,7 +732,6 @@ undefined4 _LAB_80092e6e_2 = 0;
 undefined4 DAT_801d58b4 = 0;
 undefined4 DAT_801d5860 = 0;
 undefined4 DAT_801d5864 = 0;
-undefined4 DAT_801d5865 = 0;
 undefined4 DAT_801d5867 = 0;
 undefined4 DAT_801d5868 = 0;
 undefined4 DAT_801d586a = 0;
@@ -795,10 +744,6 @@ undefined4 DAT_801d5de0 = 0;
 undefined4 DAT_801d5de2 = 0;
 undefined4 DAT_801d5ddc = 0;
 undefined4 DAT_801d5de4 = 0;
-undefined4 DAT_801d585c = 0;
-undefined4 DAT_801c98e1 = 0;
-undefined4 DAT_801c98e5 = 0;
-
 // UNK arrays - size needs to be determined from usage patterns
 // For now, using reasonable sizes based on typical PS1 game patterns
 undefined1 UNK_801d58e9[256] = {0};
@@ -808,8 +753,6 @@ undefined1 UNK_801d58de[256] = {0};
 undefined1 UNK_801d58ea[256] = {0};
 undefined1 UNK_801d58eb[256] = {0};
 undefined1 UNK_801d58ec[256] = {0};
-
-// Variables used in arcade functions
 undefined4 DAT_801c31f0 = 0;
 undefined4 DAT_801c31f4 = 0;
 undefined4 DAT_801c31f8 = 0;
@@ -833,4 +776,44 @@ undefined4 DAT_800f85ac = 0;
 undefined4 DAT_800bf4a8 = 0;
 undefined4 DAT_80129860 = 0;
 undefined4 DAT_80129830 = 0;
-undefined DAT_80129850[16] = {0};  // Array used in arcade functions (size estimated from usage)
+undefined4 DAT_80129850 = 0;
+undefined4 DAT_ = 0;
+undefined4 DAT_0000df80 = 0;
+undefined4 DAT_0000dffc = 0;
+bitfield_16_t DAT_1f800004 = {0};
+bitfield_16_t DAT_1f800008 = {0};
+bitfield_16_t DAT_1f800010 = {0};
+undefined4 DAT_1f800018 = 0;
+undefined4 DAT_1f80001c = 0;
+undefined4 DAT_1f800020 = 0;
+undefined4 DAT_1f800024 = 0;
+undefined4 DAT_1f800028 = 0;
+undefined4 DAT_1f800074_a = 0;
+undefined4 DAT_1f800080_a = 0;
+undefined4 DAT_1f80008c_a = 0;
+undefined4 DAT_1f800090 = 0;
+undefined4 DAT_1f800092 = 0;
+undefined4 DAT_1f800092_ba = 0;
+undefined4 DAT_1f800098_b16 = 0;
+undefined4 DAT_1f80009c = 0;
+undefined4 DAT_1f8000a8_b16 = 0;
+undefined4 DAT_1f8000ac_b16 = 0;
+undefined4 DAT_1f8000b8_b16 = 0;
+undefined4 DAT_1f8000bc_b16 = 0;
+undefined4 DAT_1f8000c8_b16 = 0;
+undefined4 DAT_1f8000cc_b16 = 0;
+undefined4 DAT_1f8000da = 0;
+undefined4 DAT_1f8000dc_b16 = 0;
+undefined4 DAT_1f8000e0_ = 0;
+undefined4 DAT_1f8000f4_ = 0;
+undefined4 DAT_1f800364 = 0;
+undefined4 DAT_1f800365 = 0;
+undefined4 DAT_1f8003b0_b16 = 0;
+undefined4 DAT_80087128 = 0;
+undefined4 DAT_800903b4 = 0;
+undefined4 DAT_80090ad4 = 0;
+undefined4 DAT_80091a70 = 0;
+undefined4 DAT_80091e80 = 0;
+undefined4 DAT_800921b4 = 0;
+undefined4 DAT_80093124 = 0;
+void *PTR_s_tahiti_t_rev_arcade__800502f0_arcade__80051184 = NULL;

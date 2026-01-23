@@ -12,7 +12,7 @@ void FUN_overlay0__8001882c(int param_1);
 
 // External variables and labels
 extern void LAB_overlay0__8002f4f8(void);
-extern undefined4 DAT_801d58b6;
+extern undefined DAT_801d58b6;
 extern undefined4 DAT_800a951c;
 extern void LAB_overlay0__8002f000(void);
 extern undefined1 UNK_801d58e8[];

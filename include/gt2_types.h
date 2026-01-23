@@ -1,13 +1,14 @@
 #ifndef GT2_TYPES_H
 #define GT2_TYPES_H
 
+#include <psyz.h> // For byte typedef
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
 
 // Basic type definitions for PS1 compatibility
 typedef unsigned char   undefined;
-typedef unsigned char   byte;
+typedef uint8_t         byte;
 typedef unsigned int    dword;
 typedef unsigned char   uchar;
 typedef unsigned long   ulong;
@@ -101,6 +102,11 @@ typedef func f;  // Alias for compatibility with decompiled code
 typedef void (*code)(void);  // Code pointer type used in decompiled code
 typedef uint (*code_uint)(void);  // Code pointer type that returns uint
 
+// Additional function pointer types for part_009
+typedef void (*code_int_ptr)(int, void *);
+typedef int (*code_int_ret)(void);
+typedef int (*code_vsync_callback)(int, void (**)(void));
+
 // Function pointer type for callbacks with variable arguments
 // Used for function pointers stored in structures that can be called with 1-3 arguments
 typedef int (*code_varargs)(int, void*, int);  // Variable argument function pointer type
@@ -108,15 +114,20 @@ typedef int (*code_varargs)(int, void*, int);  // Variable argument function poi
 // Anonymous structure types for Ghidra decompiled code
 // These represent structures with bitfield access patterns
 typedef struct {
-    unsigned char _0_1_ : 1;
-    unsigned char _1_1_ : 1;
-    unsigned char _2_1_ : 1;
-    unsigned char _3_1_ : 1;
-    unsigned char _4_1_ : 1;
-    unsigned char _5_1_ : 1;
-    unsigned char _6_1_ : 1;
-    unsigned char _7_1_ : 1;
+    unsigned char _0_1_;
+    unsigned char _1_1_;
+    unsigned char _2_1_;
+    unsigned char _3_1_;
+    unsigned char _4_1_;
+    unsigned char _5_1_;
+    unsigned char _6_1_;
+    unsigned char _7_1_;
 } bitfield_8_t;
+
+typedef union {
+    bitfield_8_t bytes;
+    undefined4 value;
+} bitfield_8_union_t;
 
 typedef struct {
     unsigned short _0_2_ : 16;
