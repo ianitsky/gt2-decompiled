@@ -1,5 +1,6 @@
 #include "gt2_global_vars_clean.h"
 #include <string.h>
+#include <stdlib.h>
 
 // Definitions of global variables used in the decompiled code
 // These are initialized to zero by default
@@ -73,7 +74,9 @@ undefined4 DAT_801c9916 = 0;
 undefined4 DAT_801c9968 = 0;
 // Data arrays and buffers
 undefined4 DAT_800a97d0 = 0;
-undefined4 DAT_800a8d5c = 0;
+void *DAT_800a8d5c = NULL;
+void *DAT_800a7b7c = NULL;
+int DAT_800a7b7c_initialized = 0;
 undefined4 DAT_800a97f0 = 0;
 undefined4 DAT_800b57d0 = 0;
 undefined4 DAT_801357d0 = 0;
@@ -179,6 +182,7 @@ bitfield_16_t TMR_SYSCLOCK_MAX = {0};
 bitfield_16_t TMR_SYSCLOCK_MODE = {0};
 undefined2 TMR_DOTCLOCK_VAL = 0;
 uint TMR_HRETRACE_VAL = 0;
+uint TMR_HRETRACE_MODE = 0;  // Added - needed by startIntrVSync()
 undefined2 TMR_SYSCLOCK_VAL = 0;
 // String/pointer constants (initialized as NULL for now)
 char *PTR_s___carcolor_8009118c = NULL;
@@ -623,7 +627,7 @@ undefined4 DAT_801c93fc = 0;  // Data
 undefined4 DAT_801c93fe = 0;  // Data
 undefined4 DAT_801f0ce0 = 0;  // Data
 undefined4 DAT_801f0cf0 = 0;  // Data
-undefined4 DMA_DPCR = 0;  // DMA register
+uint DMA_DPCR = 0;  // DMA register
 undefined4 SOUND_RAM_DATA_TRANSTER_CTRL = 0;  // Sound register (typo in original)
 undefined4 EXT_VOL_L = 0;  // External volume left
 undefined4 EXT_VOL_R = 0;  // External volume right
@@ -706,7 +710,14 @@ uint CURR_MAIN_VOL_R = 0;
 uint COMMON_DELAY = 0;
 // Interrupt and timer related variables (used in scus_944.88_part_009.c)
 undefined4 DAT_800a7bae = 0;
-undefined4 DAT_800a8c78 = 0;
+undefined4 DAT_800a8c14 = 0;  // Interrupt related
+undefined4 DAT_800a8c34 = 0;  // Interrupt related
+undefined4 DAT_800a8c38 = 0;  // Interrupt related
+undefined4 DAT_800a8c44[8] = {0};  // Interrupt related VSync callback table
+undefined4 DAT_800a8c64 = 0;  // Interrupt related (VSync)
+undefined4 DAT_800a8c78[8] = {0};  // DMA callback table
+code *DAT_800a8be8 = NULL;  // DMA interrupt callback
+code_vsync_callback DAT_800a8bf8 = NULL;  // VSync callback
 uint DMA_DICR = 0;
 uint DMA_MDEC_IN_MADR = 0;
 undefined4 DAT_800a8ca4 = 0;
@@ -721,8 +732,10 @@ code *DAT_801c9894 = NULL;
 uint JOY_MCD_CTRL = 0;
 uint _I_MASK = 0;
 uint _I_STAT = 0;
+uint I_MASK = 0;
+uint I_STAT = 0;
 code LAB_000000c0 = NULL;
-code_int_ret LAB_000000a0 = NULL;
+
 undefined4 DAT_800a8cb8 = 0;
 undefined4 DAT_800a8cbc = 0;
 undefined4 DAT_801c9898 = 0;
@@ -817,3 +830,10 @@ undefined4 DAT_80091e80 = 0;
 undefined4 DAT_800921b4 = 0;
 undefined4 DAT_80093124 = 0;
 void *PTR_s_tahiti_t_rev_arcade__800502f0_arcade__80051184 = NULL;
+undefined4 DAT_800a7bb4 = 0;  // Context buffer for interrupt handling
+undefined4 DAT_800a7bb8 = 0;  // Callback address for interrupt handling
+undefined4 DAT_800a7bac = 0;  // Interrupt mask variable
+undefined4 DAT_800a7b80 = 0;  // Interrupt callback storage
+undefined4 DAT_800a7bb0 = 0;  // DMA_DPCR backup
+undefined4 DAT_800a7b14 = 0;  // Interrupt related
+undefined4 DAT_800a7b7e = 0;  // Interrupt related

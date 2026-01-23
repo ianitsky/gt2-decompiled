@@ -179,6 +179,7 @@ void VSYNC_OBJ_178(int targetFrame,int timeoutValue);
 void VSYNC_OBJ_200(void);
 int VSYNC_OBJ_A4(void);
 void VSyncCallbacks(void);
+void simulate_vsync_frames(int frames);
 void _exit(void);
 void _patch_gte(void);
 void _patch_pad(void);

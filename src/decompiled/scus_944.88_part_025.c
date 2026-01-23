@@ -67,7 +67,7 @@ extern undefined4 DAT_801727ea;
 extern undefined4 DAT_801727ec;
 extern undefined4 DAT_801d585c;
 extern undefined4 DAT_801d5fa0;
-extern undefined4 DAT_800a8d5c;
+extern void *DAT_800a8d5c;
 extern undefined4 DAT_801f068c;
 extern undefined4 DAT_801c93cc;
 extern undefined4 DAT_801f0531;

@@ -4,11 +4,15 @@
 #include "scus_944.88_part_009.h"
 #include "scus_944.88_part_006.h"
 #include "ps1_stubs.h"
+#include <SDL3/SDL.h>
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+
+// VSync callback implementation for Linux
+static void (*vsync_callback)(void) = NULL;
 
 // Suppress pedantic warnings for object pointer to function pointer conversions
 // This is necessary for PS1 code that stores function pointers in data structures
@@ -86,7 +90,6 @@ extern undefined4 DAT_801c9868;
 extern code_int_ret SUB_000000b0;
 extern undefined4 PATCHGTE_OBJ_AC;
 extern undefined4 PATCHGTE_OBJ_C4;
-extern code_int_ret LAB_000000a0;
 extern code LAB_000000c0;
 extern undefined4 DAT_800a8cb8;
 extern undefined4 DAT_800a8cbc;
@@ -143,7 +146,6 @@ extern undefined4 DAT_800a7b7e;
 extern uint I_MASK;
 extern uint I_STAT;
 extern undefined2 *INTR_OBJ_194(void);
-extern undefined4 DAT_800a7b7c;
 extern undefined4 DAT_800a7bb4;
 extern undefined4 DAT_800a7bb8;
 extern undefined4 LAB_800a8b94;
@@ -158,8 +160,6 @@ extern undefined4 DAT_800a7bb0;
 extern undefined4 DAT_800a8c34;
 extern undefined4 DAT_800a8c38;
 extern undefined4 DAT_800a8c64;
-extern undefined4 DAT_800a8c44;
-extern undefined4 DAT_800a8c78;
 extern uint DMA_DPCR;
 extern uint DMA_DICR;
 extern uint DMA_MDEC_IN_MADR;
@@ -550,10 +550,9 @@ void DMACallback(void)
 int VSyncCallback(f *f)
 
 {
-  int iVar1;
-
-  iVar1 = (*DAT_800a8bf8)(4,f);
-  return iVar1;
+  // Store the callback for simulation
+  vsync_callback = (void (*)(void))f;
+  return 0; // Stub return
 }
 
 void VSyncCallbacks(void)
@@ -565,6 +564,15 @@ void VSyncCallbacks(void)
     (*DAT_800a8bf8)(0, NULL);
   }
   return;
+}
+
+// Simulate VSync frames for Linux compatibility
+void simulate_vsync_frames(int frames) {
+    for(int i = 0; i < frames; i++) {
+        if(vsync_callback) vsync_callback();
+        // Wait ~16.67ms (60 FPS) using SDL
+        SDL_WaitEventTimeout(NULL, 16);
+    }
 }
 
 int StopCallback(void)
@@ -1030,8 +1038,8 @@ void INTR_VB_OBJ_C4(int callbackIndex,int callbackFunction)
 
 {
 
-  if (callbackFunction != (int)(uintptr_t)(&DAT_800a8c44)[callbackIndex]) {
-    (&DAT_800a8c44)[callbackIndex] = (undefined4)(uintptr_t)callbackFunction;
+  if (callbackFunction != (int)(uintptr_t)DAT_800a8c44[callbackIndex]) {
+    DAT_800a8c44[callbackIndex] = (undefined4)(uintptr_t)callbackFunction;
   }
   return;
 }
