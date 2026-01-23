@@ -28,6 +28,8 @@ GT2/_decompiled/
 │   ├── decompiled/            # Decompiled source files
 │   │   ├── scus_944.88_part_001.c through part_025.c
 │   │   └── gt2_global_vars.c  # Global variable definitions
+│   ├── external/              # DO NOT MODIFY (see "Rule: Never Alter src/external")
+│   │   └── psyz/              # psyz + SDL3 (read-only)
 │   ├── platform/              # Platform-specific code
 │   │   ├── linux_main.c       # Linux entry point
 │   │   └── ps1_stubs.c        # PS1 stub implementations
@@ -157,6 +159,47 @@ When fixing compilation errors:
 - CMake 3.20+
 - GCC or Clang with C11 support
 - Standard C library
+- **SDL3**: Used for window/OpenGL and audio; provided by the psyz submodule under `src/external/psyz`. The project always uses SDL3 (not SDL2).
+
+## Rule: Never Alter `src/external`
+
+**Do not modify any file or directory under `src/external`.**
+
+### What it means
+
+- No edits, patches, or deletions inside `src/external/`.
+- No new files added under `src/external/`.
+- Code in `src/external/` is treated as read-only third-party code.
+
+### Why
+
+- **External ownership**: Contents are submodules or vendored projects (e.g. psyz, SDL3) maintained elsewhere. Changes would be overwritten on update and are hard to track.
+- **Reproducibility**: Keeping externals untouched makes builds and diffs predictable and avoids accidental breakage.
+- **Upstream compatibility**: Easing future updates and reducing merge conflicts.
+
+### What lives there
+
+- **`src/external/psyz/`**: psyz library and its dependency SDL3 (e.g. `psyz/psyz/`, `psyz/external/SDL/`). Used for PS1 runtime support and SDL3 (video/audio/input).
+
+### What to do instead
+
+- **Use, don’t change**: Use headers, libraries, and CMake targets (e.g. `SDL3::SDL3`, `psyz`) from `src/external/` without editing their sources.
+- **Project code**: Put all project-specific logic in `src/platform/`, `src/decompiled/`, `include/`, or other directories outside `src/external/`.
+- **Build wiring**: Configure use of externals only in project CMake files that live *outside* `src/external/` (e.g. root `CMakeLists.txt`, `src/CMakeLists.txt`): include dirs, `target_link_libraries`, subdirectory order, options. Do not change CMake or source files inside `src/external/`.
+- **If you need different behavior**: Prefer wrappers or glue code in `src/platform/` (or similar) that call into the external APIs, rather than patching the external tree.
+
+### Summary
+
+| Allowed | Not allowed |
+|--------|-------------|
+| Including headers from `src/external/` | Editing any file under `src/external/` |
+| Linking to targets (e.g. `SDL3::SDL3`, `psyz`) | Adding or removing files under `src/external/` |
+| Configuring build from *outside* `src/external/` | Patching or “fixing” code inside `src/external/` |
+
+## Project Rules
+
+- **Never alter anything inside `src/external`**: See the section “Rule: Never Alter `src/external`” above.
+- **Always use SDL3**: Use SDL3 for platform code (e.g. `#include <SDL3/SDL.h>`). Do not switch to SDL2.
 
 ## Notes
 

@@ -31,6 +31,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src/external/psyz/psyz/include)
-# Add subdirectories
-add_subdirectory(src)
+# Add subdirectories: psyz (and SDL3) first so SDL3::SDL3 is available when src is configured
 add_subdirectory(src/external/psyz/psyz)
+add_subdirectory(src)
