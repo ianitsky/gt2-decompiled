@@ -51,6 +51,7 @@ target_link_libraries(gt2_executable
     PRIVATE
         gt2_decompiled
         gt2_platform
+        psyz
 )
 
 # Set output name

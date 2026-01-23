@@ -21,10 +21,10 @@ set(CMAKE_C_FLAGS_RELWITHDEBINFO "-Wall -Wextra -Wpedantic -O2 -g -DNDEBUG")
 set(CMAKE_C_FLAGS_MINSIZEREL "-Wall -Wextra -Wpedantic -Os -DNDEBUG")
 
 # Additional warning flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-variable -Wunused-function -Wstrict-prototypes -Wmissing-prototypes")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused-variable -Wunused-function -Wstrict-prototypes -Wmissing-prototypes -D__psyz")
 
 # Include directories
-include_directories(${CMAKE_SOURCE_DIR}/include)
-
+include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src/external/psyz/include)
 # Add subdirectories
 add_subdirectory(src)
+add_subdirectory(src/external/psyz/psyz)

@@ -1,6 +1,7 @@
 #ifndef PS1_STUBS_H
 #define PS1_STUBS_H
 
+#include <psyz.h> // PSY-Z integration - must be first
 #include "gt2_types.h"
 #include <stdio.h>
 
