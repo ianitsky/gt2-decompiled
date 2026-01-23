@@ -38,6 +38,49 @@ The executable will be created as `build/src/gt2_executable` (or `gt2`).
 - `src/platform/` - Platform-specific code (Linux entry point, PS1 stubs)
 - `build/` - Build directory (gitignored)
 
+## Debugging
+
+The project is configured for debugging with VS Code and GDB:
+
+### VS Code Setup
+
+1. **Open in VS Code:**
+   ```bash
+   code .
+   ```
+
+2. **Debug with Build:**
+   - Press F5 or go to Run → Start Debugging
+   - Select "Debug GT2 (Build + Debug)" - this will build and debug automatically
+
+3. **Debug Existing Build:**
+   - Select "Debug GT2 (Debug Only)" - this debugs without rebuilding
+
+### Manual Debugging
+
+1. **Build in Debug mode:**
+   ```bash
+   cd build
+   cmake .. -DCMAKE_BUILD_TYPE=Debug
+   make -j$(nproc)
+   ```
+
+2. **Debug with GDB directly:**
+   ```bash
+   gdb ./build/src/gt2
+   (gdb) run
+   ```
+
+### VS Code Tasks
+
+Available tasks (Ctrl+Shift+P → "Tasks: Run Task"):
+- `build-all`: Configure CMake and build (default build task)
+- `configure`: Configure CMake for Debug build
+- `build`: Build without configuring
+- `clean`: Clean build files
+
+**Note:** The decompiled code may contain segmentation faults or other issues. Use debugging to identify and fix problems in the reverse-engineered code.
+
 ## Notes
 
 - The code is decompiled and may contain bugs or incorrect variable names
