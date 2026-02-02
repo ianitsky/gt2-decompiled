@@ -49,7 +49,7 @@ extern uint CDROM_REG2;
 extern uint CDROM_REG3;
 extern uint CURR_MAIN_VOL_L;
 extern uint CURR_MAIN_VOL_R;
-extern uint SPU_MAIN_VOL_L;
+/* SPU_MAIN_VOL_L is macro (spu_voice_register_block[48]) in gt2_global_vars_clean.h */
 extern uint SPU_MAIN_VOL_R;
 extern uint CD_VOL_L;
 extern uint CD_VOL_R;

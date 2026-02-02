@@ -135,8 +135,21 @@ extern undefined4 LAB_80092ed8;
 extern undefined4 LAB_80092ed8_2;
 extern undefined4 LAB_80092edc;
 extern undefined4 LAB_80092edc_2;
-extern undefined4 VOICE_00_LEFT_RIGHT;
-extern undefined4 SPU_MAIN_VOL_L;
+/* Contiguous block for FUN_8007f848 loop (PS1 SPU registers); loop steps by 4 dwords. */
+#define SPU_VOICE_REGISTER_BLOCK_SIZE 49
+extern undefined4 spu_voice_register_block[SPU_VOICE_REGISTER_BLOCK_SIZE];
+#define VOICE_00_LEFT_RIGHT (spu_voice_register_block[0])
+#define DAT_800900b8 (spu_voice_register_block[1])
+#define DAT_801efe64 (spu_voice_register_block[2])
+#define DAT_801efe66 (spu_voice_register_block[3])
+/* index 4 is padding (zeroed by FUN_8007f848); DAT_801f0230 is separate - see below */
+#define DAT_801f0234 (spu_voice_register_block[5])
+#define DAT_801f0236 (spu_voice_register_block[6])
+#define DAT_801f023c (spu_voice_register_block[7])
+#define DAT_801f0262 (spu_voice_register_block[8])
+#define DAT_801f0263 (spu_voice_register_block[9])
+#define DAT_80093072 (spu_voice_register_block[10])
+#define SPU_MAIN_VOL_L (spu_voice_register_block[48])
 extern undefined4 SPU_MAIN_VOL_R;
 extern undefined4 SPU_REVERB_OUT_L;
 extern undefined4 SPU_REVERB_OUT_R;
@@ -215,7 +228,7 @@ extern uint CDROM_REG2;
 extern uint CDROM_REG3;
 extern uint CURR_MAIN_VOL_L;
 extern uint CURR_MAIN_VOL_R;
-extern uint SPU_MAIN_VOL_L;
+/* SPU_MAIN_VOL_L is macro into spu_voice_register_block[48] */
 extern uint SPU_MAIN_VOL_R;
 extern uint CD_VOL_L;
 extern uint CD_VOL_R;
@@ -464,11 +477,8 @@ extern undefined4 DAT_80092e80;
 extern undefined4 DAT_80092e84;
 extern undefined4 DAT_80092e88;
 extern undefined4 DAT_80092e8c;
-extern undefined4 DAT_800900b8;
 extern undefined4 *DAT_801f0230;
-extern undefined4 DAT_801f0234;
-extern undefined4 DAT_801f023c;
-extern undefined4 DAT_80093072;
+/* DAT_800900b8, DAT_801f0234, DAT_801f023c, DAT_80093072 are macros into spu_voice_register_block */
 extern undefined4 DAT_1f801dc0;
 extern undefined4 DAT_1f801dce;
 extern undefined4 DAT_801efe70[];
@@ -1355,8 +1365,7 @@ extern undefined4 DAT_801efe18;
 extern undefined4 DAT_801efe23;
 extern undefined4 DAT_801efe61;
 extern undefined4 DAT_801efe62;
-extern undefined4 DAT_801efe64;
-extern undefined4 DAT_801efe66;
+/* DAT_801efe64, DAT_801efe66 are macros into spu_voice_register_block */
 extern undefined DAT_801efe68[0x3c0];
 extern undefined DAT_801efe69[0x3c0];
 extern undefined DAT_801efe6b[0x3c0];
@@ -1365,9 +1374,7 @@ extern undefined DAT_801efe6d[0x3c0];
 extern undefined4 DAT_801efe6e;
 extern undefined4 DAT_801efe76;
 extern undefined DAT_801efe8c[0x3c0];
-extern undefined4 DAT_801f0236;
-extern undefined4 DAT_801f0262;
-extern undefined4 DAT_801f0263;
+/* DAT_801f0236, DAT_801f0262, DAT_801f0263 are macros into spu_voice_register_block */
 extern undefined4 DAT_801f0531;
 extern undefined4 DAT_801f0532;
 extern undefined4 DAT_801f0533;
