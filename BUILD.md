@@ -22,7 +22,36 @@ cmake ..
 make
 ```
 
-The executable will be created as `build/src/gt2_executable` (or `gt2`).
+The executable will be created as `build/gt2` (or `build/src/gt2`).
+
+### Running with a disk image (ISO / CUE)
+
+CD emulation is provided by PSY-Z. You can run the game with a disk image instead of a physical CD.
+
+**1. Image next to the executable**
+
+Place one of these in the same directory as the `gt2` binary:
+
+- `scus_944.88.cue` (and the referenced `.bin`), or `scus_944.88.iso`
+- `gt2.cue` / `gt2.iso`
+- `disk.cue` / `disk.iso`
+
+Then run:
+
+```bash
+./gt2
+```
+
+**2. Command line**
+
+```bash
+./gt2 -iso /path/to/scus_944.88.iso
+./gt2 -cue /path/to/scus_944.88.cue
+./gt2 -disk /path/to/disk.cue
+./gt2 /path/to/scus_944.88.cue
+```
+
+**Formats:** CUE+BIN (use a `.cue` that references your data file) or raw `.iso` (a temporary CUE is generated). For 2048-byte sector ISOs, use a CUE file.
 
 ### Build Types
 

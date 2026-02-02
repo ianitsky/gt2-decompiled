@@ -23,6 +23,7 @@ GT2/_decompiled/
 ├── include/                    # Public headers
 │   ├── gt2_types.h            # Common type definitions
 │   ├── gt2_global_vars_clean.h # Global variable declarations
+│   ├── disk_path.h            # Disk/ISO path resolution API
 │   ├── gte_impl.h             # GTE implementation API (internal)
 │   ├── gte_stubs.h            # GTE stub declarations (used by decompiled code)
 │   └── ps1_stubs.h            # PS1 function stubs
@@ -34,6 +35,7 @@ GT2/_decompiled/
 │   │   └── psyz/              # psyz + SDL3 (read-only)
 │   ├── platform/              # Platform-specific code
 │   │   ├── linux_main.c       # Linux entry point
+│   │   ├── disk_path.c        # Disk/ISO path resolution for PSY-Z
 │   │   ├── gte.c              # GTE software implementation (ported from Noah)
 │   │   ├── gte_stubs.c        # GTE wrappers calling gte.c
 │   │   └── ps1_stubs.c        # PS1 stub implementations
@@ -77,7 +79,38 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 
 ## Entry Point
 
-The entry point is `main()` in `src/platform/linux_main.c`, which calls the original `start()` function from `scus_944.88_part_001.c:2185`.
+The entry point is `main()` in `src/platform/linux_main.c`, which resolves the disk image path (CUE or ISO) for PSY-Z CD emulation, calls `Psyz_SetDiskPath()` when a path is found, then calls the original `start()` function from `scus_944.88_part_001.c:2185`.
+
+## Running with a disk image (ISO / CUE)
+
+CD emulation is provided by PSY-Z (`Psyz_SetDiskPath`). The game can use a disk image instead of a physical CD.
+
+**Ways to specify the disk:**
+
+1. **Command line**
+   - `./gt2 -iso /path/to/image.iso`
+   - `./gt2 -cue /path/to/image.cue`
+   - `./gt2 -disk /path/to/image.cue`
+   - `./gt2 /path/to/image.cue` (first positional argument)
+
+2. **Next to the executable**  
+   Place one of these in the same directory as the `gt2` binary (no arguments needed):
+   - `scus_944.88.cue` / `scus_944.88.iso`
+   - `gt2.cue` / `gt2.iso`
+   - `disk.cue` / `disk.iso`
+
+**Formats:**
+
+- **CUE + BIN**: Use a `.cue` file that references your `.bin` (or other) data file. PSY-Z expects CUE format.
+- **Raw ISO**: A single `.iso` file is supported; a temporary CUE is generated (single track MODE1/2352). For 2048-byte sector ISOs, use a CUE file that describes the layout instead.
+
+**Example (image next to executable):**
+
+```bash
+cp /path/to/your/scus_944.88.cue /path/to/build/
+cp /path/to/your/scus_944.88.bin /path/to/build/
+./gt2
+```
 
 ## Global Variables
 
@@ -94,7 +127,7 @@ When adding new global variables:
 ## PS1 Stubs
 
 PlayStation 1 specific functions are stubbed in `src/platform/ps1_stubs.c`:
-- CD-ROM functions (CdControl, CdInit, etc.)
+- CD-ROM: Implemented by the **psyz** library when a disk path is set via `Psyz_SetDiskPath()` (see "Running with a disk image" above). The executable links to `psyz`, which provides CdInit, CdControl, etc.
 - Pad/Controller functions (PadGetState, etc.)
 - Memory card functions
 - BIOS functions

@@ -3,10 +3,12 @@
 #include <string.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
+#include <psyz.h>
 #include "gt2_global_vars_clean.h"
 #include "gt2_types.h"
+#include "disk_path.h"
 
-// Forward declaration of start() function from decompiled code
+/* Forward declaration of start() function from decompiled code */
 extern undefined4 start(undefined4 param_1, undefined4 param_2);
 
 // Stub for HookEntryInt - PS1 exception handler setup  
@@ -81,19 +83,24 @@ int main(int argc, char *argv[]) {
     }
     fprintf(stderr, "Allocated buffer at %p for DAT_800a7b7c\n", DAT_800a7b7c);
     
-    // Initialize parameters for start() function
-    // On PS1, these would be passed from the BIOS
-    // For Linux, we use default values
+    /* Resolve disk image (CUE or ISO) for PSY-Z CD emulation; optional */
+    char disk_path[GT2_DISK_PATH_MAX];
+    int disk_rc = gt2_resolve_disk_path(argc, argv, disk_path, sizeof(disk_path));
+    if (disk_rc == 0) {
+        if (Psyz_SetDiskPath(disk_path) == 0) {
+            fprintf(stderr, "GT2: Using disk image: %s\n", disk_path);
+        } else {
+            fprintf(stderr, "GT2: Failed to set disk path: %s\n", disk_path);
+        }
+    } else if (disk_rc == -1) {
+        fprintf(stderr, "GT2: Disk path resolution failed\n");
+    }
+
+    /* Initialize parameters for start(); on PS1 these would come from BIOS */
     undefined4 param_1 = 0;
     undefined4 param_2 = 0;
-    
-    // Handle command line arguments if needed
-    if (argc > 1) {
-        // Could parse arguments here if needed
-        fprintf(stderr, "Note: Command line arguments are not yet fully supported\n");
-    }
-    
-    // Call the original start() function
+
+    /* Call the original start() function */
     undefined4 result = start(param_1, param_2);
     
     fprintf(stderr, "GT2 Linux Port - Exited with code: %u\n", (unsigned int)result);

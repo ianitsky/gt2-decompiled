@@ -5,6 +5,7 @@ list(APPEND DECOMPILED_SOURCES "decompiled/gt2_global_vars.c")
 # Platform-specific sources
 set(PLATFORM_SOURCES
     platform/linux_main.c
+    platform/disk_path.c
     platform/gte.c
     platform/ps1_stubs.c
     platform/gte_stubs.c

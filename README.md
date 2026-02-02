@@ -23,13 +23,48 @@ cmake ..
 make
 ```
 
-The executable will be created as `build/src/gt2_executable` (or `gt2`).
+The executable will be created as `build/gt2` (or `build/src/gt2` depending on your CMake setup).
 
 ### Requirements
 
 - CMake 3.20+
 - GCC or Clang with C11 support
 - Make or Ninja
+
+## Usage (disk image / ISO)
+
+The game uses PSY-Z for CD emulation. You can run it with a disk image (CUE or ISO) instead of a physical CD.
+
+### Option 1: Image next to the executable
+
+Place one of these files in the **same directory** as the `gt2` binary, then run without arguments:
+
+- `scus_944.88.cue` (and the `.bin` file it references), or `scus_944.88.iso`
+- `gt2.cue` / `gt2.iso`
+- `disk.cue` / `disk.iso`
+
+```bash
+cd build
+cp /path/to/your/scus_944.88.cue .
+cp /path/to/your/scus_944.88.bin .   # if using CUE+BIN
+./gt2
+```
+
+### Option 2: Command line
+
+Pass the image path explicitly:
+
+```bash
+./gt2 -iso /path/to/scus_944.88.iso
+./gt2 -cue /path/to/scus_944.88.cue
+./gt2 -disk /path/to/disk.cue
+./gt2 /path/to/scus_944.88.cue
+```
+
+### Formats
+
+- **CUE + BIN**: Use a `.cue` file that references your data file (e.g. `.bin`). PSY-Z expects CUE format.
+- **Raw ISO**: A single `.iso` file is supported; a temporary CUE (single track MODE1/2352) is created automatically. For 2048-byte sector ISOs, use a CUE file that describes the layout instead.
 
 ## Project Structure
 
