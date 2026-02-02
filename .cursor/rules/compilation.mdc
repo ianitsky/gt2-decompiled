@@ -23,6 +23,8 @@ GT2/_decompiled/
 ├── include/                    # Public headers
 │   ├── gt2_types.h            # Common type definitions
 │   ├── gt2_global_vars_clean.h # Global variable declarations
+│   ├── gte_impl.h             # GTE implementation API (internal)
+│   ├── gte_stubs.h            # GTE stub declarations (used by decompiled code)
 │   └── ps1_stubs.h            # PS1 function stubs
 ├── src/
 │   ├── decompiled/            # Decompiled source files
@@ -32,6 +34,8 @@ GT2/_decompiled/
 │   │   └── psyz/              # psyz + SDL3 (read-only)
 │   ├── platform/              # Platform-specific code
 │   │   ├── linux_main.c       # Linux entry point
+│   │   ├── gte.c              # GTE software implementation (ported from Noah)
+│   │   ├── gte_stubs.c        # GTE wrappers calling gte.c
 │   │   └── ps1_stubs.c        # PS1 stub implementations
 │   └── CMakeLists.txt         # Source build configuration
 └── build/                     # Build directory (gitignored)

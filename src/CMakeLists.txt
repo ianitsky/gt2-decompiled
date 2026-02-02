@@ -5,6 +5,7 @@ list(APPEND DECOMPILED_SOURCES "decompiled/gt2_global_vars.c")
 # Platform-specific sources
 set(PLATFORM_SOURCES
     platform/linux_main.c
+    platform/gte.c
     platform/ps1_stubs.c
     platform/gte_stubs.c
 )
@@ -19,6 +20,7 @@ target_include_directories(gt2_decompiled
         ${CMAKE_CURRENT_SOURCE_DIR}/decompiled
 )
 
+target_link_libraries(gt2_decompiled PRIVATE SDL3::SDL3)
 target_compile_features(gt2_decompiled PUBLIC c_std_11)
 
 # Create library for platform code
@@ -31,6 +33,7 @@ target_include_directories(gt2_platform
         ${CMAKE_CURRENT_SOURCE_DIR}/platform
 )
 
+target_link_libraries(gt2_platform PRIVATE SDL3::SDL3)
 target_compile_features(gt2_platform PUBLIC c_std_11)
 
 # Link platform library to decompiled library (for stubs)
