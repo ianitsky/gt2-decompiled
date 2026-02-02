@@ -11,7 +11,11 @@
 /* Forward declaration of start() function from decompiled code */
 extern undefined4 start(undefined4 param_1, undefined4 param_2);
 
-// Stub for HookEntryInt - PS1 exception handler setup  
+/* No-op for DMA callback so DMACallback() does not call NULL (Linux has no PS1 DMA) */
+static void dma_callback_noop(void) {}
+static code dma_callback_storage = (code)dma_callback_noop;
+
+/* Stub for HookEntryInt - PS1 exception handler setup */  
 // This is used to set up exception handlers for interrupts on PS1
 void HookEntryInt(uint32_t *contextBuffer) {
     if (contextBuffer != NULL) {
@@ -95,6 +99,9 @@ int main(int argc, char *argv[]) {
     } else if (disk_rc == -1) {
         fprintf(stderr, "GT2: Disk path resolution failed\n");
     }
+
+    /* Set DMA callback to no-op so DMACallback() does not segfault (no real DMA on Linux) */
+    DAT_800a8be8 = &dma_callback_storage;
 
     /* Initialize parameters for start(); on PS1 these would come from BIOS */
     undefined4 param_1 = 0;
