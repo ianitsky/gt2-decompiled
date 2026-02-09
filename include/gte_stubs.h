@@ -98,7 +98,7 @@ void halt_unimplemented(void);
 
 /* Coprocessor register access (used by decompiled code) */
 undefined4 getCopReg(undefined4 cop, undefined4 reg);
-void SUB_000000b0(void);
+void SUB_000000b0(void);  /* B0 vector for psyz; game uses gt2_b0_callback */
 void trap(void);
 void prefetch(void);
 void func_0x80410040(void);

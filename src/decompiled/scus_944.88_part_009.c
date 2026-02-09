@@ -87,7 +87,6 @@ extern undefined4 *PTR_s_NoIntr_800a78b0;
 extern undefined4 DAT_800a7ab4;
 extern undefined4 DAT_800a7b14;
 extern undefined4 DAT_801c9868;
-extern code_int_ret SUB_000000b0;
 extern undefined4 PATCHGTE_OBJ_AC;
 extern undefined4 PATCHGTE_OBJ_C4;
 extern code LAB_000000c0;
@@ -488,7 +487,7 @@ void _patch_gte(void)
 
   FUN_8008c918();
 
-  iVar1 = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  iVar1 = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   piVar2 = (int *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)iVar1 + 0x18)) + 0x28);
 
   piVar3 = (int *)&PATCHGTE_OBJ_AC;
@@ -1205,7 +1204,7 @@ long OpenEvent(ulong eventClass,long eventSpec,long eventMode,func *eventHandler
   (void)eventSpec;
   (void)eventMode;
   (void)eventHandler;
-  eventHandle = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  eventHandle = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   return eventHandle;
 }
 
@@ -1215,7 +1214,7 @@ long EnableEvent(long eventHandle)
   long operationResult;
 
   (void)eventHandle;
-  operationResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  operationResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   return operationResult;
 }
 
@@ -1234,7 +1233,7 @@ long CloseEvent(long eventHandle)
   long operationResult;
 
   (void)eventHandle;
-  operationResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  operationResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   return operationResult;
 }
 
@@ -1252,7 +1251,7 @@ long Krom2RawAdd(ulong kromAddress)
   long rawAddress;
 
   (void)kromAddress;
-  rawAddress = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  rawAddress = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   return rawAddress;
 }
 
@@ -1269,7 +1268,7 @@ void ChangeClearPAD(long clearMode)
 {
   (void)clearMode;
 
-  (*(code *)&SUB_000000b0)();
+  (*(code *)&gt2_b0_callback)();
   return;
 }
 
@@ -1403,7 +1402,7 @@ void DeliverEvent(ulong param_1,ulong param_2)
 {
   (void)param_1;
   (void)param_2;
-  (*(code *)(void *)(uintptr_t)&SUB_000000b0)();
+  (*(code *)(void *)(uintptr_t)&gt2_b0_callback)();
   return;
 }
 
@@ -1420,14 +1419,14 @@ void FUN_8008cc90(void)
 void ReturnFromException(void)
 
 {
-  (*(code *)&SUB_000000b0)();
+  (*(code *)&gt2_b0_callback)();
   return;
 }
 
 void ResetEntryInt(void)
 
 {
-  (*(code *)&SUB_000000b0)();
+  (*(code *)&gt2_b0_callback)();
   return;
 }
 
@@ -1441,7 +1440,7 @@ void _remove_ChgclrPAD(void)
 
   DAT_801c9878 = returnAddress;
   FUN_8008c918();
-  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   loopCounter = 9;
   dataPointer = (undefined4 *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x16c)) + 0x62c);
   do {
@@ -1479,7 +1478,7 @@ void _patch_pad(void)
 
   DAT_801c9888 = returnAddress;
   FUN_8008c918();
-  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   systemCallResult = *(int *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x16c);
   loopCounter = 0xb;
   DAT_801c9890 = (code *)(void *)(uintptr_t)(systemCallResult + 0x884);
@@ -1500,7 +1499,7 @@ void PAD_init2(undefined4 param_1, undefined4 param_2, undefined4 param_3, undef
   (void)param_2;
   (void)param_3;
   (void)param_4;
-  (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   return;
 }
 
@@ -1511,14 +1510,14 @@ void InitPAD2(char *param_1, long param_2, char *param_3, long param_4)
   (void)param_2;
   (void)param_3;
   (void)param_4;
-  (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   return;
 }
 
 void StartPAD2(void)
 
 {
-  (*(code *)(void *)(uintptr_t)&SUB_000000b0)();
+  (*(code *)(void *)(uintptr_t)&gt2_b0_callback)();
   return;
 }
 
@@ -2600,7 +2599,7 @@ void FUN_8008e00c(char *param_1)
 
 {
   (void)param_1;  // Parameter unused but required by call sites
-  (*(code_int_ret)(void *)(uintptr_t)&SUB_000000b0)();
+  (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
   return;
 }
 

@@ -892,7 +892,7 @@ long _card_read(long channelNumber, long blockNumber, uchar *buffer)
 {
   long readResult;
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   readResult = 0;
 
   return readResult;
@@ -903,7 +903,7 @@ long _card_write(long channelNumber, long blockNumber, uchar *buffer)
 {
   long writeResult;
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   writeResult = 0;
 
   return writeResult;
@@ -913,7 +913,7 @@ void InitCARD2(void)
 
 {
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
 
@@ -925,7 +925,7 @@ void _patch_card_info(void)
 
   DAT_801c9598 = returnAddress;
 
-  (*(code *)&SUB_000000b0)();
+  (*(code *)&gt2_b0_callback)();
   cardStructure = 0;
 
   *(undefined4 *)(*(int *)(cardStructure + 0x16c) + 0x1988) = 0;
@@ -945,7 +945,7 @@ void _patch_card(void)
 
   FUN_8008c918();
 
-  (*(code *)&SUB_000000b0)();
+  (*(code *)&gt2_b0_callback)();
   cardStructure = 0;
 
   _DAT_0000dffc = (undefined4 *)
@@ -974,7 +974,7 @@ void _patch_card2(void)
 
   FUN_8008c918();
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   cardStructure = 0;
   cardStructure = *(int *)(cardStructure + 0x16c);
 
@@ -1011,7 +1011,7 @@ void StartCARD2(void)
 
 {
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
 
@@ -1019,7 +1019,7 @@ void StopCARD2(void)
 
 {
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
 
@@ -1034,7 +1034,7 @@ void FUN_800870b8(void)
 
   FUN_8008c918();
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   cardStructure = 0;
   cardStructure = *(int *)(cardStructure + 0x18);
 
@@ -1054,7 +1054,7 @@ void _new_card(void)
 
 {
 
-  (*(code *)(void *)&SUB_000000b0)();
+  (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
 

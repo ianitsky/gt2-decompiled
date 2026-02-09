@@ -1427,7 +1427,8 @@ extern undefined4 PTR_DAT_800a7110;
 extern undefined4 LAB_80090a7c;
 extern undefined4 LAB_80090a4c;
 extern undefined4 LAB_80090a64;
-extern code_int_ret SUB_000000b0;
+/* Game uses this; SUB_000000b0 is a function (gte_stubs) for psyz. Read-only so nothing overwrites it with slot address. */
+extern const code_int_ret gt2_b0_callback;
 extern undefined4 *_DAT_0000dffc;
 extern undefined4 PATCH_OBJ_B4;
 extern undefined4 PATCH_OBJ_C8;

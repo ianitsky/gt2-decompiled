@@ -133,7 +133,7 @@ void setCopReg(int copNumber, undefined4 registerNumber, undefined4 value, undef
         gte_setCopReg(2, (int)registerNumber, (uint32_t)value);
 }
 
-void SUB_000000b0(void) { }
+void SUB_000000b0(void) { }  /* B0 vector for psyz; game uses gt2_b0_callback */
 void trap(void) { }
 void prefetch(void) { }
 void func_0x80410040(void) { }
