@@ -89,7 +89,10 @@ extern undefined4 DAT_800a7b14;
 extern undefined4 DAT_801c9868;
 extern undefined4 PATCHGTE_OBJ_AC;
 extern undefined4 PATCHGTE_OBJ_C4;
-extern code LAB_000000c0;
+/* C0 slot (LAB_000000c0) is overwritten by init/psyz; do not read or call through it. */
+static inline void invoke_LAB_000000c0_safe(void) {
+  /* no-op: original would call C0 vector; on Linux we skip to avoid SIGSEGV at 0x8310a0 */
+}
 extern undefined4 DAT_800a8cb8;
 extern undefined4 DAT_800a8cbc;
 extern undefined4 DAT_801c9898;
@@ -1375,7 +1378,7 @@ void SysDeqIntRP(int param_1, void *param_2)
 {
   (void)param_1;
   (void)param_2;
-  (*(code *)(void *)(uintptr_t)&LAB_000000c0)();
+  invoke_LAB_000000c0_safe();
   return;
 }
 
@@ -1384,7 +1387,7 @@ void SysEnqIntRP(int param_1, void *param_2)
 {
   (void)param_1;
   (void)param_2;
-  (*(code *)(void *)(uintptr_t)&LAB_000000c0)();
+  invoke_LAB_000000c0_safe();
   return;
 }
 
@@ -1393,7 +1396,7 @@ void ChangeClearRCnt(int param_1, int param_2)
 {
   (void)param_1;
   (void)param_2;
-  (*(code *)(void *)(uintptr_t)&LAB_000000c0)();
+  invoke_LAB_000000c0_safe();
   return;
 }
 

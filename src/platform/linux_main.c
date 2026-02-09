@@ -1,6 +1,10 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <signal.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
 #include <psyz.h>
@@ -14,6 +18,27 @@ extern undefined4 start(undefined4 param_1, undefined4 param_2);
 /* No-op for DMA callback so DMACallback() does not call NULL (Linux has no PS1 DMA) */
 static void dma_callback_noop(void) {}
 static code dma_callback_storage = (code)dma_callback_noop;
+
+/* #region agent log */
+static int g_debug_log_fd = -1;
+static void segv_handler(int sig, siginfo_t *si, void *uc) {
+    (void)uc;
+    if (g_debug_log_fd >= 0 && si && sig == SIGSEGV) {
+        const char msg[] = "{\"event\":\"SIGSEGV\",\"fault_addr\":\"0x";
+        write(g_debug_log_fd, msg, sizeof(msg) - 1);
+        uintptr_t a = (uintptr_t)si->si_addr;
+        char hex[20];
+        int i, n = 0;
+        for (i = 0; i < 16; i++) { hex[15 - i] = "0123456789abcdef"[a & 0xf]; a >>= 4; }
+        hex[16] = '\0';
+        for (i = 0; i < 16 && hex[i] == '0'; i++) n++;
+        write(g_debug_log_fd, hex + n, 16 - n);
+        write(g_debug_log_fd, "\"}\n", 3);
+    }
+    signal(sig, SIG_DFL);
+    raise(sig);
+}
+/* #endregion agent log */
 
 /* Stub for HookEntryInt - PS1 exception handler setup */  
 // This is used to set up exception handlers for interrupts on PS1

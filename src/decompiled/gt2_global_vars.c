@@ -4,6 +4,8 @@
 
 /* No-op for B0 vector; game calls (*(code *)&gt2_b0_callback)(). */
 static int gt2_b0_callback_noop(void) { return 0; }
+/* No-op for C0 vector; game calls (*(code *)&LAB_000000c0)(). */
+static void gt2_c0_callback_noop(void) { return; }
 
 // Definitions of global variables used in the decompiled code
 // These are initialized to zero by default
@@ -728,7 +730,7 @@ uint _I_MASK = 0;
 uint _I_STAT = 0;
 uint I_MASK = 0;
 uint I_STAT = 0;
-code LAB_000000c0 = NULL;
+code LAB_000000c0 = gt2_c0_callback_noop;
 const code_int_ret gt2_b0_callback = gt2_b0_callback_noop;
 
 undefined4 DAT_800a8cb8 = 0;
