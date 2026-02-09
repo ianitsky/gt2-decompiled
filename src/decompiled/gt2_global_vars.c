@@ -7,6 +7,10 @@ static int gt2_b0_callback_noop(void) { return 0; }
 /* No-op for C0 vector; game calls (*(code *)&LAB_000000c0)(). */
 static void gt2_c0_callback_noop(void) { return; }
 
+/* A0 vector: declared as function; game calls (*(code *)&LAB_000000a0)(). Without this,
+ * linker leaves it unresolved (--unresolved-symbols=ignore-all) and call jumps to 0 → SIGSEGV. */
+int LAB_000000a0(void) { return 0; }
+
 // Definitions of global variables used in the decompiled code
 // These are initialized to zero by default
 // Note: Many variables are defined here - this file will be expanded as needed
@@ -732,6 +736,21 @@ uint I_MASK = 0;
 uint I_STAT = 0;
 code LAB_000000c0 = gt2_c0_callback_noop;
 const code_int_ret gt2_b0_callback = gt2_b0_callback_noop;
+
+void gt2_restore_c0_noop(void) {
+  LAB_000000c0 = gt2_c0_callback_noop;
+}
+
+/* Linker provides __real_CdInit when linking with -Wl,--wrap=CdInit (psyz's CdInit). */
+extern int __real_CdInit(void);
+
+/* Wrapper linked in place of CdInit: restore C0 slot before/after so psyz code does not SIGSEGV at 0x82f0a0. */
+int __wrap_CdInit(void) {
+  gt2_restore_c0_noop();
+  int r = __real_CdInit();
+  gt2_restore_c0_noop();
+  return r;
+}
 
 undefined4 DAT_800a8cb8 = 0;
 undefined4 DAT_800a8cbc = 0;

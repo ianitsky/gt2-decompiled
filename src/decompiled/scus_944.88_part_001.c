@@ -644,32 +644,37 @@ void FUN_80010928(void)
 void FUN_80010954(void)
 
 {
-
+  gt2_restore_c0_noop();
   VSyncCallback(FUN_80010928);
-
   simulate_vsync_frames(4);
-
   VSyncCallback((f *)0x0);
-
   return;
 }
 
 void FUN_80010998(void)
 
 {
+  gt2_restore_c0_noop();  /* Before any init that might call through C0 slot */
   FUN_8005d9bc();
   ResetCallback();
   FUN_80010954();
-  CdInit();
+  gt2_restore_c0_noop();
+  CdInit();  /* Resolved to __wrap_CdInit by linker; wrapper restores C0 before/after __real_CdInit */
+  gt2_restore_c0_noop();
   FUN_8007f848();
+  gt2_restore_c0_noop();
   InitCARD(0);
+  gt2_restore_c0_noop();
   StartCARD();
+  gt2_restore_c0_noop();
   _bu_init();
+  gt2_restore_c0_noop();
   PadInitDirect(&DAT_801f0c98,&DAT_801f0cba);
   FUN_8007fe34();
   DecDCTReset(0);
   InitGeom();
   FUN_800108c0();
+  gt2_restore_c0_noop();
   return;
 }
 

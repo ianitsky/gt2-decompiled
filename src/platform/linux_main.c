@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/syscall.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_opengl.h>
 #include <psyz.h>
@@ -19,7 +20,7 @@ extern undefined4 start(undefined4 param_1, undefined4 param_2);
 static void dma_callback_noop(void) {}
 static code dma_callback_storage = (code)dma_callback_noop;
 
-/* #region agent log */
+/* #region agent log - use syscall(SYS_write) so handler is async-signal-safe and avoids psyz write macro */
 static int g_debug_log_fd = -1;
 static void segv_handler(int sig, siginfo_t *si, void *uc) {
     (void)uc;

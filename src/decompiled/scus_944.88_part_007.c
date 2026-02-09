@@ -470,6 +470,7 @@ void FUN_8007f848(void)
 {
   dword *voicePointer;
 
+  gt2_restore_c0_noop();
   DMA_DPCR = DMA_DPCR | 0xb0000;
   DMACallback();
   voicePointer = &VOICE_00_LEFT_RIGHT;

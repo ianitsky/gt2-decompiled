@@ -804,6 +804,7 @@ void InitCARD(long initValue)
   int interruptStatus;
   int padInitFlag;
 
+  gt2_restore_c0_noop();
   ChangeClearPAD(0);
   VSync(0);
 

@@ -248,6 +248,7 @@ extern uint JOY_MCD_CTRL;
 extern uint _I_MASK;
 extern uint _I_STAT;
 extern code LAB_000000c0;
+void gt2_restore_c0_noop(void);  /* Restore C0 slot to no-op (avoids SIGSEGV when our code calls through it) */
 // Function pointer type that returns int: int (*)(void)
 typedef int (*code_int_ret)(void);
 int LAB_000000a0(void);

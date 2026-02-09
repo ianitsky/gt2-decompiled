@@ -59,5 +59,8 @@ target_link_libraries(gt2_executable
         psyz
 )
 
+# Wrap CdInit so our __wrap_CdInit runs (restore C0 slot before/after) and calls psyz's CdInit as __real_CdInit
+target_link_options(gt2_executable PRIVATE "LINKER:--wrap=CdInit")
+
 # Set output name
 set_target_properties(gt2_executable PROPERTIES OUTPUT_NAME "gt2")
