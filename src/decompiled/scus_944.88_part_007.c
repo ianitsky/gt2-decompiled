@@ -468,6 +468,11 @@ void FUN_8007f830(uint gpuConfig)
 void FUN_8007f848(void)
 
 {
+#if defined(__linux__)
+  /* Skip SPU/GPU/DMA register writes on Linux to avoid SIGSEGV (no real hardware). */
+  gt2_restore_c0_noop();
+  return;
+#else
   dword *voicePointer;
 
   gt2_restore_c0_noop();
@@ -496,6 +501,7 @@ void FUN_8007f848(void)
   SPU_VOICE_CHN_REVERB_MODE._2_2_ = 0;
   SPU_CTRL_REG_CPUCNT = 0xc001;
   return;
+#endif
 }
 
 void FUN_8007f924(void)

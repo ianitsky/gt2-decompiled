@@ -2149,7 +2149,10 @@ undefined4 start(undefined4 param_1,undefined4 param_2)
   undefined4 unaff_retaddr;
   undefined auStackX_0 [16];
 
+  gt2_init_slots();  /* Set B0/C0 slots before any use (avoids SIGSEGV at 0x45ccc8/0x45d240). */
   DAT_80091164 = 0;
+  /* Ensure interrupt init runs; BSS clear may not include DAT_800a7b7c on Linux. */
+  DAT_800a7b7c = 0;
   puVar1 = (undefined4 *)&DAT_801f0d60;
 
   DAT_8009113c = param_1;
@@ -2166,10 +2169,39 @@ undefined4 start(undefined4 param_1,undefined4 param_2)
   DAT_8009116c = unaff_s8;
   DAT_80091170 = unaff_retaddr;
 
-  do {
-    puVar1 = puVar1 + -1;
-    *puVar1 = 0;
-  } while (puVar1 != &DAT_801c93b0);
+  /* Clear memory from DAT_801f0d60 down to DAT_801c93b0. On Linux:
+     - Cap high at end_bound to avoid writing past BSS (SIGSEGV at 0x472000).
+     - Do not clear below _edata so we never overwrite .data (e.g. gt2_b0_callback at 0x45ccc8, LAB_000000c0 at 0x45d240). */
+  {
+    extern char _end[];
+    extern char _edata[];
+    undefined4 *low = &DAT_801c93b0;
+    undefined4 *high = (undefined4 *)&DAT_801f0d60;
+    const uintptr_t end_bound = ((uintptr_t)_end + 0xfff) & ~(uintptr_t)0xfff;
+    const uintptr_t edata_bound = ((uintptr_t)_edata + 3) & ~(uintptr_t)3;
+    if ((uintptr_t)low < edata_bound)
+      low = (undefined4 *)edata_bound;
+    if ((uintptr_t)high > (uintptr_t)low) {
+      if ((uintptr_t)(high - 1) <= end_bound) {
+        puVar1 = high;
+        do {
+          puVar1 = puVar1 + -1;
+          *puVar1 = 0;
+        } while (puVar1 != low);
+      } else {
+        puVar1 = (undefined4 *)(end_bound);
+        if ((uintptr_t)puVar1 > (uintptr_t)low) {
+          do {
+            puVar1 = puVar1 + -1;
+            *puVar1 = 0;
+          } while (puVar1 != low);
+        }
+      }
+    }
+  }
+
+  /* Restore B0/C0 slots after BSS clear (clear may have zeroed them or they may be in cleared range). */
+  gt2_init_slots();
 
   FUN_8008ce08();
 

@@ -893,6 +893,7 @@ long _card_read(long channelNumber, long blockNumber, uchar *buffer)
 {
   long readResult;
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   readResult = 0;
 
@@ -904,6 +905,7 @@ long _card_write(long channelNumber, long blockNumber, uchar *buffer)
 {
   long writeResult;
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   writeResult = 0;
 
@@ -914,6 +916,7 @@ void InitCARD2(void)
 
 {
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
@@ -926,6 +929,7 @@ void _patch_card_info(void)
 
   DAT_801c9598 = returnAddress;
 
+  gt2_restore_c0_noop();
   (*(code *)&gt2_b0_callback)();
   cardStructure = 0;
 
@@ -946,6 +950,7 @@ void _patch_card(void)
 
   FUN_8008c918();
 
+  gt2_restore_c0_noop();
   (*(code *)&gt2_b0_callback)();
   cardStructure = 0;
 
@@ -975,6 +980,7 @@ void _patch_card2(void)
 
   FUN_8008c918();
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   cardStructure = 0;
   cardStructure = *(int *)(cardStructure + 0x16c);
@@ -1012,6 +1018,7 @@ void StartCARD2(void)
 
 {
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
@@ -1020,6 +1027,7 @@ void StopCARD2(void)
 
 {
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
@@ -1035,6 +1043,7 @@ void FUN_800870b8(void)
 
   FUN_8008c918();
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   cardStructure = 0;
   cardStructure = *(int *)(cardStructure + 0x18);
@@ -1055,6 +1064,7 @@ void _new_card(void)
 
 {
 
+  gt2_restore_c0_noop();
   (*(code *)(void *)&gt2_b0_callback)();
   return;
 }

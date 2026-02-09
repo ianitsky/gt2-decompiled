@@ -249,6 +249,7 @@ extern uint _I_MASK;
 extern uint _I_STAT;
 extern code LAB_000000c0;
 void gt2_restore_c0_noop(void);  /* Restore C0 slot to no-op (avoids SIGSEGV when our code calls through it) */
+void gt2_init_slots(void);       /* Set B0/C0 slots to no-ops (call at start of start() to avoid SIGSEGV at 0x45ccc8/0x45d240) */
 // Function pointer type that returns int: int (*)(void)
 typedef int (*code_int_ret)(void);
 int LAB_000000a0(void);
@@ -1428,8 +1429,8 @@ extern undefined4 PTR_DAT_800a7110;
 extern undefined4 LAB_80090a7c;
 extern undefined4 LAB_80090a4c;
 extern undefined4 LAB_80090a64;
-/* Game uses this; SUB_000000b0 is a function (gte_stubs) for psyz. Read-only so nothing overwrites it with slot address. */
-extern const code_int_ret gt2_b0_callback;
+/* B0 slot: game calls (*(code *)&gt2_b0_callback)(). Must be writable (.data) to avoid SIGSEGV at 0x45ccc8. */
+extern code_int_ret gt2_b0_callback;
 extern undefined4 *_DAT_0000dffc;
 extern undefined4 PATCH_OBJ_B4;
 extern undefined4 PATCH_OBJ_C8;

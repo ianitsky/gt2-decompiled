@@ -26,15 +26,15 @@ static void segv_handler(int sig, siginfo_t *si, void *uc) {
     (void)uc;
     if (g_debug_log_fd >= 0 && si && sig == SIGSEGV) {
         const char msg[] = "{\"event\":\"SIGSEGV\",\"fault_addr\":\"0x";
-        write(g_debug_log_fd, msg, sizeof(msg) - 1);
+        syscall(SYS_write, g_debug_log_fd, msg, sizeof(msg) - 1);
         uintptr_t a = (uintptr_t)si->si_addr;
         char hex[20];
         int i, n = 0;
         for (i = 0; i < 16; i++) { hex[15 - i] = "0123456789abcdef"[a & 0xf]; a >>= 4; }
         hex[16] = '\0';
         for (i = 0; i < 16 && hex[i] == '0'; i++) n++;
-        write(g_debug_log_fd, hex + n, 16 - n);
-        write(g_debug_log_fd, "\"}\n", 3);
+        syscall(SYS_write, g_debug_log_fd, hex + n, 16 - n);
+        syscall(SYS_write, g_debug_log_fd, "\"}\n", 3);
     }
     signal(sig, SIG_DFL);
     raise(sig);
@@ -52,6 +52,23 @@ void HookEntryInt(uint32_t *contextBuffer) {
 }
 
 int main(int argc, char *argv[]) {
+    /* Set B0/C0 slots before any other code (avoids SIGSEGV at 0x45ccc8/0x45d240). */
+    gt2_init_slots();
+
+    /* Open SIGSEGV log and register handler to capture fault address */
+    {
+        char path[64];
+        snprintf(path, sizeof(path), "/tmp/gt2_segv.log");
+        FILE *logf = fopen(path, "a");
+        if (logf) {
+            g_debug_log_fd = fileno(logf);
+            struct sigaction sa = {0};
+            sa.sa_sigaction = segv_handler;
+            sigfillset(&sa.sa_mask);
+            sa.sa_flags = SA_SIGINFO;
+            sigaction(SIGSEGV, &sa, NULL);
+        }
+    }
     fprintf(stderr, "GT2 Linux Port - Starting...\n");
     fprintf(stderr, "Arguments: %d\n", argc);
     

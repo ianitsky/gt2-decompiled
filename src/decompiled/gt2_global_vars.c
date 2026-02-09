@@ -1,6 +1,10 @@
 #include "gt2_global_vars_clean.h"
 #include <string.h>
 #include <stdlib.h>
+#if defined(__linux__)
+#include <stdint.h>
+#include <sys/mman.h>
+#endif
 
 /* No-op for B0 vector; game calls (*(code *)&gt2_b0_callback)(). */
 static int gt2_b0_callback_noop(void) { return 0; }
@@ -734,11 +738,27 @@ uint _I_MASK = 0;
 uint _I_STAT = 0;
 uint I_MASK = 0;
 uint I_STAT = 0;
-code LAB_000000c0 = gt2_c0_callback_noop;
-const code_int_ret gt2_b0_callback = gt2_b0_callback_noop;
+/* C0/B0 slots in BSS so their pages are always writable (avoids SIGSEGV at 0x45ccc8/0x45d240). */
+code LAB_000000c0;
+code_int_ret gt2_b0_callback;
 
+/* Run before any other constructors/psyz so C0/B0 are never called with slot address. */
+static void gt2_early_init_slots(void) __attribute__((constructor(101)));
+static void gt2_early_init_slots(void) {
+  LAB_000000c0 = gt2_c0_callback_noop;
+  gt2_b0_callback = (code_int_ret)gt2_b0_callback_noop;
+}
+
+/* Ensure B0/C0 slots point to no-ops before any game code runs. */
+void gt2_init_slots(void) {
+  LAB_000000c0 = gt2_c0_callback_noop;
+  gt2_b0_callback = (code_int_ret)gt2_b0_callback_noop;
+}
+
+/* Restore both C0 and B0 slots so neither is called with slot address (avoids SIGSEGV at 0x45dd80/0x45dd88). */
 void gt2_restore_c0_noop(void) {
   LAB_000000c0 = gt2_c0_callback_noop;
+  gt2_b0_callback = (code_int_ret)gt2_b0_callback_noop;
 }
 
 /* Linker provides __real_CdInit when linking with -Wl,--wrap=CdInit (psyz's CdInit). */

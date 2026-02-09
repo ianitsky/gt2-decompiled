@@ -14,6 +14,12 @@
 // VSync callback implementation for Linux
 static void (*vsync_callback)(void) = NULL;
 
+#if defined(__linux__)
+/* No-op for DMA callback on Linux so DMACallback() (no-arg) does not call startIntrDMA() result
+   with garbage stack (→ callbackPointer at 0x472000 and SIGSEGV). */
+static void gt2_dma_callback_noop_fn(void) { return; }
+#endif
+
 // Suppress pedantic warnings for object pointer to function pointer conversions
 // This is necessary for PS1 code that stores function pointers in data structures
 #pragma GCC diagnostic push
@@ -92,6 +98,16 @@ extern undefined4 PATCHGTE_OBJ_C4;
 /* C0 slot (LAB_000000c0) is overwritten by init/psyz; do not read or call through it. */
 static inline void invoke_LAB_000000c0_safe(void) {
   /* no-op: original would call C0 vector; on Linux we skip to avoid SIGSEGV at 0x8310a0 */
+}
+
+/* Restore B0/C0 before calling so slot is never 0x45dd80 (avoids SIGSEGV). */
+static inline int invoke_b0_safe_int(void) {
+  gt2_restore_c0_noop();
+  return (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+}
+static inline void invoke_b0_safe_void(void) {
+  gt2_restore_c0_noop();
+  invoke_b0_safe_void();
 }
 extern undefined4 DAT_800a8cb8;
 extern undefined4 DAT_800a8cbc;
@@ -490,7 +506,7 @@ void _patch_gte(void)
 
   FUN_8008c918();
 
-  iVar1 = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  iVar1 = invoke_b0_safe_int();
   piVar2 = (int *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)iVar1 + 0x18)) + 0x28);
 
   piVar3 = (int *)&PATCHGTE_OBJ_AC;
@@ -570,11 +586,16 @@ void VSyncCallbacks(void)
 
 // Simulate VSync frames for Linux compatibility
 void simulate_vsync_frames(int frames) {
+#if defined(__linux__)
+    (void)frames;
+    /* During init, skip vsync callback and SDL wait to avoid crashes. */
+    return;
+#else
     for(int i = 0; i < frames; i++) {
         if(vsync_callback) vsync_callback();
-        // Wait ~16.67ms (60 FPS) using SDL
         SDL_WaitEventTimeout(NULL, 16);
     }
+#endif
 }
 
 int StopCallback(void)
@@ -644,7 +665,14 @@ undefined2 * INTR_OBJ_194(void)
     DAT_800a7b7c = 1;
 
     DAT_800a8bf8 = startIntrVSync();
+#if defined(__linux__)
+    /* On Linux, DMACallback() is invoked with no args; startIntrDMA() returns a setter that
+       expects (dmaChannel, callback). Calling it with stack garbage leads to callbackPointer
+       pointing at 0x472000 and SIGSEGV. Keep DMA callback as no-op. */
+    DAT_800a8be8 = (code *)(void *)(uintptr_t)gt2_dma_callback_noop_fn;
+#else
     DAT_800a8be8 = startIntrDMA();
+#endif
 
     FUN_8008cc90();
     puVar1 = (undefined2 *)&DAT_800a7b7c;
@@ -1207,7 +1235,7 @@ long OpenEvent(ulong eventClass,long eventSpec,long eventMode,func *eventHandler
   (void)eventSpec;
   (void)eventMode;
   (void)eventHandler;
-  eventHandle = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  eventHandle = invoke_b0_safe_int();
   return eventHandle;
 }
 
@@ -1217,16 +1245,16 @@ long EnableEvent(long eventHandle)
   long operationResult;
 
   (void)eventHandle;
-  operationResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  operationResult = invoke_b0_safe_int();
   return operationResult;
 }
 
 void FUN_8008c948(void)
 
 {
-
-  syscall(2);
-
+#if !defined(__linux__)
+  syscall(2);  /* PS1: unknown; on Linux syscall(2)=fork() would duplicate process */
+#endif
   return;
 }
 
@@ -1236,7 +1264,7 @@ long CloseEvent(long eventHandle)
   long operationResult;
 
   (void)eventHandle;
-  operationResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  operationResult = invoke_b0_safe_int();
   return operationResult;
 }
 
@@ -1254,7 +1282,7 @@ long Krom2RawAdd(ulong kromAddress)
   long rawAddress;
 
   (void)kromAddress;
-  rawAddress = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  rawAddress = invoke_b0_safe_int();
   return rawAddress;
 }
 
@@ -1271,7 +1299,7 @@ void ChangeClearPAD(long clearMode)
 {
   (void)clearMode;
 
-  (*(code *)&gt2_b0_callback)();
+  invoke_b0_safe_void();
   return;
 }
 
@@ -1405,7 +1433,7 @@ void DeliverEvent(ulong param_1,ulong param_2)
 {
   (void)param_1;
   (void)param_2;
-  (*(code *)(void *)(uintptr_t)&gt2_b0_callback)();
+  invoke_b0_safe_void();
   return;
 }
 
@@ -1422,14 +1450,14 @@ void FUN_8008cc90(void)
 void ReturnFromException(void)
 
 {
-  (*(code *)&gt2_b0_callback)();
+  invoke_b0_safe_void();
   return;
 }
 
 void ResetEntryInt(void)
 
 {
-  (*(code *)&gt2_b0_callback)();
+  invoke_b0_safe_void();
   return;
 }
 
@@ -1443,7 +1471,7 @@ void _remove_ChgclrPAD(void)
 
   DAT_801c9878 = returnAddress;
   FUN_8008c918();
-  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  systemCallResult = invoke_b0_safe_int();
   loopCounter = 9;
   dataPointer = (undefined4 *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x16c)) + 0x62c);
   do {
@@ -1456,19 +1484,24 @@ void _remove_ChgclrPAD(void)
   return;
 }
 
+/* No-op for EnablePAD/DisablePAD when B0 callback returns 0 (no PS1 pad BIOS). */
+static void pad_enable_disable_noop(void) { return; }
+
 void EnablePAD(void)
 
 {
-
-  (*DAT_801c9890)();
+  if (DAT_801c9890 != (code *)0x0) {
+    (*DAT_801c9890)();
+  }
   return;
 }
 
 void DisablePAD(void)
 
 {
-
-  (*DAT_801c9894)();
+  if (DAT_801c9894 != (code *)0x0) {
+    (*DAT_801c9894)();
+  }
   return;
 }
 
@@ -1481,7 +1514,13 @@ void _patch_pad(void)
 
   DAT_801c9888 = returnAddress;
   FUN_8008c918();
-  systemCallResult = (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  systemCallResult = invoke_b0_safe_int();
+  /* When B0 returns 0 (no PS1 BIOS), avoid dereferencing and use no-ops for EnablePAD/DisablePAD. */
+  if (systemCallResult == 0) {
+    DAT_801c9890 = (code *)(void *)(uintptr_t)pad_enable_disable_noop;
+    DAT_801c9894 = (code *)(void *)(uintptr_t)pad_enable_disable_noop;
+    return;
+  }
   systemCallResult = *(int *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x16c);
   loopCounter = 0xb;
   DAT_801c9890 = (code *)(void *)(uintptr_t)(systemCallResult + 0x884);
@@ -1502,7 +1541,7 @@ void PAD_init2(undefined4 param_1, undefined4 param_2, undefined4 param_3, undef
   (void)param_2;
   (void)param_3;
   (void)param_4;
-  (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  invoke_b0_safe_int();
   return;
 }
 
@@ -1513,22 +1552,24 @@ void InitPAD2(char *param_1, long param_2, char *param_3, long param_4)
   (void)param_2;
   (void)param_3;
   (void)param_4;
-  (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  invoke_b0_safe_int();
   return;
 }
 
 void StartPAD2(void)
 
 {
-  (*(code *)(void *)(uintptr_t)&gt2_b0_callback)();
+  invoke_b0_safe_void();
   return;
 }
 
 void FUN_8008ce08(void)
-
 {
+  gt2_restore_c0_noop();
   FUN_8008ddb4();
+  gt2_restore_c0_noop();
   FUN_80010998();
+  gt2_restore_c0_noop();
   return;
 }
 
@@ -2441,8 +2482,8 @@ void FUN_8008dd74(undefined4 *poolPointer,uint poolSize)
 }
 
 void FUN_8008ddb4(void)
-
 {
+  gt2_restore_c0_noop();
   uint memoryAddress;
   int poolSize;
 
@@ -2602,7 +2643,7 @@ void FUN_8008e00c(char *param_1)
 
 {
   (void)param_1;  // Parameter unused but required by call sites
-  (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
+  invoke_b0_safe_int();
   return;
 }
 
