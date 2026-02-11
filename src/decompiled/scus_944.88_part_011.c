@@ -3918,7 +3918,8 @@ void FUN_global__8001191c(int param_1,int param_2,int param_3,int param_4)
 undefined4 * FUN_global__80011b5c(undefined4 *param_1)
 
 {
-  FUN_8007fe8c();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fe8c(param_1);
   *param_1 = &LAB_global__8002106c;
   return param_1;
 }
@@ -3927,7 +3928,8 @@ void FUN_global__80011b90(undefined4 *param_1)
 
 {
   *param_1 = &LAB_global__8002106c;
-  FUN_8007fec8();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fec8(param_1);
   return;
 }
 

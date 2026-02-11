@@ -14,8 +14,8 @@
     (((uint)(byte1) << 16) | ((uint)(word2)))
 
 // Forward declarations for functions used in this file
-void FUN_8007fe8c(void);
-void FUN_8007fec8(void);
+void FUN_8007fe8c(undefined4 *renderStructure);
+void FUN_8007fec8(undefined4 *renderStructure);
 void FUN_8007b008(int, int);
 void FUN_8007b994(undefined *, int, int);
 void FUN_8007b8a0(int, undefined2, undefined2, int);
@@ -108,8 +108,8 @@ void FUN_arcade__80013b50(void)
 undefined4 * FUN_arcade__80013b7c(undefined4 *param_1)
 
 {
-
-  FUN_8007fe8c();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fe8c(param_1);
 
   *param_1 = (undefined4)(uintptr_t)&LAB_arcade__80026fb8;
   return param_1;
@@ -120,8 +120,8 @@ void FUN_arcade__80013bb0(undefined4 *param_1)
 {
 
   *param_1 = (undefined4)(uintptr_t)&LAB_arcade__80026fb8;
-
-  FUN_8007fec8();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fec8(param_1);
   return;
 }
 
@@ -257,8 +257,8 @@ void FUN_arcade__80014708(int param_1,int param_2)
 undefined4 * FUN_arcade__80014898(undefined4 *param_1)
 
 {
-
-  FUN_8007fe8c();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fe8c(param_1);
 
   *param_1 = (undefined4)(uintptr_t)&LAB_arcade__80027010;
   return param_1;
@@ -269,8 +269,8 @@ void FUN_arcade__800148cc(undefined4 *param_1)
 {
 
   *param_1 = (undefined4)(uintptr_t)&LAB_arcade__80027010;
-
-  FUN_8007fec8();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fec8(param_1);
   return;
 }
 

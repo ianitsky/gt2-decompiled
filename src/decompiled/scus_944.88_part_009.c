@@ -100,15 +100,11 @@ static inline void invoke_LAB_000000c0_safe(void) {
   /* no-op: original would call C0 vector; on Linux we skip to avoid SIGSEGV at 0x8310a0 */
 }
 
-/* Restore B0/C0 before calling so slot is never 0x45dd80 (avoids SIGSEGV). */
-static inline int invoke_b0_safe_int(void) {
-  gt2_restore_c0_noop();
-  return (*(code_int_ret)(void *)(uintptr_t)&gt2_b0_callback)();
-}
-static inline void invoke_b0_safe_void(void) {
-  gt2_restore_c0_noop();
-  invoke_b0_safe_void();
-}
+/* On Linux there is no PS1 BIOS, so all B0 vector calls are no-ops.
+   Original PS1 B0 calls would return pointers to kernel tables; on Linux these
+   don't exist and dereferencing them causes SIGSEGV. */
+static inline int invoke_b0_safe_int(void) { return 0; }
+static inline void invoke_b0_safe_void(void) { return; }
 extern undefined4 DAT_800a8cb8;
 extern undefined4 DAT_800a8cbc;
 extern undefined4 DAT_801c9898;
@@ -492,45 +488,12 @@ void InitGeom(void)
   return;
 }
 
+/* _patch_gte: On PS1, this reads kernel table via B0 vector and patches GTE opcode table.
+   On Linux there is no kernel table; B0 returns 0 and dereferencing (0 + 0x18) would SIGSEGV.
+   Skip entirely — GTE is handled by our software implementation (gte.c). */
 void _patch_gte(void)
-
 {
-  int iVar1;
-  int *piVar2;
-  int *piVar3;
-  int *piVar4;
-  int iVar5;
-  undefined4 unaff_retaddr;
-
-  DAT_801c9868 = unaff_retaddr;
-
-  FUN_8008c918();
-
-  iVar1 = invoke_b0_safe_int();
-  piVar2 = (int *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)iVar1 + 0x18)) + 0x28);
-
-  piVar3 = (int *)&PATCHGTE_OBJ_AC;
-  piVar4 = piVar2;
-
-  do {
-    iVar1 = *piVar3;
-    iVar5 = *piVar4;
-    piVar3 = piVar3 + 1;
-    piVar4 = piVar4 + 1;
-    if (iVar1 != iVar5) goto PATCHGTE_OBJ_88;
-  } while (piVar3 != (int *)&PATCHGTE_OBJ_C4);
-
-  piVar4 = (int *)&PATCHGTE_OBJ_C4;
-  do {
-    *piVar2 = *piVar4;
-    piVar4 = piVar4 + 1;
-    piVar2 = piVar2 + 1;
-  } while (piVar4 != (int *)(void *)(uintptr_t)PATCHGTE_OBJ_DC);
-
-PATCHGTE_OBJ_88:
-
   FlushCache();
-  FUN_8008c948();
   return;
 }
 
@@ -558,10 +521,9 @@ void InterruptCallback(void)
   return;
 }
 
+/* DMACallback: On PS1, invokes DMA interrupt handler. On Linux, no DMA hardware. No-op. */
 void DMACallback(void)
-
 {
-  (*DAT_800a8be8)();
   return;
 }
 
@@ -1209,20 +1171,14 @@ void INTR_DMA_OBJ_278(undefined4 *tablePointer,int entryCount)
   return;
 }
 
-void FlushCache(void)
-
-{
-
-  (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
-  return;
-}
+/* FlushCache: PS1 A0 BIOS call to flush instruction cache. No-op on Linux. */
+void FlushCache(void) { return; }
 
 void FUN_8008c918(void)
 
 {
-
-  syscall(1);
-
+  /* PS1 MIPS syscall(1) = EnterCriticalSection (disable interrupts).
+     On Linux i386 syscall(1) = sys_exit — must be a no-op instead. */
   return;
 }
 
@@ -1252,9 +1208,8 @@ long EnableEvent(long eventHandle)
 void FUN_8008c948(void)
 
 {
-#if !defined(__linux__)
-  syscall(2);  /* PS1: unknown; on Linux syscall(2)=fork() would duplicate process */
-#endif
+  /* PS1 MIPS syscall(2) = ExitCriticalSection (re-enable interrupts).
+     On Linux i386 syscall(2) = sys_fork — must be a no-op instead. */
   return;
 }
 
@@ -1268,13 +1223,8 @@ long CloseEvent(long eventHandle)
   return operationResult;
 }
 
-void GPU_cw(void)
-
-{
-
-  (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
-  return;
-}
+/* GPU_cw: PS1 A0 BIOS call for GPU command word. No-op on Linux. */
+void GPU_cw(void) { return; }
 
 long Krom2RawAdd(ulong kromAddress)
 
@@ -1286,13 +1236,8 @@ long Krom2RawAdd(ulong kromAddress)
   return rawAddress;
 }
 
-void _exit(void)
-
-{
-
-  (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
-  return;
-}
+/* _exit: PS1 A0 BIOS call to terminate. No-op on Linux (we don't want to exit). */
+void _exit(void) { return; }
 
 void ChangeClearPAD(long clearMode)
 
@@ -1438,14 +1383,8 @@ void DeliverEvent(ulong param_1,ulong param_2)
 }
 
 
-void FUN_8008cc90(void)
-
-{
-
-  (*(code_int_ret)&LAB_000000a0)();
-
-  return;
-}
+/* FUN_8008cc90: PS1 A0 BIOS call. No-op on Linux. */
+void FUN_8008cc90(void) { return; }
 
 void ReturnFromException(void)
 
@@ -1461,26 +1400,11 @@ void ResetEntryInt(void)
   return;
 }
 
+/* _remove_ChgclrPAD: On PS1, reads kernel table via B0 and clears PAD change-clear entries.
+   On Linux, B0 returns 0; dereferencing (0 + 0x16c) would SIGSEGV. Skip entirely. */
 void _remove_ChgclrPAD(void)
-
 {
-  int systemCallResult;
-  undefined4 *dataPointer;
-  int loopCounter;
-  undefined4 returnAddress;
-
-  DAT_801c9878 = returnAddress;
-  FUN_8008c918();
-  systemCallResult = invoke_b0_safe_int();
-  loopCounter = 9;
-  dataPointer = (undefined4 *)(void *)(uintptr_t)((*(int *)(void *)(uintptr_t)((uintptr_t)systemCallResult + 0x16c)) + 0x62c);
-  do {
-    *dataPointer = 0;
-    dataPointer = dataPointer + 1;
-    loopCounter = loopCounter + -1;
-  } while (loopCounter != 0);
   FlushCache();
-  FUN_8008c948();
   return;
 }
 
@@ -1723,8 +1647,8 @@ int FUN_8008d020(int param_1,undefined4 param_2)
 
 {
   int destinationLength;
-
-  destinationLength = FUN_8008cfc4((char *)0x0);
+  /* Decompiler bug: param_1 was already in $a0 (MIPS) — strcat destination. */
+  destinationLength = FUN_8008cfc4((char *)param_1);
   FUN_8008cedc((char *)(void *)(uintptr_t)((uintptr_t)param_1 + destinationLength), (char *)(void *)(uintptr_t)param_2);
   return param_1;
 }
@@ -2594,49 +2518,29 @@ void FUN_8008df80(int blockPointer)
 #undef strncmp
 #undef printf
 
+/* bcopy_stub/strncmp_stub/bzero_stub/printf_stub: PS1 A0 BIOS stubs. No-op on Linux. */
 static void * bcopy_stub(uchar *source,uchar *destination,int size)
-
 {
-  void *result;
-
-  (void)source;
-  (void)destination;
-  (void)size;
-  result = (void *)(uintptr_t)(*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
-  return result;
+  (void)source; (void)destination; (void)size;
+  return NULL;
 }
 
 static int strncmp_stub(char *string1,char *string2,int maxLength)
-
 {
-  int result;
-
-  (void)string1;
-  (void)string2;
-  (void)maxLength;
-  result = (*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
-  return result;
+  (void)string1; (void)string2; (void)maxLength;
+  return 0;
 }
 
 void * bzero_stub(uchar *memory,int size)
-
 {
-  void *result;
-
-  (void)memory;
-  (void)size;
-  result = (void *)(uintptr_t)(*(code_int_ret)(void *)(uintptr_t)&LAB_000000a0)();
-  return result;
+  (void)memory; (void)size;
+  return NULL;
 }
 
-// printf is declared in stdio.h - this is a stub implementation
 int printf_stub(char *formatString,...)
-
 {
-  int iVar1;
-  (void)formatString;  // Parameter unused but required by call sites
-  iVar1 = (*(code_int_ret)&LAB_000000a0)();
-  return iVar1;
+  (void)formatString;
+  return 0;
 }
 
 void FUN_8008e00c(char *param_1)
@@ -2650,10 +2554,9 @@ void FUN_8008e00c(char *param_1)
 void FUN_80092424(void)
 
 {
-
-  syscall(0);
-
-  halt_baddata();
+  /* PS1 MIPS syscall(0) = NoFunction (exception/halt).
+     On Linux i386 syscall(0) = sys_restart_syscall — must be a no-op instead. */
+  return;
 }
 
 void FUN_80094f80(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4)
@@ -2977,19 +2880,9 @@ void FUN_8009d9bc(void)
   halt_unimplemented();
 }
 
-void FUN_8009dace(void)
-
-{
-  (*(code *)0x0)();
-  return;
-}
-
-void FUN_8009de5a(void)
-
-{
-  (*(code *)0x0)();
-  return;
-}
+/* FUN_8009dace/FUN_8009de5a: On PS1, jump to address 0 (reset/exception vector). No-op on Linux. */
+void FUN_8009dace(void) { return; }
+void FUN_8009de5a(void) { return; }
 
 void FUN_8009ebf8(void)
 

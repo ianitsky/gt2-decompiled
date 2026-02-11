@@ -24,8 +24,8 @@ undefined2 *FUN_8007d024(int param_1, undefined4 param_2);
 void FUN_8006ac90(undefined *param_1, undefined4 param_2, int param_3, int param_4, int param_5);
 uint *FUN_8007e0b0(int param_1);
 void FUN_8007da44(int param_1, int param_2);
-void FUN_8007fe8c(void);
-void FUN_8007fec8(void);
+void FUN_8007fe8c(undefined4 *renderStructure);
+void FUN_8007fec8(undefined4 *renderStructure);
 void FUN_80080f24(undefined4 param_1, int param_2);
 void FUN_8007c570(void);
 void FUN_8007cfdc(undefined4 param_1, undefined4 param_2, undefined4 param_3, int param_4);
@@ -1879,8 +1879,8 @@ void FUN_overlay0__80047024(int param_1,int param_2,int param_3,int param_4,int 
 undefined4 * FUN_overlay0__80047278(undefined4 *param_1)
 
 {
-
-  FUN_8007fe8c();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fe8c(param_1);
 
   *param_1 = &LAB_overlay0__8005a7fc;
 
@@ -1892,8 +1892,8 @@ void FUN_overlay0__800472ac(undefined4 *param_1)
 {
 
   *param_1 = &LAB_overlay0__8005a7fc;
-
-  FUN_8007fec8();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fec8(param_1);
 
   return;
 }
@@ -1999,8 +1999,8 @@ void FUN_overlay0__800477c4(int param_1,undefined2 *param_2,undefined2 *param_3)
 undefined4 * FUN_overlay0__80047ae4(undefined4 *param_1)
 
 {
-
-  FUN_8007fe8c();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fe8c(param_1);
 
   *param_1 = &LAB_overlay0__8005a7b4;
 
@@ -2012,8 +2012,8 @@ void FUN_overlay0__80047b18(undefined4 *param_1)
 {
 
   *param_1 = &LAB_overlay0__8005a7b4;
-
-  FUN_8007fec8();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fec8(param_1);
 
   return;
 }

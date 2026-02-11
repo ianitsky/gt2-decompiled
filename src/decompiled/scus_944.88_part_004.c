@@ -1130,11 +1130,14 @@ void FUN_800683fc(undefined4 param_1,undefined4 *param_2,int param_3)
 
 void FUN_800686c8(void)
 {
-
+  /* Registers a VSync/interrupt callback into the priority list DAT_801f0688.
+     The decompiler lost the second argument to FUN_80083030 — on PS1 it would
+     be a pointer to the node structure starting ~8 bytes before DAT_801c94a4
+     (prev, next, callback, priority).  Since the PS1 interrupt system is
+     entirely stubbed on Linux (EnterCriticalSection/ExitCriticalSection are
+     no-ops), this list insertion is safe to skip. */
   DAT_801c94a4 = &LAB_800686a0;
   DAT_801c94a8 = 0x20000;
-
-  FUN_80083030(&DAT_801f0688);
 
   return;
 }

@@ -63,9 +63,7 @@ extern undefined4 LAB_800915be_2;
 extern undefined4 LAB_800915fe_2;
 extern undefined4 LAB_80091670;
 extern undefined4 LAB_80091990;
-extern undefined4 UNK_800a97f0;
-extern undefined4 UNK_800b57d0;
-extern undefined4 UNK_801357d0;
+/* UNK_800a97f0, UNK_800b57d0, UNK_801357d0 are macros into DAT_800a97d0 array – see below */
 extern undefined4 UNK_801c98e9;
 extern undefined4 UNK_801c991e;
 extern undefined4 UNK_801c9922;
@@ -335,16 +333,27 @@ extern undefined4 DAT_801c98a4;
 extern undefined4 DAT_801c98a8;
 extern undefined4 DAT_801c9916;
 extern undefined4 DAT_801c9968;
-extern undefined4 DAT_800a97d0;
+/* PS1 address 0x800a97d0: large contiguous data buffer used by the car/vol
+   file system.  On PS1 the 573 440 bytes from 0x800a97d0 to 0x801357d0 are
+   contiguous RAM; we model this as an array so pointer-comparison loop
+   terminators work. */
+extern undefined4 DAT_800a97d0[0x23001];  /* 0x8C004 bytes – covers up to UNK_801357d0+1 */
+#define UNK_800b57d0  (DAT_800a97d0[0x3000])    /* PS1: 0x800b57d0, offset +0xC000 */
+#define UNK_801357d0  (DAT_800a97d0[0x23000])   /* PS1: 0x801357d0, offset +0x8C000 */
 extern void *DAT_800a8d5c;
-extern undefined4 DAT_800a97f0;
-extern undefined4 DAT_800b57d0;
-extern undefined4 DAT_801357d0;
+/* DAT_800a97f0 is at PS1 offset +0x20 from DAT_800a97d0 (8 uint32s) */
+#define DAT_800a97f0  (DAT_800a97d0[8])
+#define UNK_800a97f0  DAT_800a97f0
+/* These end-marker aliases also map into the array */
+#define DAT_800b57d0  UNK_800b57d0
+#define DAT_801357d0  UNK_801357d0
 extern undefined4 DAT_800a6f18;
 extern undefined4 DAT_801e2ef0;
-extern undefined4 DAT_801e35f0;
-extern undefined4 DAT_801e3604;
-extern undefined4 DAT_801e3600;
+/* PS1 address 0x801e35f0: contiguous 0xC000 byte region (car index data).
+   DAT_801e3600 / DAT_801e3604 are at known offsets within it. */
+extern undefined4 DAT_801e35f0[0x3001];  /* 0xC004 bytes */
+#define DAT_801e3604  (DAT_801e35f0[5])   /* PS1: 0x801e3604, offset +0x14 */
+#define DAT_801e3600  (DAT_801e35f0[4])   /* PS1: 0x801e3600, offset +0x10 */
 extern undefined4 DAT_801e30ba;
 extern undefined4 DAT_801e30b8;
 extern undefined4 DAT_801e30f0;
@@ -362,8 +371,10 @@ extern undefined4 DAT_801ef5f8;
 extern undefined4 DAT_801ef600;
 extern undefined4 DAT_801ef610;
 extern undefined4 DAT_801ef618;
-extern undefined4 DAT_801ef61c;
-extern undefined4 DAT_801ef630;
+/* PS1 address 0x801ef61c: used as array by module loading system
+   (&DAT_801ef61c + param * 8) — needs contiguous space. */
+extern undefined4 DAT_801ef61c[256];
+#define DAT_801ef630  (DAT_801ef61c[5])   /* PS1: 0x801ef630, offset +0x14 */
 extern undefined4 DAT_801e18e6;
 extern undefined4 DAT_801e18e8;
 extern undefined4 DAT_801e18e4;
@@ -417,7 +428,8 @@ extern undefined4 DAT_000017cc;
 extern undefined4 DAT_80033dc0;
 extern undefined4 DAT_80011d38;
 extern undefined4 DAT_801c93cc;
-extern undefined4 DAT_800a97d4;
+/* DAT_800a97d4 is at PS1 offset +0x4 from DAT_800a97d0 (1 uint32) */
+#define DAT_800a97d4  (DAT_800a97d0[1])
 extern undefined4 DAT_801df5d0;
 extern undefined4 DAT_801df5d4;
 extern undefined4 DAT_801e18e0;
@@ -438,7 +450,8 @@ extern undefined4 DAT_801c94cc;
 extern undefined4 DAT_801c94e0;
 extern undefined4 DAT_80091fe4;
 extern undefined4 DAT_80092354;
-extern undefined4 DAT_801ef6b0;
+/* DAT_801ef6b0 is at PS1 offset +0x94 from DAT_801ef61c */
+#define DAT_801ef6b0  (DAT_801ef61c[37])
 extern undefined4 DAT_80092388;
 extern undefined4 DAT_8008fb38;
 extern undefined4 DAT_8009238c;
@@ -1259,7 +1272,7 @@ extern undefined4 DAT_801c95a8;
 extern undefined4 DAT_801c95bc;
 extern undefined4 DAT_801c95c0;
 extern undefined4 DAT_801c95c4;
-extern undefined4 DAT_801c95c8;
+extern undefined4 DAT_801c95c8[0x100];
 extern undefined4 DAT_801c9604;
 extern undefined4 DAT_801c9608;
 extern undefined4 DAT_801c96b8;
@@ -1425,7 +1438,7 @@ extern undefined4 DAT_801f0d00;
 extern undefined4 DAT_801f0d20;
 extern undefined4 DAT_a;
 extern undefined4 DAT_A;
-extern undefined4 PTR_DAT_800a7110;
+extern undefined *PTR_DAT_800a7110;
 extern undefined4 LAB_80090a7c;
 extern undefined4 LAB_80090a4c;
 extern undefined4 LAB_80090a64;

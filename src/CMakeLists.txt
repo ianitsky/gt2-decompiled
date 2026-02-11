@@ -6,6 +6,7 @@ list(APPEND DECOMPILED_SOURCES "decompiled/gt2_global_vars.c")
 set(PLATFORM_SOURCES
     platform/linux_main.c
     platform/disk_path.c
+    platform/cd_reader.c
     platform/gte.c
     platform/ps1_stubs.c
     platform/gte_stubs.c

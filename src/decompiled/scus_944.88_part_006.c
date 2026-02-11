@@ -3,6 +3,11 @@
 #include "gt2_global_vars_clean.h"
 #include "scus_944.88_part_004.h"
 #include "scus_944.88_part_006.h"
+#include "cd_reader.h"
+#include <string.h>  /* memcpy */
+/* usleep() declaration — cannot include <unistd.h> because psyz redefines
+   read/write/lseek which conflict with the POSIX prototypes. */
+extern int usleep(unsigned int usec);
 
 void FUN_80078408(void)
 {
@@ -2109,7 +2114,15 @@ undefined4 FUN_8007ab14(code *callbackFunction)
 void FUN_8007ab74(undefined4 dataBuffer,int sectorAddress,undefined4 dataSize)
 
 {
-  FUN_8007cfdc(dataBuffer, (sectorAddress << 0xb) >> 0xb, dataSize, 0);
+  /* Platform CD reader: bypass the PS1 interrupt-driven CD state machine
+     and read sectors directly from the BIN file (synchronous). */
+  int sector = (sectorAddress << 0xb) >> 0xb;
+  if (gt2_cd_reader_is_ready() && dataBuffer != 0) {
+    gt2_cd_read_sectors((void *)(uintptr_t)dataBuffer, sector, (int)dataSize);
+    return;
+  }
+  /* Fallback: original CD state machine (unlikely to work without HW interrupts) */
+  FUN_8007cfdc(dataBuffer, sector, dataSize, 0);
   DAT_801f0548 = 0;
   FUN_8007ab14(0);
   return;
@@ -2118,7 +2131,34 @@ void FUN_8007ab74(undefined4 dataBuffer,int sectorAddress,undefined4 dataSize)
 void FUN_8007ab78(undefined4 dataBuffer,int sectorAddress,undefined4 dataSize)
 
 {
-  FUN_8007cfdc(dataBuffer, sectorAddress >> 0xb, dataSize, 0);
+  int sector = sectorAddress >> 0xb;
+  int byte_offset = (ushort)sectorAddress & 0x7ff;
+  /* Platform CD reader: synchronous read from BIN file */
+  if (gt2_cd_reader_is_ready() && dataBuffer != 0) {
+    /* Read full sectors first, then shift if there is an intra-sector offset */
+    int total = (int)dataSize + byte_offset;
+    unsigned char tmp_buf[2048];
+    unsigned char *dst = (unsigned char *)(uintptr_t)dataBuffer;
+    int written = 0;
+    int cur_sector = sector;
+    int skip = byte_offset;
+    while (written < (int)dataSize) {
+      int got = gt2_cd_read_sectors(tmp_buf, cur_sector, 2048);
+      if (got <= 0) break;
+      int usable = got - skip;
+      if (usable <= 0) break;
+      int need = (int)dataSize - written;
+      if (usable > need) usable = need;
+      memcpy(dst + written, tmp_buf + skip, (size_t)usable);
+      written += usable;
+      cur_sector++;
+      skip = 0;
+    }
+    (void)total;
+    return;
+  }
+  /* Fallback: original CD state machine */
+  FUN_8007cfdc(dataBuffer, sector, dataSize, 0);
   DAT_801f0548 = (ushort)sectorAddress & 0x7ff;
   FUN_8007ab14(0);
   return;
@@ -2908,6 +2948,9 @@ void FUN_8007b994(undefined2 *outputMatrix,undefined4 *rotationMatrix,uint *inpu
   return;
 }
 
+/* FUN_8007ba70: PS1 GPU LoadImage/StoreImage — transfers pixel data via DMA.
+   On Linux, no PS1 GPU hardware; audioData may be a truncated pointer causing SIGSEGV.
+   Guard against invalid audioData. */
 int FUN_8007ba70(int audioData,dword *dataBuffer,int transferMode)
 
 {
@@ -2920,6 +2963,13 @@ int FUN_8007ba70(int audioData,dword *dataBuffer,int transferMode)
   int iVar1;
   dword dVar3;
   dword dVar4;
+
+  /* On Linux, audioData may be a truncated 64-bit pointer that can't be safely read.
+     If audioData looks like a negative value or small address, skip GPU transfer. */
+  if (audioData <= 0 || audioData < 0x1000) {
+    DAT_801f06a4 = 0;
+    return 0;
+  }
 
   param_2 = dataBuffer;
   iVar1 = dataSize;
@@ -3676,6 +3726,10 @@ void FUN_8007c744(int audioBuffer,uint **commandList)
   param_1 = audioBuffer;
   param_2 = commandList;
 
+  /* Guard: callers may pass audioBuffer=0 (e.g. FUN_8007c628 line 3609);
+     on PS1 address 0x162 is accessible but on Linux it's unmapped. */
+  if (audioBuffer == 0) return;
+
   *(undefined *)(audioBuffer + 0x162) = 0;
   *(undefined4 *)(audioBuffer + 0x80) = 0;
   *(undefined4 *)(audioBuffer + 0x7c) = 0;
@@ -3976,8 +4030,10 @@ void FUN_8007d1a4(int textureWidth,int textureHeight)
 bool FUN_8007d200(void)
 
 {
-  do {
-  } while (((DAT_801f06a0 ^ GPU_REG1) & 0x80000000) == 0);
+  /* PS1: busy-wait until GPU_REG1 bit 31 toggles (VSync signal).
+     Linux: simulate one frame delay (~16.67ms at 60Hz NTSC). */
+  usleep(16667);
+  FUN_8007d294();  /* tick the VBlank handler once */
   DAT_801f0684 = 0;
   return (DAT_801f06a0 & 0x80000000) == 0;
 }
@@ -3991,8 +4047,12 @@ undefined4 FUN_8007d23c(int frameCount)
   }
   if (0 < frameCount) {
     DAT_801f06a0 = GPU_REG1;
-    do {
-    } while (DAT_801f0684 < frameCount);
+    /* PS1: busy-wait for VBlank interrupt to increment DAT_801f0684.
+       Linux: simulate frame ticks with usleep (~16.67ms per frame at 60Hz). */
+    while (DAT_801f0684 < frameCount) {
+      usleep(16667);
+      FUN_8007d294();  /* tick the VBlank handler */
+    }
     DAT_801f0684 = 0;
   }
   return DAT_801f0680;

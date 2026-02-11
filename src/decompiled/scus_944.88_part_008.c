@@ -52,19 +52,11 @@ void FUN_80085974(undefined4 param)
 
   FUN_80085990();
 
-  _exit(0);
-
-  functionCount = *(int *)PTR_DAT_800a7110;
-  functionPointer = (code **)PTR_DAT_800a7110;
-
-  while (functionCount != 0) {
-    PTR_DAT_800a7110 = (undefined *)(functionPointer + 1);
-    (**functionPointer)();
-    functionPointer = (code **)PTR_DAT_800a7110;
-    functionCount = *(int *)PTR_DAT_800a7110;
-  }
-
-  PTR_DAT_800a7110 = (undefined *)functionPointer;
+  /* On PS1, _exit() (BIOS A0 call) terminates the process and the code below
+     would never run.  Our _exit() is a no-op but is declared _Noreturn by
+     the C library, so the compiler corrupts the stack after it returns.
+     We skip the _exit call entirely and return instead.  The code that
+     followed _exit on PS1 (another callback-list walk) is therefore dead. */
   return;
 }
 
@@ -74,6 +66,7 @@ void FUN_80085990(void)
   code **functionPointer;
   int functionCount;
 
+  if (PTR_DAT_800a7110 == (undefined *)0x0) return;  /* no cleanup callback list */
   functionCount = *(int *)PTR_DAT_800a7110;
   functionPointer = (code **)PTR_DAT_800a7110;
 
@@ -88,14 +81,16 @@ void FUN_80085990(void)
   return;
 }
 
+/* FUN_800859fc: Iterates a table of cleanup function pointers and calls each.
+   Fixed: use void(*)(void) type for function pointers instead of code*
+   (code* is void(**)(void) which adds an extra level of indirection). */
 void FUN_800859fc(void)
-
 {
   int *currentPointer;
-  code *functionToCall;
+  void (*functionToCall)(void);
   int functionCount;
   int offset;
-  code **functionArray;
+  void (**functionArray)(void);
 
   functionCount = DAT_801c9410;
 
@@ -109,12 +104,14 @@ void FUN_800859fc(void)
   }
 
   if (functionCount != 0) {
-    functionArray = (code **)(&DAT_801c9410 + functionCount);
+    functionArray = (void (**)(void))((char *)&DAT_801c9410 + functionCount * sizeof(void *));
     do {
       functionToCall = *functionArray;
-      functionArray = functionArray + -1;
-      functionCount = functionCount + -1;
-      (*functionToCall)();
+      functionArray = functionArray - 1;
+      functionCount = functionCount - 1;
+      if (functionToCall != NULL) {
+        functionToCall();
+      }
     } while (functionCount != 0);
   }
   return;
@@ -657,30 +654,11 @@ int DecDCToutCallback(func *callbackFunction)
   return callbackResult;
 }
 
+/* LIBPRESS_OBJ_2C0: Resets PS1 MDEC (Motion Decoder) DMA channels and hardware.
+   On Linux, MDEC hardware registers (DMA_MDEC_OUT_CHCR, MDEC_REG1) don't exist. No-op. */
 void LIBPRESS_OBJ_2C0(int resetMode)
-
 {
-  if (resetMode == 0) {
-
-    DMA_MDEC_IN_CHCR = 0;
-    DMA_MDEC_OUT_CHCR = 0;
-    MDEC_REG1 = 0x60000000;
-
-    LIBPRESS_OBJ_3B0(&DAT_800a7524, 0x20);
-    LIBPRESS_OBJ_3B0(&DAT_800a75a8, 0x20);
-    LIBPRESS_OBJ_3A0();
-    return;
-  }
-
-  if (resetMode != 1) {
-    LIBPRESS_OBJ_394();
-    return;
-  }
-
-  DMA_MDEC_IN_CHCR = 0;
-  DMA_MDEC_OUT_CHCR = 0;
-  MDEC_REG1 = 0x60000000;
-  LIBPRESS_OBJ_3A0();
+  (void)resetMode;
   return;
 }
 
@@ -857,13 +835,9 @@ long StopCARD(void)
   return 0;
 }
 
-void _bu_init(void)
-
-{
-
-  (*(code *)(void *)&LAB_000000a0)();
-  return;
-}
+/* _bu_init: On PS1, calls A0 BIOS vector to init memory card file system.
+   On Linux, A0 vector doesn't exist as indirect pointer. No-op. */
+void _bu_init(void) { return; }
 
 long _card_clear(long channelNumber)
 
@@ -877,197 +851,74 @@ long _card_clear(long channelNumber)
   return clearResult;
 }
 
+/* _card_info: PS1 BIOS A0 call for card info. No-op on Linux. */
 long _card_info(long channelNumber)
-
 {
-  long cardInfo;
-
-  (*(code *)(void *)&LAB_000000a0)();
-  cardInfo = 0;
-
-  return cardInfo;
+  (void)channelNumber;
+  return 0;
 }
 
+/* _card_read/_card_write/InitCARD2: PS1 BIOS memory card operations.
+   On Linux, no memory card hardware; B0 call is no-op, return 0. */
 long _card_read(long channelNumber, long blockNumber, uchar *buffer)
-
 {
-  long readResult;
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
-  readResult = 0;
-
-  return readResult;
+  (void)channelNumber; (void)blockNumber; (void)buffer;
+  return 0;
 }
 
 long _card_write(long channelNumber, long blockNumber, uchar *buffer)
-
 {
-  long writeResult;
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
-  writeResult = 0;
-
-  return writeResult;
+  (void)channelNumber; (void)blockNumber; (void)buffer;
+  return 0;
 }
 
 void InitCARD2(void)
-
 {
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
   return;
 }
 
+/* _patch_card_info: On PS1, reads kernel table via B0 and patches card info structure.
+   On Linux, B0 returns 0; dereferencing (0 + 0x16c) would SIGSEGV. Skip patching. */
 void _patch_card_info(void)
-
 {
-  int cardStructure;
-  undefined4 returnAddress;
-
-  DAT_801c9598 = returnAddress;
-
-  gt2_restore_c0_noop();
-  (*(code *)&gt2_b0_callback)();
-  cardStructure = 0;
-
-  *(undefined4 *)(*(int *)(cardStructure + 0x16c) + 0x1988) = 0;
-
   FlushCache();
   return;
 }
 
+/* _patch_card: On PS1, reads kernel table via B0 and patches card handler code.
+   On Linux, B0 returns 0; dereferencing (0 + 0x18) would SIGSEGV. Skip patching. */
 void _patch_card(void)
-
 {
-  int cardStructure;
-  undefined4 *patchData;
-  undefined4 returnAddress;
-
-  DAT_801c9598 = returnAddress;
-
-  FUN_8008c918();
-
-  gt2_restore_c0_noop();
-  (*(code *)&gt2_b0_callback)();
-  cardStructure = 0;
-
-  _DAT_0000dffc = (undefined4 *)
-       (*(int *)(*(int *)(cardStructure + 0x18) + 0x70) * 0x10000 +
-        (*(uint *)(*(int *)(cardStructure + 0x18) + 0x74) & 0xffff) + 0x28);
-
-  patchData = &PATCH_OBJ_B4;
-  do {
-    *_DAT_0000dffc = *patchData;
-    patchData = patchData + 1;
-    _DAT_0000dffc = _DAT_0000dffc + 1;
-  } while (patchData != &PATCH_OBJ_C8);
-
   FlushCache();
   return;
 }
 
+/* _patch_card2: On PS1, reads kernel table via B0 and patches card2 handler.
+   On Linux, B0 returns 0; dereferencing (0 + 0x16c) would SIGSEGV. Skip patching. */
 void _patch_card2(void)
-
 {
-  int cardStructure;
-  undefined4 *patchData;
-  undefined4 returnAddress;
-
-  DAT_801c9598 = returnAddress;
-
-  FUN_8008c918();
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
-  cardStructure = 0;
-  cardStructure = *(int *)(cardStructure + 0x16c);
-
-  patchData = &PATCH_OBJ_C8;
-  do {
-    *(undefined4 *)(cardStructure + 0x9c8) = *patchData;
-    patchData = patchData + 1;
-    cardStructure = cardStructure + 4;
-  } while (patchData != (undefined4 *)_patch_card);
-
   FlushCache();
   return;
 }
 
-void _copy_memcard_patch(void)
+/* _copy_memcard_patch: Copies patch data to PS1 kernel memory (0xdf80).
+   On Linux, kernel memory doesn't exist; PATCH_OBJ_B4 is unresolved. No-op. */
+void _copy_memcard_patch(void) { return; }
 
-{
-  undefined4 *destinationPointer;
-  undefined4 *sourcePointer;
+/* StartCARD2/StopCARD2: PS1 BIOS memory card start/stop. No-op on Linux. */
+void StartCARD2(void) { return; }
+void StopCARD2(void) { return; }
 
-  destinationPointer = (undefined4 *)&DAT_0000df80;
-  sourcePointer = &PATCH_OBJ_B4;
-
-  do {
-    *destinationPointer = *sourcePointer;
-    sourcePointer = sourcePointer + 1;
-    destinationPointer = destinationPointer + 1;
-  } while (sourcePointer != &PATCH_OBJ_B4);
-
-  return;
-}
-
-void StartCARD2(void)
-
-{
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
-  return;
-}
-
-void StopCARD2(void)
-
-{
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
-  return;
-}
-
+/* FUN_800870b8: On PS1, reads kernel table via B0 and patches card handler at (0+0x18).
+   On Linux, B0 returns 0; dereferencing (0 + 0x18) would SIGSEGV. Skip patching. */
 void FUN_800870b8(void)
-
 {
-  int cardStructure;
-  undefined4 *patchData;
-  undefined4 returnAddress;
-
-  DAT_801c95a8 = returnAddress;
-
-  FUN_8008c918();
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
-  cardStructure = 0;
-  cardStructure = *(int *)(cardStructure + 0x18);
-
-  patchData = &DAT_80087128;
-  do {
-    *(undefined4 *)(cardStructure + 0x70) = *patchData;
-    patchData = patchData + 1;
-    cardStructure = cardStructure + 4;
-  } while (patchData != (undefined4 *)0x80087134);
-
   FlushCache();
-  FUN_8008c948();
   return;
 }
 
-void _new_card(void)
-
-{
-
-  gt2_restore_c0_noop();
-  (*(code *)(void *)&gt2_b0_callback)();
-  return;
-}
+/* _new_card: PS1 BIOS new card init. No-op on Linux. */
+void _new_card(void) { return; }
 
 void PadInitDirect(uchar *port1Buffer, uchar *port2Buffer)
 

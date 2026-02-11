@@ -92,6 +92,12 @@ void gte_ldLZCS(undefined4 value);
 void gte_ldVXY1(undefined4 *ptr);
 void gte_ldVZ1(int z_or_ptr);
 void gte_ldOFY(undefined4 value);
+void gte_ldOFX(undefined4 value);
+void gte_ldH(undefined4 value);
+void gte_ldDQA(undefined4 value);
+void gte_ldDQB(undefined4 value);
+void gte_ldZSF3(undefined4 value);
+void gte_ldZSF4(undefined4 value);
 
 void halt_baddata(void);
 void halt_unimplemented(void);

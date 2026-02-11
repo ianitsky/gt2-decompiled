@@ -35,6 +35,10 @@ void FUN_80010000(int *param_1)
   int fileSize;
 
   fileHandle = FUN_8001146c("gt2.ovl");
+  if (fileHandle == 0) {
+    /* File not found on CD image – nothing to load */
+    return;
+  }
   baseMemoryAddress = DAT_801c93e8;
 
   fileSize = *(int *)((intptr_t)fileHandle + 2);
@@ -78,6 +82,10 @@ void FUN_80010010(int param_1)
   int *unaff_s1;
 
   iVar2 = FUN_8001146c((char *)(intptr_t)(param_1 + 0x1d30));
+  if (iVar2 == 0) {
+    /* File not found on CD image – nothing to load */
+    return;
+  }
   iVar1 = DAT_801c93e8;
 
   *unaff_s1 = *(int *)((intptr_t)iVar2 + 2) - DAT_801c93e8;
@@ -247,13 +255,13 @@ undefined4 * FUN_800100e4(char *param_1,undefined4 *param_2)
     param_1 = param_1 + 1;
     if (*pcVar1 == '\0') {
 
-      return &DAT_800a97d0;
+      return DAT_800a97d0;
     }
     param_2 = (undefined4 *)0x0;
   }
 
   if (param_2 == (undefined4 *)0x0) {
-    param_2 = &DAT_800a97d0;
+    param_2 = DAT_800a97d0;
   }
 
   while( true ) {
@@ -280,7 +288,7 @@ undefined4 * FUN_800100e4(char *param_1,undefined4 *param_2)
 
     if (iVar3 == 0) break;
 
-    param_2 = &DAT_800a97d0 + (uint)*(ushort *)(iVar3 + 4) * 8;
+    param_2 = DAT_800a97d0 + (uint)*(ushort *)(iVar3 + 4) * 8;
   }
 
   return (undefined4 *)0x0;
@@ -327,11 +335,11 @@ void FUN_800102dc(void)
   undefined4 uVar3, uVar4, uVar5;
   undefined4 *puVar6;
 
-  puVar6 = &DAT_800a97d0;
+  puVar6 = DAT_800a97d0;
 
-  FUN_8005d7d0(&DAT_800a97d0,0,0x8c000);
+  FUN_8005d7d0(DAT_800a97d0,0,0x8c000);
 
-  puVar2 = &DAT_801e35f0;
+  puVar2 = DAT_801e35f0;
   do {
 
     uVar3 = puVar6[1];
@@ -344,25 +352,30 @@ void FUN_800102dc(void)
 
     puVar6 = puVar6 + 4;
     puVar2 = puVar2 + 4;
-  } while (puVar6 != (undefined4 *)&UNK_800b57d0);
+  } while (puVar6 != &UNK_800b57d0);
 
-  puVar2 = &DAT_800a97d0;
+  puVar2 = DAT_800a97d0;
   uVar1 = DAT_801e3604 & 0xfffff800;
-  puVar6 = (undefined4 *)((int)&DAT_800a97d0 + uVar1);
+  puVar6 = (undefined4 *)((int)(uintptr_t)DAT_800a97d0 + uVar1);
 
-  do {
+  /* End condition: byte arithmetic (decompiler emitted pointer arithmetic which
+     scales by sizeof(undefined4); the original MIPS just adds raw bytes). */
+  {
+    undefined4 *endPtr = (undefined4 *)((char *)&UNK_801357d0 + uVar1);
+    do {
 
-    uVar3 = puVar6[1];
-    uVar4 = puVar6[2];
-    uVar5 = puVar6[3];
-    *puVar2 = *puVar6;
-    puVar2[1] = uVar3;
-    puVar2[2] = uVar4;
-    puVar2[3] = uVar5;
+      uVar3 = puVar6[1];
+      uVar4 = puVar6[2];
+      uVar5 = puVar6[3];
+      *puVar2 = *puVar6;
+      puVar2[1] = uVar3;
+      puVar2[2] = uVar4;
+      puVar2[3] = uVar5;
 
-    puVar6 = puVar6 + 4;
-    puVar2 = puVar2 + 4;
-  } while (puVar6 != (undefined4 *)(&UNK_801357d0 + uVar1));
+      puVar6 = puVar6 + 4;
+      puVar2 = puVar2 + 4;
+    } while (puVar6 != endPtr);
+  }
 
   FUN_80010228();
 
@@ -663,9 +676,9 @@ void FUN_80010998(void)
   gt2_restore_c0_noop();
   FUN_8007f848();
   gt2_restore_c0_noop();
-  InitCARD(0);
+//  InitCARD(0);
   gt2_restore_c0_noop();
-  StartCARD();
+//  StartCARD();
   gt2_restore_c0_noop();
   _bu_init();
   gt2_restore_c0_noop();
@@ -681,8 +694,9 @@ void FUN_80010998(void)
 void FUN_80010a24(undefined4 *param_1)
 
 {
-
-  FUN_8007fe8c();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS) when calling FUN_8007fe8c,
+     but Ghidra failed to detect it as an argument pass-through. */
+  FUN_8007fe8c(param_1);
 
   *param_1 = &LAB_80011d3e_2;
 
@@ -698,7 +712,8 @@ void FUN_80010a60(undefined4 *param_1, int param_2)
 
   *param_1 = &LAB_80011d3e_2;
 
-  FUN_8007fec8();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS) when calling FUN_8007fec8. */
+  FUN_8007fec8(param_1);
 
   return;
 }
@@ -766,19 +781,25 @@ void FUN_80010cec(void)
 
 {
   undefined **ppuVar1;
-  undefined auStack_b8 [56];
+  /* Decompiler split the contiguous PS1 stack frame into smaller arrays, but
+     the render structure written through auStack_b8 accesses up to offset 0x8C
+     (param_1[0x23]).  Merge into a single buffer large enough for the full
+     structure plus the auxiliary locals that follow it on the original stack. */
+  undefined auStack_b8 [256];
+  undefined *auStack_80_ptr;  /* alias into auStack_b8 is not used; keep separate */
   undefined auStack_80 [32];
   undefined auStack_60 [40];
   undefined4 local_38;
   uint local_34;
   uint local_30;
   uint local_28;
+  (void)auStack_80_ptr;
 
   FUN_80010c68();
 
   FUN_80010a24(auStack_b8);
   FUN_8007ff70(auStack_b8,0x27);
-  FUN_80080494(auStack_60,&DAT_800a97d0,0xc0000);
+  FUN_80080494(auStack_60,DAT_800a97d0,0xc0000);
   FUN_80080088(auStack_80,DAT_800a8d5c,0x100);
   FUN_80010a88(auStack_b8);
 
@@ -787,8 +808,8 @@ void FUN_80010cec(void)
 
     DAT_80033dcc = (undefined2)(0xa0 << (*(byte *)((int)ppuVar1 + 7) & 0x1f));
 
-    FUN_80082fac(*ppuVar1,&DAT_800a97d0);
-    FUN_8007bca0(&DAT_800a97d0,&DAT_80033dc0,&LAB_80033dc8);
+    FUN_80082fac(*ppuVar1,DAT_800a97d0);
+    FUN_8007bca0(DAT_800a97d0,&DAT_80033dc0,&LAB_80033dc8);
 
     local_38 = 0;
     local_34 = (uint)*(ushort *)(ppuVar1 + 1);
@@ -1021,7 +1042,8 @@ byte * FUN_8001124c(int param_1,undefined4 param_2,undefined4 param_3)
   undefined auStack_128 [264];
 
   FUN_8008cedc(auStack_128,param_3);
-  FUN_8008d020(auStack_128,0x80011da0);
+  /* 0x80011da0 was a PS1 ROM string literal ";1" (ISO 9660 version suffix). */
+  FUN_8008d020(auStack_128,(undefined4)(uintptr_t)";1");
 
   iVar6 = 0;
   iVar4 = 0;
@@ -1157,7 +1179,9 @@ void FUN_80011494(undefined4 param_1)
   FUN_80011390(&LAB_800a8e5c,param_1);
 
   iVar1 = FUN_80011154(&LAB_800a8e5c,"gt2.vol");
-  DAT_801c93e8 = *(undefined4 *)(iVar1 + 2);
+  if (iVar1 != 0) {
+    DAT_801c93e8 = *(undefined4 *)(iVar1 + 2);
+  }
 
   iVar1 = FUN_80011154(&LAB_800a8e5c,"music.dat");
   if (iVar1 == 0) {
@@ -1292,8 +1316,9 @@ void FUN_80011710(void)
   undefined4 *puVar8;
 
   iVar2 = FUN_800100e4("/carobj",0);
+  if (iVar2 == 0) return;  /* directory not found on CD */
   iVar3 = (uint)*(ushort *)(iVar2 + 4) * 0x20;
-  puVar5 = &DAT_800a97d0 + (uint)*(ushort *)(iVar2 + 4) * 8;
+  puVar5 = DAT_800a97d0 + (uint)*(ushort *)(iVar2 + 4) * 8;
 
   if ((*(byte *)((int)&DAT_800a97d4 + iVar3 + 2) & 3) == 1) {
     puVar8 = (undefined4 *)(&UNK_800a97f0 + iVar3);
@@ -1343,9 +1368,9 @@ void FUN_80011820(void)
   byte *pbVar8;
 
   iVar3 = FUN_800100e4("/carlogo",0);
-
+  if (iVar3 == 0) return;  /* directory not found on CD */
   iVar4 = (uint)*(ushort *)(iVar3 + 4) * 0x20;
-  puVar6 = &DAT_800a97d0 + (uint)*(ushort *)(iVar3 + 4) * 8;
+  puVar6 = DAT_800a97d0 + (uint)*(ushort *)(iVar3 + 4) * 8;
 
   if ((*(byte *)((int)&DAT_800a97d4 + iVar4 + 2) & 3) == 1) {
 
@@ -1409,8 +1434,9 @@ void FUN_8001194c(void)
   short sVar6;
 
   iVar2 = FUN_800100e4("/carwheel",0);
+  if (iVar2 == 0) return;  /* directory not found on CD */
   iVar3 = (uint)*(ushort *)(iVar2 + 4) * 0x20;
-  puVar5 = &DAT_800a97d0 + (uint)*(ushort *)(iVar2 + 4) * 8;
+  puVar5 = DAT_800a97d0 + (uint)*(ushort *)(iVar2 + 4) * 8;
 
   if ((*(byte *)((int)&DAT_800a97d4 + iVar3 + 2) & 3) == 1) {
     puVar1 = (undefined4 *)(&UNK_800a97f0 + iVar3);
@@ -1454,8 +1480,9 @@ void FUN_80011a10(void)
   short sVar8;
 
   iVar3 = FUN_800100e4("/engine",0);
+  if (iVar3 == 0) return;  /* directory not found on CD */
   iVar4 = (uint)*(ushort *)(iVar3 + 4) * 0x20;
-  puVar5 = &DAT_800a97d0 + (uint)*(ushort *)(iVar3 + 4) * 8;
+  puVar5 = DAT_800a97d0 + (uint)*(ushort *)(iVar3 + 4) * 8;
 
   if ((*(byte *)((int)&DAT_800a97d4 + iVar4 + 2) & 3) == 1) {
     puVar1 = (undefined4 *)(&UNK_800a97f0 + iVar4);
@@ -1536,8 +1563,9 @@ void FUN_80011b70(void)
   undefined auStack_38 [32];
 
   iVar1 = FUN_800100e4("/crsmap",0);
+  if (iVar1 == 0) return;  /* directory not found on CD */
   iVar2 = (uint)*(ushort *)(iVar1 + 4) * 0x20;
-  puVar5 = &DAT_800a97d0 + (uint)*(ushort *)(iVar1 + 4) * 8;
+  puVar5 = DAT_800a97d0 + (uint)*(ushort *)(iVar1 + 4) * 8;
 
   if ((*(byte *)((int)&DAT_800a97d4 + iVar2 + 2) & 3) == 1) {
     puVar6 = (undefined4 *)(&UNK_800a97f0 + iVar2);
@@ -2386,22 +2414,23 @@ void FUN_8005da7c(undefined4 param_1,undefined4 param_2,undefined4 param_3,undef
   DAT_801c945c = param_3;
   DAT_801c9460 = param_4;
 
-  FUN_8005dad8();
-  puVar1 = &DAT_801c942c;
+  FUN_8005dad8(param_1);
 
   FUN_8007ad90(&DAT_801c942c,param_2);
 
   FUN_80078370();
   FUN_800783dc();
 
+  /* Decompiler emitted (int)&DAT_801c942c * 8 (address-as-index); the original
+     MIPS reuses param_1 which is still in $a0/$s0. */
   if (DAT_801ef618 == 0) {
 
     FUN_8007ab74(DAT_800a8d5c,DAT_801c93d0,DAT_801c93e0);
-    iVar2 = (int)DAT_800a8d5c + *(int *)(&DAT_801ef61c + (int)puVar1 * 8);
+    iVar2 = (int)DAT_800a8d5c + *(int *)(&DAT_801ef61c + (int)param_1 * 8);
   }
   else {
 
-    iVar2 = DAT_801ef618 + *(int *)(&DAT_801ef61c + (int)puVar1 * 8);
+    iVar2 = DAT_801ef618 + *(int *)(&DAT_801ef61c + (int)param_1 * 8);
   }
 
   FUN_80082fac(iVar2,FUN_80010000);

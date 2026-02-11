@@ -12,6 +12,7 @@
 #include "gt2_global_vars_clean.h"
 #include "gt2_types.h"
 #include "disk_path.h"
+#include "cd_reader.h"
 
 /* Forward declaration of start() function from decompiled code */
 extern undefined4 start(undefined4 param_1, undefined4 param_2);
@@ -73,7 +74,7 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Arguments: %d\n", argc);
     
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
         fprintf(stderr, "SDL initialization failed: %s\n", SDL_GetError());
         return 1;
     }
@@ -110,7 +111,7 @@ int main(int argc, char *argv[]) {
     DAT_800a8d5c = malloc(0x120654 + 1024); // Add some extra space
     if (DAT_800a8d5c == NULL) {
         fprintf(stderr, "Failed to allocate memory for DAT_800a8d5c\n");
-        SDL_GL_DeleteContext(context);
+        SDL_GL_DestroyContext(context);
         SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
@@ -123,7 +124,7 @@ int main(int argc, char *argv[]) {
     if (DAT_800a7b7c == NULL) {
         fprintf(stderr, "Failed to allocate memory for DAT_800a7b7c\n");
         free(DAT_800a8d5c);
-        SDL_GL_DeleteContext(context);
+        SDL_GL_DestroyContext(context);
         SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
@@ -139,12 +140,23 @@ int main(int argc, char *argv[]) {
         } else {
             fprintf(stderr, "GT2: Failed to set disk path: %s\n", disk_path);
         }
+        /* Initialize platform CD sector reader (reads data directly from BIN file,
+           bypassing the PS1 interrupt-driven CD state machine). */
+        if (gt2_cd_reader_init(disk_path) == 0) {
+            fprintf(stderr, "GT2: CD reader initialized\n");
+        } else {
+            fprintf(stderr, "GT2: CD reader init failed (CD reads will not work)\n");
+        }
     } else if (disk_rc == -1) {
         fprintf(stderr, "GT2: Disk path resolution failed\n");
     }
 
     /* Set DMA callback to no-op so DMACallback() does not segfault (no real DMA on Linux) */
     DAT_800a8be8 = &dma_callback_storage;
+
+    /* Save original heap pointers before start() — the game may overwrite them */
+    void *saved_800a7b7c = DAT_800a7b7c;
+    void *saved_800a8d5c = DAT_800a8d5c;
 
     /* Initialize parameters for start(); on PS1 these would come from BIOS */
     undefined4 param_1 = 0;
@@ -156,10 +168,11 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "GT2 Linux Port - Exited with code: %u\n", (unsigned int)result);
     
     // Cleanup
-    free(DAT_800a7b7c);
-    free(DAT_800a8d5c);
-    SDL_GL_DeleteContext(context);
-    SDL_DestroyWindow(window);
+    gt2_cd_reader_close();
+    free(saved_800a7b7c);
+    free(saved_800a8d5c);
+    if (context) SDL_GL_DestroyContext(context);
+    if (window) SDL_DestroyWindow(window);
     SDL_Quit();
     
     return (int)result;

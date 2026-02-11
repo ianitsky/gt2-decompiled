@@ -48,7 +48,7 @@ void FUN_8007ba70(undefined4 *param_1, undefined4 param_2, int param_3);
 void FUN_8007af30(void);
 void FUN_8007d23c(int param_1);
 void FUN_8007d0f0(int param_1);
-void FUN_80080858(void);
+void FUN_80080858(undefined4 *renderStructure);
 void FUN_8007fab8(undefined4 *param_1, int param_2, undefined4 *param_3);
 void FUN_8007fb38(undefined4 *param_1);
 void FUN_800808c4(undefined4 *param_1, undefined4 param_2);
@@ -1442,7 +1442,8 @@ void FUN_overlay5__80010e64(undefined4 *param_1,undefined4 param_2,int param_3)
   undefined modeValue;
   undefined *callbackPointer;
 
-  FUN_80080858();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_80080858(param_1);
 
   *param_1 = &LAB_overlay5__8001156c;
 

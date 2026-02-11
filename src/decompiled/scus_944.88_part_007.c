@@ -134,19 +134,26 @@ void FUN_8007e8a0(void)
   systemData = (long *)&DAT_801f06e0;
   currentSource = &DAT_80090530;
   destinationBuffer = localBuffer;
-  do {
-    currentDestination = destinationBuffer;
-    sourceBuffer = currentSource;
-    value1 = sourceBuffer[1];
-    value2 = sourceBuffer[2];
-    value3 = sourceBuffer[3];
-    *currentDestination = *sourceBuffer;
-    currentDestination[1] = value1;
-    currentDestination[2] = value2;
-    currentDestination[3] = value3;
-    currentSource = sourceBuffer + 4;
-    destinationBuffer = currentDestination + 4;
-  } while (sourceBuffer + 4 != (ulong *)0x80090590);
+  /* Original loop: while (sourceBuffer + 4 != 0x80090590)
+     0x80090590 - 0x80090530 = 0x60 bytes = 3 iterations of 0x20 bytes each.
+     Fixed: use iteration count instead of PS1 address comparison. */
+  {
+    int _copy_iter = 0;
+    do {
+      currentDestination = destinationBuffer;
+      sourceBuffer = currentSource;
+      value1 = sourceBuffer[1];
+      value2 = sourceBuffer[2];
+      value3 = sourceBuffer[3];
+      *currentDestination = *sourceBuffer;
+      currentDestination[1] = value1;
+      currentDestination[2] = value2;
+      currentDestination[3] = value3;
+      currentSource = sourceBuffer + 4;
+      destinationBuffer = currentDestination + 4;
+      _copy_iter++;
+    } while (_copy_iter < 3);
+  }
   value1 = sourceBuffer[5];
   value2 = sourceBuffer[6];
   currentDestination[4] = 0xf0000011;
@@ -2163,7 +2170,9 @@ undefined4 FUN_80081cf8(int interruptState)
   bool wasZero;
   int callbackResult;
   undefined4 result;
-  code *callbackFunction;
+  /* Fixed: use direct function pointer type instead of code* (code* is void(**)(void),
+     which would dereference function body bytes as a pointer). */
+  void (*callbackFunction)(void);
 
   callbackResult = CheckCallback();
   result = 0;
@@ -2177,7 +2186,7 @@ undefined4 FUN_80081cf8(int interruptState)
     wasZero = DAT_80095ac4 == 0;
     DAT_80095ac4 = callbackResult;
     if (wasZero) {
-      (*callbackFunction)();
+      callbackFunction();
     }
     result = 0xffffffff;
   }
@@ -3108,6 +3117,10 @@ void FUN_80083030(int **listHead,int **newData)
   int *nextNode;
   int *previousNode;
 
+  /* Guard: some call sites (e.g. FUN_800686c8) pass only one argument due to decompiler bug;
+     newData will be NULL in that case. */
+  if (newData == NULL || listHead == NULL) return;
+
   interruptState = FUN_80081cf8(0);
   currentNode = *listHead;
   nextNode = (int *)0x0;
@@ -3158,14 +3171,19 @@ void FUN_800830cc(int **listHead,int *dataToRemove)
 void FUN_80083134(int *callbackList)
 
 {
-  code **callbackFunction;
+  /* Traverse linked list and invoke each node's callback stored at offset +8.
+     Decompiler emitted `code **` + `**ptr` (double-dereference) but the callback
+     field already contains the function pointer, so a single dereference suffices. */
+  void (*callbackFunction)(void);
   int currentNode;
 
   currentNode = *callbackList;
   while (currentNode != 0) {
-    callbackFunction = (code **)(currentNode + 8);
+    callbackFunction = *(void (**)(void))(currentNode + 8);
     currentNode = *(int *)(currentNode + 4);
-    (**callbackFunction)();
+    if (callbackFunction != NULL) {
+      callbackFunction();
+    }
   }
   return;
 }
@@ -4183,6 +4201,7 @@ void FUN_80084364(int decompressionContext)
 void FUN_800847d0(code **renderData)
 
 {
+  if (renderData == (code **)0x0) return;  /* null guard – caller may pass NULL */
   ushort inputValue;
   uint *tablePointer1;
   code **callbackPointer;

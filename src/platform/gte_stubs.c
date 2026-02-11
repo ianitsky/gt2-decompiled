@@ -133,6 +133,14 @@ void setCopReg(int copNumber, undefined4 registerNumber, undefined4 value, undef
         gte_setCopReg(2, (int)registerNumber, (uint32_t)value);
 }
 
+/* GTE control register loaders used by InitGeom and other callers */
+void gte_ldOFX(undefined4 value)  { gte_impl_ldOFX((int32_t)value); }
+void gte_ldH(undefined4 value)    { gte_impl_ldH((uint32_t)value); }
+void gte_ldDQA(undefined4 value)  { gte_impl_ldDQA((int32_t)value); }
+void gte_ldDQB(undefined4 value)  { gte_impl_ldDQB((int32_t)value); }
+void gte_ldZSF3(undefined4 value) { gte_impl_ldZSF3((int32_t)value); }
+void gte_ldZSF4(undefined4 value) { gte_impl_ldZSF4((int32_t)value); }
+
 void SUB_000000b0(void) { }  /* B0 vector for psyz; game uses gt2_b0_callback */
 void trap(void) { }
 void prefetch(void) { }

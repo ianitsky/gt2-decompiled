@@ -927,28 +927,28 @@ undefined4 FUN_8007248c(void)
   return 0xffffffff;
 }
 
+/* FUN_80072494: Sets module callback and invokes it.
+   Fixed: use proper function pointer types instead of code* to avoid double-indirection. */
 void FUN_80072494(int param_1)
-
 {
-
   int systemDataPointer;
-  code *callbackFunction;
+  void (*callbackFunction)(int, int, int);
 
   systemDataPointer = DAT_801c94ac;
 
   if (param_1 < 0) {
-
-    callbackFunction = FUN_8007248c;
+    callbackFunction = (void (*)(int, int, int))(void *)FUN_8007248c;
   }
   else {
-
-    callbackFunction = (code *)(&PTR_LAB_800921d4)[param_1];
+    callbackFunction = (void (*)(int, int, int))(void *)(&PTR_LAB_800921d4)[param_1];
   }
 
-  *(code **)(DAT_801c94ac + 4) = callbackFunction;
+  *(void (**)(int, int, int))(DAT_801c94ac + 4) = callbackFunction;
   *(short *)(systemDataPointer + 2) = (short)param_1;
 
-  (*(code_varargs *)(*(code **)(systemDataPointer + 4)))(0,0,0);
+  if (callbackFunction != NULL) {
+    callbackFunction(0, 0, 0);
+  }
 
   return;
 }

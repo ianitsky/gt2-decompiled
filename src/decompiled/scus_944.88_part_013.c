@@ -4003,7 +4003,8 @@ void FUN_overlay0__800157a8(undefined4 *param_1)
   int iVar1;
   int iVar2;
 
-  FUN_8007fe8c();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fe8c(param_1);
   *param_1 = &LAB_overlay0__8002ef98;
   *(undefined *)((int)param_1 + 0x2e6) = 0;
 
@@ -4018,7 +4019,8 @@ void FUN_overlay0__800157fc(undefined4 *param_1)
 
 {
   *param_1 = &LAB_overlay0__8002ef98;
-  FUN_8007fec8();
+  /* Decompiler bug: param_1 was already in $a0 (MIPS). */
+  FUN_8007fec8(param_1);
   return;
 }
 
