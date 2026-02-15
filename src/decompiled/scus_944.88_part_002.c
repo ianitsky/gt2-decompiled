@@ -2269,6 +2269,22 @@ code_r0x80063da4:
   goto LAB_80063954;
 }
 
+/*
+ * RenderMeshWithSubdivision (suggested name)
+ *
+ * Purpose: Renders a 3D mesh with adaptive polygon subdivision. Projects vertices
+ * via GTE, transforms them (FUN_800616c4), then processes polygon lists (triangles,
+ * quads) with backface culling (gte_nclip_b) and depth sorting. For large/distant
+ * polygons, subdivides into sub-polygons with interpolated coords/colors for
+ * Gouraud shading. Writes GPU commands (G3, G4, etc.) to DAT_1f800068.
+ *
+ * Parameters:
+ *   param_1 - mesh structure: [0]=vertex count, [2-9]=poly counts, [10]=SVECTOR*,
+ *             [0xe]-[0x1c]=polygon list pointers
+ *   param_2, param_3, param_4 - transform/depth/config (used in vertex loop)
+ *
+ * Polygon types: triangles (3v), quads (4v), with optional subdivision.
+ */
 void FUN_80063ef4(ushort *param_1,undefined4 param_2,uint param_3,uint param_4)
 
 {

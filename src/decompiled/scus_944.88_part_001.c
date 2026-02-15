@@ -4,6 +4,7 @@
 #include "scus_944.88_part_006.h"
 #include "scus_944.88_part_009.h"
 #include <stdint.h>
+#include <stdio.h>
 
 // Keep local type aliases for compatibility
 // Note: __WORDSIZE is already defined by system headers, so we don't redefine it
@@ -26,7 +27,23 @@ byte FUN_8005db90(int param_1, uint param_2);
 int FUN_8005de8c(int param_1, uint *param_2);
 int FUN_8001146c(char *param_1);
 
-void FUN_80010000(int *param_1)
+/*
+ * LoadGT2OverlayFile (suggested name)
+ *
+ * Loads the main overlay file gt2.ovl from CD-ROM. Opens the file via ISO 9660,
+ * allocates a decompression buffer, copies compressed data from CD, and optionally
+ * copies the first 0x30 bytes to a local buffer. Used as the loader callback
+ * by FUN_80082fac when loading overlays dynamically.
+ *
+ * param_1: Output array [offset, decompressed_size, buffer_ptr]
+ *   param_1[0]: File offset (sectors) relative to base
+ *   param_1[1]: Decompressed size (from file entry)
+ *   param_1[2]: Allocated buffer pointer (0 if fallback to param_1+3)
+ *
+ * Globals: DAT_801c93e0 (size), DAT_801c93d0 (load address)
+ * Called by: FUN_80082fac (as loader), FUN_800100c0
+ */
+void load_gt2_overlay_file(int *param_1)
 
 {
   int fileHandle;
@@ -36,6 +53,7 @@ void FUN_80010000(int *param_1)
 
   fileHandle = FUN_8001146c("gt2.ovl");
   if (fileHandle == 0) {
+    printf("File not found on CD image – nothing to load\n");
     /* File not found on CD image – nothing to load */
     return;
   }
@@ -236,7 +254,7 @@ void FUN_800100c0(void)
 
 {
 
-  FUN_80010000(&DAT_801ef610);
+  load_gt2_overlay_file(&DAT_801ef610);
   return;
 }
 
@@ -870,6 +888,28 @@ int FUN_80010f1c(int param_1,int param_2)
   return param_1 + 0x16c;
 }
 
+/*
+ * LoadPrimaryVolumeDescriptor (suggested name)
+ *
+ * Loads and parses the ISO 9660 Primary Volume Descriptor (PVD) from the CD-ROM.
+ * Starts at sector 16 (0x10), where the Volume Descriptor Set begins per ISO 9660.
+ *
+ * param_1: ISO 9660 context structure (receives parsed data)
+ *
+ * Algorithm:
+ * 1. Read sector via FUN_80010f1c (sector 16, then 17, 18... if needed)
+ * 2. Validate "CD001" at offset 1 (ISO 9660 standard identifier)
+ * 3. Loop until Volume Descriptor Set Terminator (type 0xFF) or PVD found
+ * 4. When type == 0x01 (Primary Volume Descriptor):
+ *    - Copy Root Directory Record (34 bytes at PVD offset 0x9c) to param_1+0x22
+ *    - Copy same record to param_1 (start of context) for navigation
+ * 5. On error: set param_1[0x11] = 2 and return
+ *
+ * The Root Directory Record contains LBA and size of the root directory,
+ * enabling subsequent path resolution (FUN_80011154, FUN_8001124c).
+ *
+ * Called from FUN_80011494 during file system initialization.
+ */
 undefined4 FUN_80010f5c(undefined4 *param_1)
 
 {
@@ -1181,6 +1221,8 @@ void FUN_80011494(undefined4 param_1)
   iVar1 = FUN_80011154(&LAB_800a8e5c,"gt2.vol");
   if (iVar1 != 0) {
     DAT_801c93e8 = *(undefined4 *)(iVar1 + 2);
+  } else {
+    fprintf(stderr, "[GT2] gt2.vol not found on disc - /carobj and other paths will fail\n");
   }
 
   iVar1 = FUN_80011154(&LAB_800a8e5c,"music.dat");
@@ -2282,11 +2324,15 @@ int FUN_8005d79c(int param_1)
   return ((&DAT_801e3600)[param_1 + 1] & 0xfffff800) - (&DAT_801e3600)[param_1];
 }
 
-void FUN_8005d7d0(undefined4 param_1,int param_2)
-
+/*
+ * Loads data from gt2.vol (CD) to buffer. param_2 = sector offset in 2KB units,
+ * param_3 = size in bytes (default 0x800 if 0). FUN_800102dc passes 0x8c000 to
+ * load the full virtual file system; without this, only 2KB loads and /carobj fails.
+ */
+void FUN_8005d7d0(undefined4 param_1, int param_2, int param_3)
 {
-
-  FUN_8007ab78(param_1,(DAT_801c93e8 + ((param_2 << 0xb) >> 0xb)) * 0x800, 0x800);
+  int size = (param_3 > 0) ? param_3 : 0x800;
+  FUN_8007ab78(param_1, (DAT_801c93e8 + ((param_2 << 0xb) >> 0xb)) * 0x800, size);
   return;
 }
 
@@ -2369,6 +2415,12 @@ uint * FUN_8005d950(uint param_1)
   return (uint *)0x0;
 }
 
+/*
+ * ClearOverlayBuffer (suggested name)
+ *
+ * Clears the main overlay/game data buffer (DAT_800a8d5c, 0x120654 bytes).
+ * Called after overlay processing to free space for next load.
+ */
 void FUN_8005d9bc(void)
 
 {
@@ -2380,6 +2432,13 @@ void FUN_8005d9bc(void)
 // Function pointer type for FUN_8005d9f0 callback
 typedef void (*callback_4args)(undefined4, undefined4, undefined4, undefined4);
 
+/*
+ * InvokeOverlayInitCallback (suggested name)
+ *
+ * Invokes the overlay initialization callback stored in DAT_801c942c.
+ * Called before loading a new overlay (e.g. in FUN_8005d6e0). Passes
+ * DAT_801c945c, DAT_801c9460, DAT_801c9464, DAT_801c9468 as arguments.
+ */
 void FUN_8005d9f0(void)
 
 {
@@ -2394,6 +2453,12 @@ void FUN_8005d9f0(void)
   return;
 }
 
+/*
+ * InitializeOverlayByIndex (suggested name)
+ *
+ * Loads overlay by index using configuration from PTR_LAB_80091174.
+ * Wrapper for FUN_8005da7c with preset config. param_1=1 loads main game overlay.
+ */
 void FUN_8005da3c(int param_1)
 
 {
@@ -2402,6 +2467,14 @@ void FUN_8005da3c(int param_1)
   return;
 }
 
+/*
+ * LoadOverlayWithConfig (suggested name)
+ *
+ * Full overlay loading: copies overlay data from CD to buffer, decompresses
+ * via FUN_80082fac (DEFLATE), flushes cache, clears buffer. Uses DAT_801ef61c
+ * for overlay offset table. param_2 is overlay config (from PTR_LAB_80091174).
+ * param_3-6 stored in DAT_801c945c-68 for callbacks.
+ */
 void FUN_8005da7c(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
                  undefined4 param_5,undefined4 param_6)
 
@@ -2433,7 +2506,7 @@ void FUN_8005da7c(undefined4 param_1,undefined4 param_2,undefined4 param_3,undef
     iVar2 = DAT_801ef618 + *(int *)(&DAT_801ef61c + (int)param_1 * 8);
   }
 
-  FUN_80082fac(iVar2,FUN_80010000);
+  FUN_80082fac(iVar2,load_gt2_overlay_file);
 
   FlushCache();
 
@@ -2441,6 +2514,13 @@ void FUN_8005da7c(undefined4 param_1,undefined4 param_2,undefined4 param_3,undef
   return;
 }
 
+/*
+ * PrepareAndLoadOverlay (suggested name)
+ *
+ * Simplified overlay load: copies from CD (DAT_801c93d0, DAT_801c93e0) to buffer,
+ * calls FUN_80082fac to decompress, FlushCache, ClearOverlayBuffer.
+ * Used when overlay data is already set up (e.g. by load_gt2_overlay_file).
+ */
 void FUN_8005dad8(int param_1)
 
 {
@@ -2459,7 +2539,7 @@ void FUN_8005dad8(int param_1)
     iVar1 = DAT_801ef618 + *(int *)(&DAT_801ef61c + param_1 * 8);
   }
 
-  FUN_80082fac(iVar1,FUN_80010000);
+  FUN_80082fac(iVar1,load_gt2_overlay_file);
 
   FlushCache();
   FUN_8005d9bc();
@@ -4281,6 +4361,36 @@ LAB_800602b4:
   return iVar5;
 }
 
+/*
+ * ApplyCarParameterByAction (suggested name)
+ *
+ * Applies a single car/tuning parameter from internal tables to the active game state.
+ * Called when the user confirms a menu selection (e.g. tuning menu) with action flag 0x10000.
+ *
+ * param_1: Game/race context (e.g. &DAT_8016e894)
+ * param_2: Action ID (0-0x10) - selects which parameter to apply
+ *
+ * Action mapping:
+ *   0: Copy color/visual data (offsets 0x1f, 0x22) from car table
+ *   1: Copy data (0x15, 0x18) from car table
+ *   2: Copy tire/rim data (0x2a-0x42) - conditional on FUN_8005f800
+ *   3: Copy data (0x31, 0x34, 0x3f, 0x42) from car table
+ *   4: Copy data (0xb, 0xe) from car table
+ *   5: Set fixed values 0x80 at 0x5e, 0x5f
+ *   6: Copy data (0x46, 0x4a) from car table
+ *   7: Copy from table at 0xae8 (stride 0x10, index at 0x17b4)
+ *   8: Copy wheel/rim data from table at 0x1218; calls FUN_8005e99c for transform
+ *   9: Copy byte from table at 0x1239
+ *   10, 0xd: Copy from table at 0x1640 (stride 0x20, index at 0x17dc)
+ *   0xb: Copy from table at 0x1640 (offsets 0x10, 0x1a)
+ *   0xc: Copy from table at 0x1640 (offsets 0x13, 0x1d)
+ *   0xe: Copy from table at 0x15fb (stride 0x10, index at 0x17d8)
+ *   0xf: Copy from table at 0x1624 (stride 0x10, index at 0x17da)
+ *   0x10: Copy from table at 0x1550 (stride 0x1c, index at 0x17d6)
+ *
+ * Tables use indices stored at param_1+0x17b0, 0x17b4, 0x17bc, 0x17dc, 0x17d8, 0x17da, 0x17d6.
+ * Called from part_024 when user selects menu item with action at overlay+0x14.
+ */
 void FUN_80060410(int param_1,undefined4 param_2)
 
 {

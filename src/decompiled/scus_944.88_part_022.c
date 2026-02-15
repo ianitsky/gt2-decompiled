@@ -481,6 +481,36 @@ LAB_overlay0__8003e07c:
   return;
 }
 
+/*
+ * CoordinateVehiclePhysicsStep (Original: FUN_overlay0__8003e0c4)
+ *
+ * Purpose:
+ *   Coordinates multiple vehicle physics subsystems in a single pass. Processes
+ *   state flags, vertical physics, aerodynamics, traction limitation, slip angle,
+ *   steering, braking and throttle for all vehicles. Called from main physics
+ *   loop (FUN_overlay0__8003ebf0) before movement integration.
+ *
+ * Parameters:
+ *   param_1: Base pointer to vehicle data array (each vehicle = 0xb40 bytes)
+ *   param_2: Number of vehicles to process
+ *
+ * Processing phases (in order):
+ *   1. Flags/timers: 0x744 (mode), 0x76a/0x7ba/0x791 (decrement)
+ *   2. FUN_overlay0__8004232c: Vertical velocity
+ *   3. FUN_overlay0__8003daa8: Aerodynamics
+ *   4. Speed/position: FUN_80075d2c, FUN_80075bf4 -> 0x73c, 0x740
+ *   5. FUN_overlay0__80039a4c: Traction limitation
+ *   6. FUN_overlay0__80039de8: Slip angle
+ *   7. Main physics: FUN_overlay0__8003e020/8002fb18 or FUN_overlay0__80038540
+ *   8. Steering: 0x638 -> 0x498, 0x500; wheel 0x46c adjustments
+ *   9. FUN_overlay0__800419e8: Wheel state; copy to scratchpad
+ *  10. FUN_overlay0__80039778
+ *  11. Braking/acceleration: scratchpad 0x90, 0x92
+ *  12. Throttle/steering: FUN_overlay0__8003dfdc, FUN_overlay0__8003de68, FUN_overlay0__8003dbe8
+ *  13. FUN_overlay0__80039fc8, FUN_overlay0__80030330
+ *
+ * Vehicle state (0x489): 0=normal physics, 2=alternate (replay/AI?)
+ */
 void FUN_overlay0__8003e0c4(int param_1,int param_2)
 
 {

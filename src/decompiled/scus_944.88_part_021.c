@@ -1811,6 +1811,28 @@ void FUN_overlay0__80039470(int param_1, int param_2)
   return;
 }
 
+/*
+ * CalculateWheelSlipRatio (Original: FUN_overlay0__80039490)
+ *
+ * Purpose:
+ *   Computes wheel slip ratio/correction for each of 4 wheels. Compares expected
+ *   speed (from scratchpad-scaled longitudinal/lateral velocities) with actual
+ *   wheel speed (0x18) to determine slip direction and magnitude. Output written
+ *   to wheel +0x44. Called from FUN_overlay0__80039778 per vehicle (drive mode 1).
+ *
+ * Parameters:
+ *   param_1: Base pointer to wheel/axle data (vehicle + 0x2c)
+ *   param_2: Vehicle index (for scratchpad: DAT_1f800004 + param_2 * 0x24)
+ *
+ * Per wheel (4 total, stride 0x68):
+ *   Input:  +0x2c = longitudinal velocity, +0x30 = lateral velocity
+ *           +0x18 = wheel speed, +0x2a = scaling factor
+ *   Output: +0x44 = slip ratio/correction (-0x1000..0x1000)
+ *
+ * Logic: Compares (long*scale - lat*scale) with wheel speed; branches on
+ *   stationary (0x18 + 0x46 < 0x8d), reversing (0x18 < 1), or forward.
+ *   Uses FUN_80086084 for division, FUN_8007596c for final scaling when fast.
+ */
 void FUN_overlay0__80039490(int param_1,int param_2)
 
 {
@@ -2091,6 +2113,29 @@ LAB_overlay0__80039a28:
   return;
 }
 
+/*
+ * LimitTractionBasedOnWheelSlip (Original: FUN_overlay0__80039a4c)
+ *
+ * Purpose:
+ *   Limits traction based on wheel slip/accumulation. When DAT_overlay0__80046f48
+ *   is set and vehicle flag (0x7b9 & 0x10) is clear, computes a traction multiplier
+ *   (+0x38) from accumulated wheel value (+100) using thresholds. Then computes
+ *   lateral force (+0x34) per wheel, applying the multiplier when active. Called
+ *   from CoordinateVehiclePhysicsStep before FUN_overlay0__80039de8 (slip angle).
+ *
+ * Parameters:
+ *   param_1: Base pointer to vehicle data array (each vehicle = 0xb40 bytes)
+ *   param_2: Number of vehicles to process
+ *
+ * Per wheel (4 per vehicle, stride 0x68):
+ *   Input:  +8 = base torque, +100 = accumulated slip/value
+ *   Output: +0x34 = lateral force
+ *           +0x38 = traction multiplier (0..0x1000) when DAT_overlay0__80046f48 active
+ *           +0x3f = slip indicator when active
+ *
+ * Thresholds (DAT_overlay0__80046f*): 80046f48=limit, 80046f5c, 80046f54, 80046f58,
+ *   80046f60, 80046f4c control the multiplier curve.
+ */
 void FUN_overlay0__80039a4c(int param_1,int param_2)
 
 {
@@ -2235,6 +2280,30 @@ LAB_overlay0__80039c94:
   } while( true );
 }
 
+/*
+ * CalculateWheelSlipAngleAndGrip (Original: FUN_overlay0__80039de8)
+ *
+ * Purpose:
+ *   Calculates slip angle and grip coefficient for each wheel based on
+ *   longitudinal (0x2c) and lateral (0x30) velocity components. Called from
+ *   CoordinateVehiclePhysicsStep after FUN_overlay0__80039a4c (traction limit).
+ *
+ * Parameters:
+ *   param_1: Base pointer to vehicle data array (each vehicle = 0xb40 bytes)
+ *   param_2: Number of vehicles to process
+ *
+ * Per wheel (4 per vehicle, offset +0x68 each):
+ *   Input:  +0x2c = longitudinal velocity, +0x30 = lateral velocity
+ *   Output: +0x50 = slip angle (atan2(-lateral, longitudinal))
+ *           +0x52 = grip coefficient (0..0x1000)
+ *
+ * Grip logic:
+ *   - 0x1000 when speed magnitude > 0x2c73 or edge cases
+ *   - 0 when magnitude <= 0x472 (very low speed)
+ *   - Ramp (magnitude - 0x472) * 0x666 >> 12 when 0x472 < magnitude <= 0x2c73
+ *
+ * Uses FUN_80081288 (sqrt) and FUN_80081af0 (atan2).
+ */
 void FUN_overlay0__80039de8(int param_1,int param_2)
 
 {
@@ -2329,6 +2398,34 @@ int FUN_overlay0__80039f4c(undefined4 param_1,int param_2)
   return (int)sVar2 * (int)sVar1;
 }
 
+/*
+ * IntegrateVehiclePhysicsForces (Original: FUN_overlay0__80039fc8)
+ *
+ * Purpose:
+ *   Integrates wheel forces into vehicle motion. Takes accumulated wheel torques,
+ *   lateral forces and slip angles, computes longitudinal/yaw acceleration, and
+ *   updates vehicle speed (0x6d0), yaw rate (0x678) and drive speed (0x650).
+ *   Called from CoordinateVehiclePhysicsStep (FUN_overlay0__8003e0c4) as final
+ *   integration phase, before FUN_overlay0__80030330.
+ *
+ * Parameters:
+ *   param_1: Base pointer to vehicle data array (each vehicle = 0xb40 bytes)
+ *   param_2: Number of vehicles to process
+ *
+ * Processing phases (in order):
+ *   1. State flags: 0x645 (drive state 0/1/2/3), 0x650 -> scratchpad 0x7c/0x80
+ *   2. Wheel torque sum: 0x468 * lookup -> scratchpad 0x88
+ *   3. FUN_overlay0__800397d0; per-wheel 0x58, 0x5c (lateral forces)
+ *   4. Per-wheel slip/lateral: 0x54, 0x3c via FUN_overlay0__800450e0, 80039f4c
+ *   5. Integrate: 0x760, 0x750 -> 0x6d0 (vehicle speed)
+ *   6. FUN_overlay0__80046b58: wheel/suspension physics (part_023)
+ *   7. Drive speed: 0x650 via FUN_overlay0__800353dc, 8003932c
+ *   8. Yaw: 0x678, steering 0x676, 0x754
+ *   9. Final: tire smoke, airborne reset, FUN_overlay0__80041ab8
+ *
+ * Vehicle state: 0x39e (drive mode 1/2), 0x645 (0=normal, 1/2/3=special)
+ * Uses scratchpad 0x1f800000 (stride 0x90 per vehicle).
+ */
 void FUN_overlay0__80039fc8(int param_1,int param_2)
 
 {

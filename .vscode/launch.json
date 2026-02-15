@@ -6,7 +6,10 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/src/gt2",
-            "args": [],
+            "args": [
+                "-iso",
+                "${workspaceFolder}/assets/Gran Turismo 2 (Arcade Mode) (v1.1).cue"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
@@ -27,7 +30,10 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/src/gt2",
-            "args": [],
+            "args": [
+                "-iso",
+                "${workspaceFolder}/assets/Gran Turismo 2 (Arcade Mode) (v1.1).cue"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

@@ -2092,6 +2092,20 @@ void FUN_8007aa94(int channelId,undefined4 *soundData)
   return;
 }
 
+/*
+ * WaitForTransferComplete (suggested name)
+ *
+ * Purpose: Busy-waits until CD/DMA transfer completes (FUN_80081c94 returns 0).
+ * Each iteration: processes audio (FUN_80081c5c), updates system (FUN_80081f4c),
+ * waits for DAT_801f0676 (FUN_8007c550), then checks transfer status. Used after
+ * starting CD reads or other transfers. Optional callback runs while waiting
+ * (e.g. FUN_8007dfd8 for SPU config during init).
+ *
+ * Parameter:
+ *   callbackFunction - optional callback to run each loop while waiting; NULL to skip
+ *
+ * Return: 1 (always)
+ */
 undefined4 FUN_8007ab14(code *callbackFunction)
 
 {

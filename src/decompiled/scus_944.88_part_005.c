@@ -4105,6 +4105,21 @@ void FUN_800771ac(int param_1,undefined4 param_2)
   return;
 }
 
+/*
+ * ApplyCarStatsToDisplayBuffer (suggested name)
+ *
+ * Purpose: Builds car display data from car stats. Clears output buffer, then
+ * applies data mappings and subsystem data (engine, tires, brakes, transmission,
+ * suspension, weight, wing, turbo) to produce a display-ready buffer. Uses
+ * table DAT_80092ca4/ca6 for variant handling; when entry is terminal, performs
+ * full processing and returns.
+ *
+ * Parameters:
+ *   param_1 - car data structure (from FUN_800763e8 or similar)
+ *   param_2 - output buffer (0x1c0 bytes, cleared on entry)
+ *
+ * Return: 1 on success
+ */
 undefined4 FUN_80077214(int param_1,int param_2)
 
 {
@@ -4256,6 +4271,25 @@ LAB_800772e8:
   } while( true );
 }
 
+/*
+ * ProcessDataMappingList (suggested name)
+ *
+ * Purpose: Executes a list of data transfer descriptors that map/transform data
+ * from source (param_2) to destination (param_3). Each descriptor encodes
+ * offsets, block size, and operation. List terminates with 0.
+ *
+ * Descriptor format (uint):
+ *   bits 0-9:   dest offset
+ *   bits 10-19: source offset
+ *   bits 20-23: block format (0=1x1, 1=2x1, 2=4x1, 3=1x4, 4=1x6, 5=1x8, 6=1x16,
+ *               7=2x8, 8=2x16)
+ *   bits 24-31: mode (0=scale/100, 1=scale/1000, 2=add array, 3=add single, 4=raw copy)
+ *
+ * Parameters:
+ *   param_1 - descriptor array (0-terminated)
+ *   param_2 - source base address
+ *   param_3 - destination base address
+ */
 void FUN_80077634(uint *param_1,int param_2,int param_3)
 
 {

@@ -611,6 +611,22 @@ void FUN_8007fb38(short *controlStructure)
   return;
 }
 
+/*
+ * FindControlDataByType (suggested name)
+ *
+ * Purpose: Finds the control data entry matching the current controller type.
+ * Searches the data table (from controlIndex+2) for the first entry whose
+ * type field equals the controller type from DAT_801f0c99. Used to select
+ * the appropriate callback/config for the connected pad.
+ *
+ * Parameter:
+ *   controlIndex - pointer to { short slotIndex; int *dataTable; ... }
+ *
+ * Return: Pointer to matching 3-int entry (type, param, callback at +8),
+ *         or NULL if not found or dataTable is NULL.
+ *
+ * Note: If DAT_801f0c98[slot*0x22] != 0 (pad not connected?), targetType = 0.
+ */
 int FUN_8007fbc4(short *controlIndex)
 
 {
@@ -3066,6 +3082,18 @@ void FUN_80082f74(int commandBuffer,undefined4 commandData1,undefined4 commandDa
   return;
 }
 
+/*
+ * ProcessOverlayData (suggested name)
+ *
+ * Processes overlay data: decompresses DEFLATE stream from source to destination.
+ * param_1: Destination buffer address (or base + offset from DAT_801ef61c)
+ * param_2: Loader function (e.g. load_gt2_overlay_file) - loads gt2.ovl from CD, provides
+ *          input for decompression. Builds context for FUN_800847d0 (InflateDeflateStream).
+ *
+ * Used by: FUN_8005da7c, FUN_8005dad8 (overlay loading), FUN_80010e14 loop
+ *          (graphics data), part_009/012 (arcade/global data loading).
+ * Note: Decompiled body may be incomplete; real impl builds context and calls FUN_800847d0.
+ */
 void FUN_80082fac(int renderData1,int renderData2)
 
 {
@@ -3913,6 +3941,23 @@ bool FUN_80083e00(int dataSize,int *dataBuffer,uint parameter1,uint parameter2,i
   return bVar1;
 }
 
+/*
+ * InflateBlock (suggested name)
+ *
+ * Purpose: Processes one DEFLATE block using pre-built Huffman tables.
+ * Decodes symbols from the bit stream until end-of-block (256) or end-of-stream.
+ * Called by FUN_800847d0 (InflateDeflateStream) after FUN_80083e00 builds tables.
+ *
+ * Parameter:
+ *   decompressionContext - pointer to same context as InflateDeflateStream.
+ *   Offsets (bytes): +0xc input ptr, +0x10 input end, +0x14 bit buffer,
+ *   +0x18 bit count, +0x24 output ptr, +0x28 output end, +0x38 literal/length
+ *   table, +0x3c distance table, +0x40/+0x44 table masks. +4 refill callback,
+ *   +0x1c flush callback.
+ *
+ * Flow: Decode from literal/length table -> literal: output byte; length: decode
+ * distance, copy (length,distance) from output (LZ77). Returns on EOB or EOS.
+ */
 void FUN_80084364(int decompressionContext)
 
 {
@@ -4198,6 +4243,41 @@ void FUN_80084364(int decompressionContext)
   } while( true );
 }
 
+/*
+ * InflateDeflateStream (suggested name)
+ *
+ * Purpose: Decompresses a DEFLATE stream (RFC 1951), compatible with zlib/gzip.
+ * Processes blocks until end-of-stream marker (BFINAL=1).
+ *
+ * Parameter:
+ *   renderData - pointer to decompression context (array of callbacks/state).
+ *                NULL is allowed; function returns immediately.
+ *
+ * renderData layout (indices):
+ *   [0]   - optional progress callback (called at block boundaries)
+ *   [1]   - refill callback: called when input buffer exhausted; must refill
+ *           renderData[3..6] and update [9],[10],[0x12]
+ *   [3]   - input read pointer (ushort*)
+ *   [4]   - input end pointer (ushort*)
+ *   [5]   - bit accumulator buffer
+ *   [6]   - bits available in accumulator (signed)
+ *   [7]   - flush callback: called when output buffer full (pcVar16==pcVar17)
+ *   [9]   - output write pointer (char*)
+ *   [10]  - output end pointer (char*)
+ *   [0xb] - table context base
+ *   [0xd] - table context (reset per block)
+ *   [0xe] - literal/length Huffman table
+ *   [0xf] - distance Huffman table
+ *   [0x10]- bits used for literal table
+ *   [0x11]- bits used for distance table
+ *
+ * Block types (2-bit header):
+ *   0 - Stored: uncompressed, LEN/NLEN, copy LEN bytes
+ *   1 - Fixed: predefined Huffman tables
+ *   2 - Dynamic: code-length alphabet, then literal and distance tables
+ *
+ * Uses: FUN_80083e00 (build Huffman tables), FUN_80084364 (inflate loop).
+ */
 void FUN_800847d0(code **renderData)
 
 {

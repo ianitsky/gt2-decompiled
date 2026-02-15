@@ -2149,6 +2149,31 @@ int FUN_8008d888(char **stringPointer)
   return result;
 }
 
+/*
+ * FormatStringAndOutput (Original: FUN_8008d8d4)
+ *
+ * Purpose:
+ *   Minimal printf-style formatter. Parses format string and outputs formatted
+ *   values via callback. Supports %d, %i, %u, %o, %x, %X, %t, %c, %s with flags,
+ *   width, precision and length modifiers (h, l, L).
+ *
+ * Parameters:
+ *   outputFunction: Callback invoked per character (int (*)(int))
+ *   formatString:   Format string (e.g. "%d %s")
+ *   argumentList:   Varargs as uint* (can be NULL)
+ *
+ * Format specifiers:
+ *   Flags: space(0x20), #(0x23), +(0x2b), -(0x2d), 0(0x30)
+ *   Width: digits or *
+ *   Precision: .digits or .*
+ *   Length: h, l, L
+ *   Types: d,i,u,o,x,X,t,c,s
+ *
+ * Return: Total characters output, or -1 on error.
+ *
+ * Delegates: FUN_8008d7a4 (hex), FUN_8008d590 (dec/u), FUN_8008d6e4 (oct),
+ *   FUN_8008d1e4 (string).
+ */
 int FUN_8008d8d4(code_output_func outputFunction,byte *formatString,uint *argumentList)
 
 {
@@ -4641,6 +4666,30 @@ void FUN_arcade__800124a0(char *dataStructure,undefined4 processingParam,int val
   return;
 }
 
+/*
+ * RenderArcadeRankingList (Original: FUN_arcade__80012948)
+ *
+ * Purpose:
+ *   Renders a ranked list (leaderboard) for arcade mode. Draws iVar11 rows with
+ *   fade effect (brightness decreases down the list), color gradient, and text
+ *   per row. Each row shows a number (via FUN_arcade__80011bb0) with shadow.
+ *   Called from arcade UI pipeline after FUN_arcade__800124a0.
+ *
+ * Parameters:
+ *   renderData:      Layout (offset +0x3e=row count, +0x1c..0x1e=RGB, +2,+4,+6,+8=pos/size)
+ *   graphicsContext: GPU context
+ *   outputBuffer:    Render buffer (FUN_8007da80, FUN_8007d024, FUN_8007f7f4)
+ *
+ * RenderData layout:
+ *   +0x3e: Row count
+ *   +0x1c..0x1e: Base RGB color
+ *   +2,+4: X,Y base
+ *   +6,+8: Width, height per row
+ *   +0x30: Max brightness; param_1[1]: fade factor
+ *
+ * Per row: FUN_arcade__80011bb0 (number->string), FUN_8006ad3c (measure),
+ *   FUN_8006ac90 (draw text), shadow quad via FUN_8007f7f4.
+ */
 void FUN_arcade__80012948(char *renderData,undefined4 graphicsContext,int outputBuffer)
 
 {

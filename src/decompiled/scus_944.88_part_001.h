@@ -107,7 +107,7 @@ undefined4 FUN_8005ee4c(int param_1,undefined4 param_2,int param_3,undefined4 pa
 undefined4 FUN_8005f790(int param_1);
 undefined4 FUN_8005f7c8(int param_1);
 undefined4 start(undefined4 param_1,undefined4 param_2);
-void FUN_80010000(int *param_1);
+void load_gt2_overlay_file(int *param_1);
 void FUN_80010010(int param_1);
 void FUN_80010020(void);
 void FUN_80010030(undefined4 param_1,int param_2);
@@ -182,7 +182,7 @@ void FUN_8005a3a6(int param_1);
 void FUN_8005a3b6(int param_1);
 void FUN_8005d718(int param_1);
 void FUN_8005d768(int param_1);
-void FUN_8005d7d0(undefined4 param_1,int param_2);
+void FUN_8005d7d0(undefined4 param_1, int param_2, int param_3);
 void FUN_8005d848(int param_1,undefined4 param_2,code *param_3);
 void FUN_8005d8a0(int param_1);
 void FUN_8005d8d4(int param_1);

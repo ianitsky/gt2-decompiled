@@ -861,6 +861,31 @@ void FUN_overlay0__80045688(int param_1,int param_2)
   return;
 }
 
+/*
+ * AdjustWheelPositionsForActiveDifferential (Original: FUN_overlay0__800457b0)
+ *
+ * Purpose:
+ *   Adjusts wheel position/speed values in scratchpad for vehicles with active
+ *   differential (types 6 or 7). Only runs when vehicle speed exceeds 0x2c73.
+ *   Balances left/right wheel values toward their average to reduce slip before
+ *   traction and differential physics run. Called after FUN_overlay0__80045688
+ *   (wheel heights), before FUN_overlay0__80045ae8 (traction physics).
+ *
+ * Parameters:
+ *   param_1: Base pointer to vehicle data (each vehicle = 0xb40 bytes)
+ *   param_2: Number of vehicles to process
+ *
+ * Conditions:
+ *   - Differential type (vehicle+0x39c+10 per axle) must be 6 or 7
+ *   - Vehicle speed (vehicle+0x6d0) must be > 0x2c73
+ *
+ * Per axle:
+ *   - Averages left/right wheel positions (offset +0x18) to get target
+ *   - Steering (vehicle+0x638) biases the target
+ *   - Adjusts scratchpad values (+0xc) to balance wheels toward target
+ *
+ * Uses scratchpad 0x1f800000 (stride 0x90 per vehicle).
+ */
 void FUN_overlay0__800457b0(int param_1,int param_2)
 
 {
@@ -1026,6 +1051,39 @@ int FUN_overlay0__800459a8(int param_1,int param_2,undefined4 param_3,int param_
   return iVar2;
 }
 
+/*
+ * ProcessTractionPhysics (Original: FUN_overlay0__80045ae8)
+ *
+ * Purpose:
+ *   Processes traction and drive system physics for multiple vehicles. Computes
+ *   acceleration force, grip, and torque distribution to front/rear axles based
+ *   on drive type. Called after FUN_overlay0__800457b0 (wheel positions), before
+ *   FUN_overlay0__800465e0 (differential physics) in the vehicle physics pipeline.
+ *
+ * Parameters:
+ *   param_1: Base pointer to vehicle data array (each vehicle = 0xb40 bytes)
+ *   param_2: Number of vehicles to process
+ *
+ * Drive types (vehicle+0x39c):
+ *   0: RWD (rear) - torque to rear only
+ *   1: RWD - sets flags 4ef|8, 557|8
+ *   2: AWD - sets flags, distributes torque front/rear
+ *   3, 6: 4WD - sets flags 4ef|4, 557|4, 5bf|8, 627|8
+ *   4, 5: 4WD variants - grip-based distribution via FUN_overlay0__800459a8
+ *
+ * Drive mode (vehicle+0x39e):
+ *   1: FUN_overlay0__8004530c - acceleration force
+ *   2: FUN_overlay0__80045138 - control values
+ *   else: FUN_overlay0__800353dc - related values
+ *
+ * Key outputs:
+ *   +0x660, +0x664: Wheel speeds (left/right or front/rear)
+ *   +0x476: Wheel delta/slip per axle
+ *   +0x668: Wheel lock flag (ABS/TC)
+ *   Scratchpad +0x74, +0x78: Torque to front/rear axles
+ *
+ * local_3c states: 0=normal, 1=slip, 2=AWD split, 3=wheel lock
+ */
 void FUN_overlay0__80045ae8(int param_1,int param_2)
 
 {
@@ -1486,6 +1544,35 @@ LAB_overlay0__80046584:
   } while( true );
 }
 
+/*
+ * ProcessDifferentialTorqueDistribution (Original: FUN_overlay0__800465e0)
+ *
+ * Purpose:
+ *   Processes differential physics for multiple vehicles. Distributes torque/speed
+ *   between left and right wheels on each axle based on differential type. Called
+ *   after FUN_overlay0__80045ae8 (traction physics) in the vehicle physics pipeline.
+ *
+ * Parameters:
+ *   param_1: Base pointer to vehicle data array (each vehicle = 0xb40 bytes)
+ *   param_2: Number of vehicles to process
+ *
+ * Vehicle layout (param_1 + offset):
+ *   +0x2c:   Axle/wheel data (0x68 bytes per wheel pair)
+ *   +0x39c:  Differential config; byte at +10 per axle = differential type
+ *   +0x72a:  Ratio value (stored in DAT_1f800000 for fixed-point math)
+ *
+ * Differential types (config byte):
+ *   1: Locked   - both wheels forced to same speed (uVar9 == 1 path)
+ *   3, 4: Limited slip - clamped adjustment based on speed difference
+ *   5: Open     - similar to 3/4 with different limits
+ *
+ * Per-axle outputs:
+ *   +0x476: Wheel delta/slip (short)
+ *   +0x478: Wheel speed/position (int)
+ *   +0x61a: Lock flag (cleared when slip exceeds threshold)
+ *
+ * Uses scratchpad 0x1f800000 for intermediate values.
+ */
 void FUN_overlay0__800465e0(int param_1,int param_2)
 
 {
@@ -3407,6 +3494,23 @@ void FUN_overlay0__8004d074
   return;
 }
 
+/*
+ * RenderTextWithDropShadow (suggested name)
+ * Original: FUN_overlay0__8004d0ec
+ *
+ * Renders multi-line text with a drop shadow effect. Only runs when
+ * DAT_801c98e0 == 0 (e.g. 16-bit/paletted mode).
+ *
+ * For each line from DAT_801c90a0 (line count at +0x4fc, string ptrs at +0x4dc):
+ *   - For each 16-bit character: draws glyph 3 times (main + shadow above/below)
+ *   - Main: full intensity (param_4) at (x, y)
+ *   - Shadow: dim intensity (param_4 >> 2) at (x, y-1) and (x, y+1)
+ *   - Advances x by 0xc per character
+ *   - After line: draws background rect (0x144 wide) at (param_2, y+0x10)
+ *   - Next line at y += 0x16
+ *
+ * Params: param_1=render ctx, param_2/3=base x/y, param_4=brightness (0..0x80)
+ */
 void FUN_overlay0__8004d0ec(undefined4 param_1,int param_2,int param_3,int param_4)
 
 {
@@ -3465,6 +3569,30 @@ void FUN_overlay0__8004d0ec(undefined4 param_1,int param_2,int param_3,int param
   return;
 }
 
+/*
+ * RenderMultiLineTextTrueColor (Original: FUN_overlay0__8004d2ec)
+ *
+ * Purpose:
+ *   Renders multi-line text using the true-color/24-bit pipeline. Only runs when
+ *   DAT_801c98e0 != 0. Complementary to FUN_overlay0__8004d0ec (RenderTextWithDropShadow),
+ *   which runs when DAT_801c98e0 == 0 (16-bit/paletted mode).
+ *
+ * Parameters:
+ *   param_1: Render context (passed to FUN_8007d024, FUN_8007da44)
+ *   param_2: Base X position
+ *   param_3: Base Y position (incremented by 0x16 per line)
+ *   param_4: Color/brightness blend factor (0..0x80)
+ *
+ * Data source (DAT_801c90a0):
+ *   +0x4fc: Line count
+ *   +0x4dc: Array of pointers to string data (4 bytes per line)
+ *
+ * For each line:
+ *   - FUN_8006ac90: Renders full line as text at (param_2, param_3)
+ *   - FUN_8006b548: Interpolates color (DAT_overlay0__8005b1c4..LAB_overlay0__8005b1d8)
+ *   - FUN_8007d024/FUN_8007da44: Submits quad (x, y, 0x144, 1) for background/overlay
+ *   - param_3 += 0x16 (22 px line spacing)
+ */
 void FUN_overlay0__8004d2ec(undefined4 param_1,undefined4 param_2,int param_3,undefined4 param_4)
 
 {

@@ -1697,6 +1697,19 @@ LAB_overlay0__80055534:
   return;
 }
 
+/*
+ * CountValidListEntries (suggested name)
+ * Original: FUN_overlay0__80055808
+ *
+ * Counts the number of valid (non-zero) entries in a 16-slot list structure.
+ * Walks the list (stride 8 bytes per entry), checking the word at offset +0x10
+ * in each slot. Stops at the first zero or after 16 entries.
+ *
+ * Returns: 0..15 = count of valid entries before first empty slot,
+ *          0x10  = all 16 slots are valid (no empty slot found).
+ *
+ * Used by: menu/list iteration (e.g. for loop bounds), element count checks.
+ */
 int FUN_overlay0__80055808(int param_1)
 
 {
@@ -2042,6 +2055,39 @@ void FUN_overlay0__8005613c(int param_1,int param_2)
   return;
 }
 
+/*
+ * ProcessAlternativeMenuInput (Original: FUN_overlay0__80056194)
+ *
+ * Purpose:
+ *   State machine that processes player input and drives the alternative menu system.
+ *   Manages a hierarchical menu: category -> subcategory -> item list -> confirmation.
+ *   Similar to FUN_overlay0__800536a4 but for the alternative menu variant.
+ *
+ * Parameters:
+ *   param_1: Menu context (offset +4 = state, +5 = category index, +6 = subcategory index,
+ *             +8 = category count, +0xc/0xe/0x10 = timers, +0x12 = item buffer, +0x224 = input)
+ *   param_2: Pad/input state (NULL = no input; +4 = buttons, +0xc = held buttons)
+ *   param_3: Caller context (stored in DAT_801c90e4)
+ *
+ * State machine (param_1+4):
+ *   0: Category selection - D-pad up/down changes category; select enters submenu.
+ *   1: Subcategory selection - D-pad up/down changes subcategory; select executes action
+ *      or builds item list and transitions to state 2.
+ *   2: Item list confirmation - FUN_8006cfc4 handles selection; confirm applies and
+ *      returns to state 1; cancel returns to state 1.
+ *
+ * Return values (signed):
+ *   0xffffffff (-1): No change / continue
+ *   0xfffffffe (-2): Selection changed (caller should refresh)
+ *   0xfffffffb (-5): Entered submenu / state transition
+ *   0xfffffffa (-6): Back / exit to previous level
+ *   0xfffffff9 (-7): Error (e.g. no items)
+ *   0xfffffff8 (-8): Cancel (DAT_801c90e4 cleared)
+ *   0xfffffffc (-4): Exit (DAT_801c90e4 cleared)
+ *
+ * Input flags (param_2+4): 0x1000=cancel, 0x504/0x500=back, 0x10000=confirm,
+ *   0xa00/0xa08=select, 1=D-pad up, 2=D-pad down.
+ */
 undefined4 FUN_overlay0__80056194(int param_1,int param_2,undefined4 param_3)
 
 {
