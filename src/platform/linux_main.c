@@ -118,18 +118,8 @@ int main(int argc, char *argv[]) {
     }
     fprintf(stderr, "Allocated buffer at %p for DAT_800a8d5c\n", DAT_800a8d5c);
     
-    // Allocate memory for DAT_800a7b7c (used as a buffer by INTR_OBJ_69C)
-    // Size based on usage: 0x41a bytes needed
-    DAT_800a7b7c = malloc(0x41a + 1024); // Add some extra space
-    if (DAT_800a7b7c == NULL) {
-        fprintf(stderr, "Failed to allocate memory for DAT_800a7b7c\n");
-        free(DAT_800a8d5c);
-        SDL_GL_DestroyContext(context);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-    fprintf(stderr, "Allocated buffer at %p for DAT_800a7b7c\n", DAT_800a7b7c);
+    /* DAT_800a7b7c is a static block (DAT_800a7b7c_region), not malloc'd */
+
     
     /* Resolve disk image (CUE or ISO) for PSY-Z CD emulation; optional */
     char disk_path[GT2_DISK_PATH_MAX];
@@ -154,8 +144,7 @@ int main(int argc, char *argv[]) {
     /* Set DMA callback to no-op so DMACallback() does not segfault (no real DMA on Linux) */
     DAT_800a8be8 = &dma_callback_storage;
 
-    /* Save original heap pointers before start() — the game may overwrite them */
-    void *saved_800a7b7c = DAT_800a7b7c;
+    /* Save original heap pointer before start() — the game may overwrite it */
     void *saved_800a8d5c = DAT_800a8d5c;
 
     /* Initialize parameters for start(); on PS1 these would come from BIOS */
@@ -169,7 +158,6 @@ int main(int argc, char *argv[]) {
     
     // Cleanup
     gt2_cd_reader_close();
-    free(saved_800a7b7c);
     free(saved_800a8d5c);
     if (context) SDL_GL_DestroyContext(context);
     if (window) SDL_DestroyWindow(window);

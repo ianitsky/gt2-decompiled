@@ -17,8 +17,7 @@ extern undefined4 DAT_overlay0__80046f58;
 extern undefined4 DAT_overlay0__80046e00;
 extern undefined4 DAT_overlay0__80046ef0;
 extern undefined4 DAT_801c8730;
-extern undefined4 DAT_801c98a4;
-extern undefined4 DAT_801c98a8;
+/* DAT_801c98a4, DAT_801c98a8: macros in gt2_global_vars_clean.h */
 extern undefined2 DAT_801c86b4[];
 extern undefined4 DAT_800a9500;
 extern undefined4 DAT_801c8570;

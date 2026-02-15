@@ -119,7 +119,7 @@ extern undefined4 DAT_801c98c2;
 extern undefined4 DAT_801c98c3;
 extern undefined4 DAT_801c98c4;
 extern undefined4 DAT_801c98c5;
-extern undefined4 DAT_801c98a0;
+/* DAT_801c98a0: macro in gt2_global_vars_clean.h */
 extern undefined4 DAT_801d5866;
 extern undefined4 DAT_overlay0__80046f69;
 extern undefined4 DAT_801c85f0;

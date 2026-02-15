@@ -139,7 +139,7 @@ extern undefined4 DAT_80173894;
 extern undefined4 DAT_8017389c;
 extern undefined4 DAT_8017389e;
 extern undefined4 DAT_801738a0;
-extern undefined4 DAT_801c98e0;
+/* DAT_801c98e0: macro in gt2_global_vars_clean.h */
 extern undefined4 DAT_801c90c0;
 extern undefined4 DAT_801c90c4;
 extern undefined4 DAT_80178894;

@@ -19,7 +19,7 @@ void FUN_overlay0__800101fc(int param_1);
 
 // External variables
 extern undefined4 DAT_800a8d60;
-extern undefined4 DAT_801c98e0;
+/* DAT_801c98e0: macro in gt2_global_vars_clean.h */
 extern undefined DAT_801b9e70[];
 extern undefined DAT_801b9e84[];
 extern undefined DAT_801b9ea0[];

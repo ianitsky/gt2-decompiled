@@ -156,21 +156,18 @@ extern uint _I_MASK;
 extern uint _I_STAT;
 extern code *DAT_800a8be8;
 extern code_vsync_callback DAT_800a8bf8;
-extern undefined4 DAT_800a7b7e;
+/* DAT_800a7b7e: macro in gt2_global_vars_clean.h */
 extern uint I_MASK;
 extern uint I_STAT;
 extern undefined2 *INTR_OBJ_194(void);
-extern undefined4 DAT_800a7bb4;
-extern undefined4 DAT_800a7bb8;
+/* DAT_800a7bb4, DAT_800a7bb8: macros in gt2_global_vars_clean.h */
 extern undefined4 LAB_800a8b94;
 extern void HookEntryInt(undefined4 *);
 extern code_vsync_callback startIntrVSync(void);
 extern code *startIntrDMA(void);
-extern undefined4 DAT_800a7bac;
-extern undefined4 DAT_800a7b80;
+/* DAT_800a7bac, DAT_800a7b80: macros in gt2_global_vars_clean.h */
 extern undefined4 DAT_800a8c14;
-extern undefined4 DAT_800a7bae;
-extern undefined4 DAT_800a7bb0;
+/* DAT_800a7bae, DAT_800a7bb0: macros in gt2_global_vars_clean.h */
 extern undefined4 DAT_800a8c34;
 extern undefined4 DAT_800a8c38;
 extern undefined4 DAT_800a8c64;

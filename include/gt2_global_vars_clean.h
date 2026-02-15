@@ -138,11 +138,9 @@ extern undefined4 LAB_80092edc_2;
 extern undefined4 spu_voice_register_block[SPU_VOICE_REGISTER_BLOCK_SIZE];
 #define VOICE_00_LEFT_RIGHT (spu_voice_register_block[0])
 #define DAT_800900b8 (spu_voice_register_block[1])
-#define DAT_801efe64 (spu_voice_register_block[2])
-#define DAT_801efe66 (spu_voice_register_block[3])
+/* DAT_801efe64, DAT_801efe66: macros into DAT_801efe60_buffer (see below) */
 /* index 4 is padding (zeroed by FUN_8007f848); DAT_801f0230 is separate - see below */
-#define DAT_801f0234 (spu_voice_register_block[5])
-#define DAT_801f0236 (spu_voice_register_block[6])
+/* DAT_801f0234, DAT_801f0236, DAT_801f0238: macros into DAT_801f0230_buffer */
 #define DAT_801f023c (spu_voice_register_block[7])
 #define DAT_801f0262 (spu_voice_register_block[8])
 #define DAT_801f0263 (spu_voice_register_block[9])
@@ -285,59 +283,63 @@ extern undefined4 DAT_8009115c;
 extern undefined4 DAT_80091160;
 extern undefined4 DAT_8009116c;
 extern undefined4 DAT_80091170;
-extern undefined4 DAT_801c93b0;
-extern undefined4 DAT_801c93d0;
-extern undefined4 DAT_801c93e0;
-extern undefined4 DAT_801c93e8;
-extern undefined4 DAT_801c93c4;
-extern undefined4 DAT_801c93d4;
-extern undefined4 DAT_801c93d8;
-extern undefined4 DAT_801c93dc;
-extern undefined4 DAT_801c93e4;
-extern undefined4 DAT_801c93bc;
-extern undefined4 DAT_801c93b4;
-extern undefined4 DAT_801c942c;
-extern undefined4 DAT_801c945c;
-extern undefined4 DAT_801c9460;
-extern undefined4 DAT_801c9af8;
-extern undefined4 DAT_801c93c3;
-extern undefined4 DAT_801f0d60;
-extern undefined4 DAT_801c98e0;
-extern undefined4 DAT_801c98ea;
-extern undefined4 DAT_801c98ee;
-extern undefined4 DAT_801c98f3;
-extern undefined4 DAT_801c98f4;
-extern undefined4 DAT_801c98f5;
-extern undefined4 DAT_801c98f9;
-extern undefined4 DAT_801c98fe;
-extern undefined4 DAT_801c98ff;
-extern undefined4 DAT_801c9900;
-extern undefined4 DAT_801c9904;
-extern undefined4 DAT_801c9909;
-extern undefined4 DAT_801c990a;
-extern undefined4 DAT_801c990b;
-extern undefined4 DAT_801c9928;
-extern undefined4 DAT_801c992c;
-extern undefined4 DAT_801c998e;
-extern undefined4 DAT_801c998f;
-extern undefined4 DAT_801c9990;
-extern undefined4 DAT_801c9991;
-extern undefined4 DAT_801c9992;
-extern undefined4 DAT_801c9993;
-extern undefined4 DAT_801c9994;
-extern undefined4 DAT_801c9995;
-extern undefined4 DAT_801c9424;
-extern undefined4 DAT_801c9998;
-extern undefined4 DAT_801c98a0;
-extern undefined4 DAT_801c98a4;
-extern undefined4 DAT_801c98a8;
-extern undefined4 DAT_801c9916;
-extern undefined4 DAT_801c9968;
+/* Contiguous PS1 BSS region 0x801c93b0..0x801f0d60; macros for variables in it */
+extern undefined4 DAT_801c93b0_region[0x9e81];
+#define _R93(addr) (((addr) - 0x801c93b0u) / 4u)
+#define DAT_801c93b0  (DAT_801c93b0_region[_R93(0x801c93b0)])
+#define DAT_801c93b4  (DAT_801c93b0_region[_R93(0x801c93b4)])
+#define DAT_801c93bc  (DAT_801c93b0_region[_R93(0x801c93bc)])
+#define DAT_801c93c3  (DAT_801c93b0_region[_R93(0x801c93c0)])
+#define DAT_801c93c4  (DAT_801c93b0_region[_R93(0x801c93c4)])
+#define DAT_801c93d0  (DAT_801c93b0_region[_R93(0x801c93d0)])
+#define DAT_801c93d4  (DAT_801c93b0_region[_R93(0x801c93d4)])
+#define DAT_801c93d8  (DAT_801c93b0_region[_R93(0x801c93d8)])
+#define DAT_801c93dc  (DAT_801c93b0_region[_R93(0x801c93dc)])
+#define DAT_801c93e0  (DAT_801c93b0_region[_R93(0x801c93e0)])
+#define DAT_801c93e4  (DAT_801c93b0_region[_R93(0x801c93e4)])
+#define DAT_801c93e8  (DAT_801c93b0_region[_R93(0x801c93e8)])
+#define DAT_801c942c  (DAT_801c93b0_region[_R93(0x801c942c)])
+#define DAT_801c945c  (DAT_801c93b0_region[_R93(0x801c945c)])
+#define DAT_801c9460  (DAT_801c93b0_region[_R93(0x801c9460)])
+#define DAT_801c9af8  (DAT_801c93b0_region[_R93(0x801c9af8)])
+#define DAT_801f0d60  (DAT_801c93b0_region[_R93(0x801f0d60)])
+#define DAT_801c98e0  (DAT_801c93b0_region[_R93(0x801c98e0)])
+#define DAT_801c98ea  (DAT_801c93b0_region[_R93(0x801c98ea)])
+#define DAT_801c98ee  (DAT_801c93b0_region[_R93(0x801c98ee)])
+#define DAT_801c98f3  (DAT_801c93b0_region[_R93(0x801c98f3)])
+#define DAT_801c98f4  (DAT_801c93b0_region[_R93(0x801c98f4)])
+#define DAT_801c98f5  (DAT_801c93b0_region[_R93(0x801c98f5)])
+#define DAT_801c98f9  (DAT_801c93b0_region[_R93(0x801c98f9)])
+#define DAT_801c98fe  (DAT_801c93b0_region[_R93(0x801c98fe)])
+#define DAT_801c98ff  (DAT_801c93b0_region[_R93(0x801c98ff)])
+#define DAT_801c9900  (DAT_801c93b0_region[_R93(0x801c9900)])
+#define DAT_801c9904  (DAT_801c93b0_region[_R93(0x801c9904)])
+#define DAT_801c9909  (DAT_801c93b0_region[_R93(0x801c9909)])
+#define DAT_801c990a  (DAT_801c93b0_region[_R93(0x801c990a)])
+#define DAT_801c990b  (DAT_801c93b0_region[_R93(0x801c990b)])
+#define DAT_801c9928  (DAT_801c93b0_region[_R93(0x801c9928)])
+#define DAT_801c992c  (DAT_801c93b0_region[_R93(0x801c992c)])
+#define DAT_801c998e  (DAT_801c93b0_region[_R93(0x801c998e)])
+#define DAT_801c998f  (DAT_801c93b0_region[_R93(0x801c998f)])
+#define DAT_801c9990  (DAT_801c93b0_region[_R93(0x801c9990)])
+#define DAT_801c9991  (DAT_801c93b0_region[_R93(0x801c9991)])
+#define DAT_801c9992  (DAT_801c93b0_region[_R93(0x801c9992)])
+#define DAT_801c9993  (DAT_801c93b0_region[_R93(0x801c9993)])
+#define DAT_801c9994  (DAT_801c93b0_region[_R93(0x801c9994)])
+#define DAT_801c9995  (DAT_801c93b0_region[_R93(0x801c9995)])
+#define DAT_801c9424  (DAT_801c93b0_region[_R93(0x801c9424)])
+#define DAT_801c9998  (DAT_801c93b0_region[_R93(0x801c9998)])
+#define DAT_801c98a0  (DAT_801c93b0_region[_R93(0x801c98a0)])
+#define DAT_801c98a4  (DAT_801c93b0_region[_R93(0x801c98a4)])
+#define DAT_801c98a8  (DAT_801c93b0_region[_R93(0x801c98a8)])
+#define DAT_801c9916  (DAT_801c93b0_region[_R93(0x801c9916)])
+#define DAT_801c9968  (DAT_801c93b0_region[_R93(0x801c9968)])
+#define DAT_801c98e1  (*(bitfield_8_t *)((char *)DAT_801c93b0_region + 0x531u))
+#define DAT_801c98e5  (*(bitfield_8_t *)((char *)DAT_801c93b0_region + 0x535u))
 /* PS1 address 0x800a97d0: large contiguous data buffer used by the car/vol
-   file system.  On PS1 the 573 440 bytes from 0x800a97d0 to 0x801357d0 are
-   contiguous RAM; we model this as an array so pointer-comparison loop
-   terminators work. */
-extern undefined4 DAT_800a97d0[0x23001];  /* 0x8C004 bytes – covers up to UNK_801357d0+1 */
+   file system and graphics (FUN_80010cec uses 0xc0000 bytes). Must be at
+   least 0xc0000 to avoid overflow. */
+extern undefined4 DAT_800a97d0[0x30001];  /* 0xC0004 bytes */
 #define UNK_800b57d0  (DAT_800a97d0[0x3000])    /* PS1: 0x800b57d0, offset +0xC000 */
 #define UNK_801357d0  (DAT_800a97d0[0x23000])   /* PS1: 0x801357d0, offset +0x8C000 */
 extern void *DAT_800a8d5c;
@@ -492,7 +494,13 @@ extern undefined4 DAT_80092e80;
 extern undefined4 DAT_80092e84;
 extern undefined4 DAT_80092e88;
 extern undefined4 DAT_80092e8c;
-extern undefined4 *DAT_801f0230;
+extern undefined4 DAT_801f0230_buffer[0xb5];
+#define _R0230(addr) (((addr) - 0x801f0230u) / 4u)
+#define DAT_801f0230   (DAT_801f0230_buffer[0])
+#define DAT_801f0234   (DAT_801f0230_buffer[_R0230(0x801f0234)])
+#define DAT_801f0236   (*(undefined2 *)(void *)((char *)(void *)DAT_801f0230_buffer + 6))
+#define DAT_801f0238   (DAT_801f0230_buffer[_R0230(0x801f0238)])
+#define DAT_801f0248   (DAT_801f0230_buffer[_R0230(0x801f0248)])
 /* DAT_800900b8, DAT_801f0234, DAT_801f023c, DAT_80093072 are macros into spu_voice_register_block */
 extern undefined4 DAT_1f801dc0;
 extern undefined4 DAT_1f801dce;
@@ -519,8 +527,11 @@ extern undefined4 DAT_801f0534;
 extern undefined4 DAT_801f0538;
 extern undefined4 DAT_801f0540;
 extern undefined4 DAT_801f0544;
-extern undefined4 DAT_801f0680;
-extern undefined4 DAT_801f0684;
+extern undefined4 DAT_801f0680_buffer[10];
+#define DAT_801f0680 (DAT_801f0680_buffer[0])
+#define DAT_801f0684 (DAT_801f0680_buffer[1])
+#define DAT_801f0688 (DAT_801f0680_buffer[2])
+#define DAT_801f068c (DAT_801f0680_buffer[3])
 extern undefined4 DAT_801f0690;
 extern undefined4 DAT_801f06a0;
 extern undefined4 DAT_801f0724;
@@ -544,9 +555,11 @@ extern undefined4 DAT_801c9508;
 extern undefined4 DAT_801c950c;
 extern undefined4 DAT_801c9510;
 extern undefined4 DAT_801c9500;
-extern undefined4 DAT_801efe60;
-extern undefined4 DAT_801f0238;
-extern undefined4 DAT_801f0248;
+extern undefined4 DAT_801efe60_buffer[0xf2];
+#define DAT_801efe60 (DAT_801efe60_buffer[0])
+#define DAT_801efe64 (*(undefined2 *)(void *)((char *)(void *)DAT_801efe60_buffer + 4))
+#define DAT_801efe66 (*(undefined2 *)(void *)((char *)(void *)DAT_801efe60_buffer + 6))
+/* DAT_801f0238, DAT_801f0248: macros in DAT_801f0230_buffer */
 extern undefined4 DAT_801efe7c[0x3c0];
 extern undefined4 DAT_801f0c98;
 extern undefined4 DAT_801f0cba;
@@ -612,7 +625,7 @@ extern undefined4 DAT_801efcf0;
 extern undefined4 DAT_801efcfc;
 extern undefined4 DAT_801efd4c;
 extern undefined4 DAT_801f053c;
-extern undefined4 DAT_801f0688;
+/* DAT_801f0688: macro in DAT_801f0680_buffer */
 extern undefined4 DAT_80091eb8;
 extern undefined4 DAT_80091ebc;
 extern undefined4 DAT_80091ec4;
@@ -671,7 +684,7 @@ extern undefined4 DAT_801c9854;
 extern undefined4 DAT_800a781c;
 extern undefined4 DAT_800a7818;
 extern undefined4 DAT_800a7828;
-extern undefined4 DAT_800a7bae;
+/* DAT_800a7bae: macro in DAT_800a7b7c_region block */
 extern undefined4 DAT_800a8c78[8];
 extern undefined4 DAT_800a8ca4;
 extern undefined4 DAT_801f0d54;
@@ -856,14 +869,17 @@ extern byte DAT_800a7ae9;
 extern byte DAT_800a7aea;
 extern undefined4 DAT_800a7aec;
 extern undefined4 DAT_800a7b14;
-extern void *DAT_800a7b7c;
+extern undefined4 DAT_800a7b7c_region[0x41a];
+#define _R7b(addr) (((addr) - 0x800a7b7cu) / 4u)
+#define DAT_800a7b7c   (DAT_800a7b7c_region[0])
+#define DAT_800a7b80   (DAT_800a7b7c_region[_R7b(0x800a7b80)])
+#define DAT_800a7bac   (DAT_800a7b7c_region[_R7b(0x800a7bac)])
+#define DAT_800a7bb0   (DAT_800a7b7c_region[_R7b(0x800a7bb0)])
+#define DAT_800a7bb4   (DAT_800a7b7c_region[_R7b(0x800a7bb4)])
+#define DAT_800a7bb8   (DAT_800a7b7c_region[_R7b(0x800a7bb8)])
+#define DAT_800a7b7e   (*(undefined2 *)(void *)((char *)(void *)DAT_800a7b7c_region + 2u))
+#define DAT_800a7bae   (*(undefined2 *)(void *)((char *)(void *)DAT_800a7b7c_region + 0x32u))
 extern int DAT_800a7b7c_initialized;
-extern undefined4 DAT_800a7b7e;
-extern undefined4 DAT_800a7b80;
-extern undefined4 DAT_800a7bac;
-extern undefined4 DAT_800a7bb0;
-extern undefined4 DAT_800a7bb4;
-extern undefined4 DAT_800a7bb8;
 extern code *DAT_800a8be8;
 extern code_vsync_callback DAT_800a8bf8;
 extern undefined4 DAT_800a8c14;
@@ -1291,8 +1307,7 @@ extern char *DAT_801c9858;
 extern undefined4 DAT_801c9868;
 extern code *DAT_801c9890;
 extern code *DAT_801c9894;
-extern undefined4 DAT_801c98a4;
-extern undefined4 DAT_801c98a8;
+/* DAT_801c98a4, DAT_801c98a8: macros into DAT_801c93b0_region */
 extern undefined4 DAT_801c98ac;
 extern undefined4 DAT_801c98b0;
 extern bitfield_8_union_t DAT_801c98b4;
@@ -1304,8 +1319,7 @@ extern undefined4 DAT_801c98c2;
 extern undefined4 DAT_801c98c3;
 extern undefined4 DAT_801c98c4;
 extern undefined4 DAT_801c98c5;
-extern bitfield_8_t DAT_801c98e1;
-extern bitfield_8_t DAT_801c98e5;
+/* DAT_801c98e1, DAT_801c98e5: macros into DAT_801c93b0_region */
 extern undefined4 DAT_801c9af5;
 extern undefined4 DAT_801cacf8;
 extern undefined4 DAT_801cd36c;
@@ -1404,7 +1418,7 @@ extern undefined DAT_801f0673;
 extern undefined4 DAT_801f0674;
 extern undefined4 DAT_801f0676;
 extern undefined4 DAT_801f0677;
-extern undefined4 DAT_801f068c;
+/* DAT_801f068c: macro in DAT_801f0680_buffer */
 extern undefined4 DAT_801f06a4;
 extern undefined4 DAT_801f06a5;
 extern undefined4 *DAT_801f06b0;

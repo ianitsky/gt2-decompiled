@@ -127,7 +127,7 @@ extern undefined4 DAT_800f3a08;
 extern undefined4 DAT_800f3a20;
 extern undefined4 DAT_800f3ce0;
 extern undefined4 DAT_800a8d64;
-extern undefined4 DAT_801f068c;
+/* DAT_801f068c: macro in gt2_global_vars_clean.h */
 extern void LAB_arcade__80025e48(void);
 extern void LAB_arcade__80025cbc(void);
 extern void LAB_arcade__80052908(void);

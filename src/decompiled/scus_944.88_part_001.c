@@ -266,6 +266,7 @@ undefined4 * FUN_800100e4(char *param_1,undefined4 *param_2)
   int iVar3;
   undefined4 *puVar4;
   undefined auStack_118 [256];
+  int iter_limit;
 
   pcVar1 = param_1 + 1;
 
@@ -288,12 +289,14 @@ undefined4 * FUN_800100e4(char *param_1,undefined4 *param_2)
 
     if (iVar2 == 0) {
 
+      iter_limit = 0x2400;  /* Max entries to prevent OOB on corrupt gt2.vol */
       for (; (iVar2 = FUN_8008cf00((int)param_2 + 7,param_1),
               puVar4 = param_2,
               iVar2 != 0 &&
              (puVar4 = (undefined4 *)0x0,
              (*(byte *)((int)param_2 + 6) & 0x80) == 0));
           param_2 = param_2 + 8) {
+        if (--iter_limit <= 0) return (undefined4 *)0x0;
       }
       return puVar4;
     }
@@ -306,7 +309,11 @@ undefined4 * FUN_800100e4(char *param_1,undefined4 *param_2)
 
     if (iVar3 == 0) break;
 
-    param_2 = DAT_800a97d0 + (uint)*(ushort *)(iVar3 + 4) * 8;
+    {
+      uint sub_idx = (uint)*(ushort *)(iVar3 + 4) * 8;
+      if ((uintptr_t)((char *)DAT_800a97d0 + sub_idx * 4) >= (uintptr_t)&UNK_801357d0) break;
+      param_2 = DAT_800a97d0 + sub_idx;
+    }
   }
 
   return (undefined4 *)0x0;
@@ -374,6 +381,11 @@ void FUN_800102dc(void)
 
   puVar2 = DAT_800a97d0;
   uVar1 = DAT_801e3604 & 0xfffff800;
+  /* Clamp uVar1 to prevent out-of-bounds access when gt2.vol format is invalid
+     (e.g. Arcade disc, gt2.vol not found, or wrong sector loaded). */
+  if (uVar1 >= 0x8c000) {
+    uVar1 = 0;
+  }
   puVar6 = (undefined4 *)((int)(uintptr_t)DAT_800a97d0 + uVar1);
 
   /* End condition: byte arithmetic (decompiler emitted pointer arithmetic which

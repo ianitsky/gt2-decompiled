@@ -33,65 +33,19 @@ undefined4 DAT_80091160 = 0;
 undefined4 DAT_80091168 = 0;
 undefined4 DAT_8009116c = 0;
 undefined4 DAT_80091170 = 0;
-// Memory management variables
-undefined4 DAT_801c93b0 = 0;
-undefined4 DAT_801c93d0 = 0;
-undefined4 DAT_801c93e0 = 0;
-undefined4 DAT_801c93e8 = 0;
-undefined4 DAT_801c93c4 = 0;
-undefined4 DAT_801c93d4 = 0;
-undefined4 DAT_801c93d8 = 0;
-undefined4 DAT_801c93dc = 0;
-undefined4 DAT_801c93e4 = 0;
-undefined4 DAT_801c93bc = 0;
-undefined4 DAT_801c93b4 = 0;
-undefined4 DAT_801c942c = 0;
-undefined4 DAT_801c945c = 0;
-undefined4 DAT_801c9460 = 0;
-undefined4 DAT_801c9af8 = 0;
-undefined4 DAT_801c93c3 = 0;
-undefined4 DAT_801f0d60 = 0;
-// Game state variables
-undefined4 DAT_801c98e0 = 0;
-bitfield_8_t DAT_801c98e1 = {0};
-bitfield_8_t DAT_801c98e5 = {0};
-undefined4 DAT_801c98ea = 0;
-undefined4 DAT_801c98ee = 0;
-undefined4 DAT_801c98f3 = 0;
-undefined4 DAT_801c98f4 = 0;
-undefined4 DAT_801c98f5 = 0;
-undefined4 DAT_801c98f9 = 0;
-undefined4 DAT_801c98fe = 0;
-undefined4 DAT_801c98ff = 0;
-undefined4 DAT_801c9900 = 0;
-undefined4 DAT_801c9904 = 0;
-undefined4 DAT_801c9909 = 0;
-undefined4 DAT_801c990a = 0;
-undefined4 DAT_801c990b = 0;
-undefined4 DAT_801c9928 = 0;
-undefined4 DAT_801c992c = 0;
-undefined4 DAT_801c998e = 0;
-undefined4 DAT_801c998f = 0;
-undefined4 DAT_801c9990 = 0;
-undefined4 DAT_801c9991 = 0;
-undefined4 DAT_801c9992 = 0;
-undefined4 DAT_801c9993 = 0;
-undefined4 DAT_801c9994 = 0;
-undefined4 DAT_801c9995 = 0;
-undefined4 DAT_801c9424 = 0;
-undefined4 DAT_801c9998 = 0;
-undefined4 DAT_801c98a0 = 0;
-undefined4 DAT_801c98a4 = 0;  // Array element
-undefined4 DAT_801c98a8 = 0;  // Array element
-undefined4 DAT_801c9916 = 0;
-undefined4 DAT_801c9968 = 0;
+/* Contiguous PS1 BSS region 0x801c93b0..0x801f0d60 (0x27a00 bytes). On PS1 this
+   was one block; on Linux we need it contiguous so the start() clear loop
+   (high-1 down to low) does not write into ASan red zones. */
+undefined4 DAT_801c93b0_region[0x9e81];
 // Data arrays and buffers
 /* Large contiguous array: PS1 addresses 0x800a97d0..0x801357d0 (573440 bytes).
-   DAT_800a97d4, DAT_800a97f0/UNK_800a97f0, UNK_800b57d0, UNK_801357d0
-   are macros that index into this array (see gt2_global_vars_clean.h). */
-undefined4 DAT_800a97d0[0x23001] = {0};
+   FUN_80010cec uses 0xc0000 bytes for graphics; we need at least that to avoid
+   buffer overflow / segfault. 0x30001 elements = 0xC0004 bytes. */
+undefined4 DAT_800a97d0[0x30001] = {0};
 void *DAT_800a8d5c = NULL;
-void *DAT_800a7b7c = NULL;
+/* PS1 0x800a7b7c: contiguous 0x41a-word block; INTR_OBJ_69C clears it. First word
+   is the init flag (0/1). Use static block instead of malloc to avoid overflow. */
+undefined4 DAT_800a7b7c_region[0x41a];
 int DAT_800a7b7c_initialized = 0;
 /* DAT_800a97f0, DAT_800b57d0, DAT_801357d0 are now macros – removed definitions */
 undefined4 DAT_800a6f18 = 0;
@@ -344,7 +298,8 @@ undefined4 DAT_80092e88 = 0;
 undefined4 DAT_80092e8c = 0;
 /* Contiguous block for FUN_8007f848 (PS1 SPU voice to main vol); DO NOT reorder. */
 undefined4 spu_voice_register_block[SPU_VOICE_REGISTER_BLOCK_SIZE] = {0};
-undefined4 *DAT_801f0230 = NULL;
+/* PS1 0x801f0230: FUN_8008ce30 clears 0x2d4 bytes */
+undefined4 DAT_801f0230_buffer[0xb5];
 undefined4 SPU_MAIN_VOL_R = 0;
 undefined4 DAT_1f801dc0 = 0;
 undefined4 DAT_1f801dce = 0;
@@ -406,8 +361,8 @@ undefined4 DAT_801f0534 = 0;
 undefined4 DAT_801f0538 = 0;
 undefined4 DAT_801f0540 = 0;
 undefined4 DAT_801f0544 = 0;
-undefined4 DAT_801f0680 = 0;
-undefined4 DAT_801f0684 = 0;
+/* PS1 0x801f0680: FUN_8008ce30 clears 0x28 bytes; need contiguous block */
+undefined4 DAT_801f0680_buffer[10];
 undefined4 DAT_801f0690 = 0;
 undefined4 DAT_801f06a0 = 0;
 undefined4 LAB_800903b8 = 0;
@@ -454,10 +409,10 @@ undefined4 LAB_8007da9c = 0;
 undefined4 LAB_8008fdb8 = 0;
 undefined4 LAB_8007abb8 = 0;
 undefined4 LAB_800901b6_2 = 0;
-undefined4 DAT_801efe60 = 0;
+/* PS1 0x801efe60: FUN_8008ce30 clears 0x3c8 bytes */
+undefined4 DAT_801efe60_buffer[0xf2];
 undefined4 DAT_801efe76 = 0;
-undefined4 DAT_801f0238 = 0;
-undefined4 DAT_801f0248 = 0;
+/* DAT_801f0238, DAT_801f0248: macros in gt2_global_vars_clean.h */
 bitfield_16_t SPU_VOICE_KEY_OFF = {0};
 bitfield_16_t SPU_VOICE_KEY_ON = {0};
 bitfield_16_t SPU_VOICE_CHN_REVERB_MODE = {0};
@@ -553,7 +508,7 @@ undefined4 DAT_801efe0e = 0;
 undefined4 DAT_801efe18 = 0;
 undefined4 DAT_801efe23 = 0;
 undefined4 DAT_801f053c = 0;
-undefined4 DAT_801f0688 = 0;
+/* DAT_801f0688: macro in DAT_801f0680_buffer */
 undefined4 UNK_801c99ec = 0;
 undefined4 UNK_801d5f78 = 0;
 undefined4 UNK_801da65c = 0;
@@ -712,7 +667,7 @@ uint CURR_MAIN_VOL_L = 0;
 uint CURR_MAIN_VOL_R = 0;
 uint COMMON_DELAY = 0;
 // Interrupt and timer related variables (used in scus_944.88_part_009.c)
-undefined4 DAT_800a7bae = 0;
+/* DAT_800a7bae: macro in gt2_global_vars_clean.h */
 undefined4 DAT_800a8c14 = 0;  // Interrupt related
 undefined4 DAT_800a8c34 = 0;  // Interrupt related
 undefined4 DAT_800a8c38 = 0;  // Interrupt related
@@ -907,13 +862,8 @@ undefined4 DMA_MDEC_OUT_MADR = 0;
 undefined4 MDEC_REG0 = 0;
 undefined4 MDEC_REG1 = 0;
 /* SPU_MAIN_VOL_L is a macro defined in gt2_global_vars_clean.h — no separate definition needed */
-undefined4 DAT_800a7bb4 = 0;  // Context buffer for interrupt handling
-undefined4 DAT_800a7bb8 = 0;  // Callback address for interrupt handling
-undefined4 DAT_800a7bac = 0;  // Interrupt mask variable
-undefined4 DAT_800a7b80 = 0;  // Interrupt callback storage
-undefined4 DAT_800a7bb0 = 0;  // DMA_DPCR backup
-undefined4 DAT_800a7b14 = 0;  // Interrupt related
-undefined4 DAT_800a7b7e = 0;  // Interrupt related
+/* DAT_800a7bb4, DAT_800a7bb8, DAT_800a7bac, DAT_800a7b80, DAT_800a7bb0, DAT_800a7b7e: macros into DAT_800a7b7c_region */
+undefined4 DAT_800a7b14 = 0;  // Interrupt related (0x800a7b14, before 0x800a7b7c block)
 undefined4 DAT_800a6f5c = 0;
 undefined4 DAT_800a6fc0 = 0;
 undefined4 DAT_800a7040 = 0;
@@ -1363,7 +1313,7 @@ undefined4 DAT_801efb5b = 0;
 undefined4 DAT_801efb74 = 0;
 undefined DAT_801f0673 = 0;
 undefined4 DAT_801f0674 = 0;
-undefined4 DAT_801f068c = 0;
+/* DAT_801f068c: macro in DAT_801f0680_buffer */
 undefined4 DAT_801f0d20 = 0;
 undefined DAT_800efd60[256] = {0};
 undefined DAT_801b9e70[64] = {0};

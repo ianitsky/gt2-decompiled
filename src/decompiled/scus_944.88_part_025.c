@@ -68,7 +68,7 @@ extern undefined4 DAT_801727ec;
 extern undefined4 DAT_801d585c;
 extern undefined4 DAT_801d5fa0;
 extern void *DAT_800a8d5c;
-extern undefined4 DAT_801f068c;
+/* DAT_801f068c: macro in gt2_global_vars_clean.h */
 extern undefined4 DAT_801c93cc;
 extern undefined4 DAT_801f0531;
 extern undefined4 DAT_801f0528;
