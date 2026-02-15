@@ -8,7 +8,8 @@
 
 // Basic type definitions for PS1 compatibility
 typedef unsigned char   undefined;
-typedef uint8_t         byte;
+// 'byte' is typedef'd by <psyz.h> and may already exist; do not redefine to avoid conflict.
+// typedef uint8_t         byte;    // Removed to fix conflicting typedef error
 typedef unsigned int    dword;
 typedef unsigned char   uchar;
 typedef unsigned long   ulong;

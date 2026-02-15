@@ -210,6 +210,7 @@ When fixing compilation errors:
 
 ### Why
 
+- **Premise**: psyz is a working project from the start. The GT2 decompiled project must adapt to it; psyz is never modified.
 - **External ownership**: Contents are submodules or vendored projects (e.g. psyz, SDL3) maintained elsewhere. Changes would be overwritten on update and are hard to track.
 - **Reproducibility**: Keeping externals untouched makes builds and diffs predictable and avoids accidental breakage.
 - **Upstream compatibility**: Easing future updates and reducing merge conflicts.
@@ -236,6 +237,7 @@ When fixing compilation errors:
 ## Project Rules
 
 - **Never alter anything inside `src/external`**: See the section “Rule: Never Alter `src/external`” above.
+- **Adapt to psyz, never modify it**: psyz was working from the start. When build errors involve psyz/SDL3 (e.g. `LIBDECOR_WINDOW_STATE_SUSPENDED` undeclared), adjust the environment (install libdecor 0.3.0+, correct dependency versions) instead of patching `src/external/`.
 - **Always use SDL3**: Use SDL3 for platform code (e.g. `#include <SDL3/SDL.h>`). Do not switch to SDL2.
 
 ## Notes
