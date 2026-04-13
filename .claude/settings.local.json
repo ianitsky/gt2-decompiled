@@ -24,7 +24,24 @@
       "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''glVer_required\\\\|GL_CONTEXT_MAJOR\\\\|GL_CONTEXT_MINOR\\\\|PROFILE'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/external/psyz/psyz/src/platform/sdl3_gl.c 2>&1 | head -30\")",
       "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"dpkg -l ''libgl1*:i386'' ''libglu1*:i386'' ''libglx*:i386'' 2>/dev/null | grep ''^ii''\")",
       "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"ls /usr/lib/i386-linux-gnu/libGL*.so* /usr/lib/i386-linux-gnu/libOpenGL*.so* /usr/lib/i386-linux-gnu/libGLX*.so* 2>&1\")",
-      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \":*)"
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \":*)",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -rn ''FUN_8007e8a0\\\\|FUN_80010e14'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/decompiled/ --include=''*.c'' --include=''*.h'' -l\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''FUN_80010e14'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/decompiled/scus_944.88_part_001.c\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''FUN_8007e8a0'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/decompiled/scus_944.88_part_007.c\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''OpenEvent\\\\|EnableEvent\\\\|FUN_8008c918\\\\|FUN_8008c948'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/platform/ps1_stubs.c | head -30\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''OpenEvent\\\\|EnableEvent'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/platform/ps1_stubs.c /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/include/ps1_stubs.h 2>/dev/null | head -20\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -rn ''OpenEvent\\\\|EnableEvent'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/include/ /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/platform/ 2>/dev/null | head -20\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -rn ''OpenEvent\\\\|EnableEvent'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/external/psyz/ 2>/dev/null | head -20\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''NOT_IMPLEMENTED\\\\|FUN_8008c918\\\\|FUN_8008c948\\\\|FUN_80083030'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/external/psyz/psyz/src/psyz/libapi.c /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/platform/ps1_stubs.c 2>/dev/null | head -20\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -rn ''define NOT_IMPLEMENTED\\\\|NOT_IMPLEMENTED'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/external/psyz/psyz/include/ 2>/dev/null | head -10\")",
+      "Bash(grep -n \"^void FUN_8008ce30\\\\|^undefined4 FUN_8008ce30\" \"C:\\\\Users\\\\inmor\\\\Documents\\\\Projects\\\\gt2-decompiled\\\\src\\\\decompiled\"/*.c)",
+      "Bash(grep -n \"^void FUN_80083030\\\\|^undefined4 FUN_80083030\" \"C:\\\\Users\\\\inmor\\\\Documents\\\\Projects\\\\gt2-decompiled\\\\src\\\\decompiled\"/*.c)",
+      "Bash(grep -n \"^void FUN_8008ce30\\\\|^undefined.*FUN_8008ce30\" \"C:\\\\Users\\\\inmor\\\\Documents\\\\Projects\\\\gt2-decompiled\\\\src\\\\decompiled\"/*.c)",
+      "Bash(grep -n \"FUN_8008ce30\" \"C:\\\\Users\\\\inmor\\\\Documents\\\\Projects\\\\gt2-decompiled\\\\src\\\\platform\"/*.c)",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''8007e8a0\\\\|8007e8'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/GT2.dis | head -5\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"head -20 /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/GT2.dis\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''8007E8A0\\\\|8007e8a0'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/GT2.dis | head -5\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c 'LIBGL_ALWAYS_SOFTWARE=1 MESA_GL_VERSION_OVERRIDE=3.3 gdb -batch -ex \"\"set args -cue \\\\\"\"/mnt/c/Users/inmor/Documents/My Games/PSX/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\)/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\).cue\\\\\"\"\"\" -ex run -ex backtrace -ex \"\"info locals\"\" ~/gt2-build/src/gt2 2>&1 | tail -30')"
     ]
   }
 }

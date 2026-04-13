@@ -2,6 +2,22 @@
     "tasks": [
         {
             "type": "shell",
+            "label": "build-debug",
+            "command": "cd ~/gt2-build && cmake -DCMAKE_BUILD_TYPE=Debug -DOPENGL_opengl_LIBRARY=/usr/lib/i386-linux-gnu/libOpenGL.so -DOPENGL_glx_LIBRARY=/usr/lib/i386-linux-gnu/libGLX.so -DOPENGL_INCLUDE_DIR=/usr/include /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled && make -j$(nproc)",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$gcc"
+        },
+        {
+            "type": "shell",
             "label": "build-all",
             "command": "cd \"${workspaceFolder}/build\" && cmake .. -DCMAKE_BUILD_TYPE=Debug && make -j$(nproc)",
             "group": {

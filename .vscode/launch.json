@@ -5,14 +5,17 @@
             "name": "Debug GT2 (Build + Debug)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/src/gt2",
+            "program": "${env:HOME}/gt2-build/src/gt2",
             "args": [
-                "-iso",
-                "${workspaceFolder}/assets/Gran Turismo 2 (Arcade Mode) (v1.1).cue"
+                "-cue",
+                "/mnt/c/Users/inmor/Documents/My Games/PSX/Gran Turismo 2 (Arcade Mode) (v1.1)/Gran Turismo 2 (Arcade Mode) (v1.1).cue"
             ],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
+            "cwd": "${env:HOME}/gt2-build",
+            "environment": [
+                { "name": "LIBGL_ALWAYS_SOFTWARE", "value": "1" },
+                { "name": "SDL_VIDEO_DRIVER",      "value": "x11" }
+            ],
             "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb",
@@ -21,22 +24,30 @@
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
+                },
+                {
+                    "description": "Catch segfaults",
+                    "text": "handle SIGSEGV stop print",
+                    "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build-all"
+            "preLaunchTask": "build-debug"
         },
         {
             "name": "Debug GT2 (Debug Only)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/src/gt2",
+            "program": "${env:HOME}/gt2-build/src/gt2",
             "args": [
-                "-iso",
-                "${workspaceFolder}/assets/Gran Turismo 2 (Arcade Mode) (v1.1).cue"
+                "-cue",
+                "/mnt/c/Users/inmor/Documents/My Games/PSX/Gran Turismo 2 (Arcade Mode) (v1.1)/Gran Turismo 2 (Arcade Mode) (v1.1).cue"
             ],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
+            "cwd": "${env:HOME}/gt2-build",
+            "environment": [
+                { "name": "LIBGL_ALWAYS_SOFTWARE", "value": "1" },
+                { "name": "SDL_VIDEO_DRIVER",      "value": "x11" }
+            ],
             "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb",
@@ -44,6 +55,11 @@
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Catch segfaults",
+                    "text": "handle SIGSEGV stop print",
                     "ignoreFailures": true
                 }
             ]
