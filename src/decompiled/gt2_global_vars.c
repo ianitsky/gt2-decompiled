@@ -78,9 +78,7 @@ undefined4 DAT_801ef610 = 0;
 undefined4 DAT_801ef618 = 0;
 /* Module loading index table – DAT_801ef630 and DAT_801ef6b0 are macros */
 undefined4 DAT_801ef61c[256] = {0};
-undefined4 DAT_801e18e6 = 0;
-undefined4 DAT_801e18e8 = 0;
-undefined4 DAT_801e18e4 = 0;
+// DAT_801e18e6, DAT_801e18e8, DAT_801e18e4: macros into DAT_801e18e0_buffer (see gt2_global_vars_clean.h)
 undefined4 DAT_8009160c = 0;
 undefined4 DAT_8009160d = 0;
 undefined4 DAT_80091660 = 0;
@@ -165,7 +163,7 @@ undefined4 UNK_801c98e9 = 0;
 undefined4 UNK_801c991e = 0;
 undefined4 UNK_801c9922 = 0;
 undefined4 UNK_801c9926 = 0;
-undefined4 UNK_801e18e4 = 0;
+// undefined4 UNK_801e18e4 = 0; // now macro into DAT_801e18e0_buffer
 undefined4 DAT_000014a0 = 0;
 undefined4 DAT_000017cc = 0;
 undefined4 DAT_80033dcc = 0;
@@ -178,7 +176,10 @@ undefined4 DAT_801c93cc = 0;
 /* DAT_800a97d4 is now a macro into DAT_800a97d0[1] */
 undefined4 DAT_801df5d0 = 0;
 undefined4 DAT_801df5d4 = 0;
-undefined4 DAT_801e18e0 = 0;
+/* PS1 0x801e18e0: CD data is loaded into this buffer by FUN_8005d8a0.
+   Fields at offsets +4, +6, +8 are accessed as DAT_801e18e4/e6/e8.
+   Must be contiguous.  0x1400 bytes covers up to 0x801e2ce0. */
+undefined4 DAT_801e18e0_buffer[0x1400 / 4] = {0};
 undefined4 DAT_801e2cf0 = 0;
 undefined4 LAB_8005d80c = 0;
 undefined4 DAT_801c9464 = 0;

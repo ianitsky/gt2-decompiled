@@ -68,7 +68,7 @@ extern undefined4 UNK_801c98e9;
 extern undefined4 UNK_801c991e;
 extern undefined4 UNK_801c9922;
 extern undefined4 UNK_801c9926;
-extern undefined4 UNK_801e18e4;
+// UNK_801e18e4: macro into DAT_801e18e0_buffer (see below)
 extern undefined4 LAB_80033dc8;
 extern undefined4 LAB_800a8e5c;
 extern char *PTR_s_Apollo_440___Cold_Rock_the_Mic_800959c0;
@@ -377,9 +377,14 @@ extern undefined4 DAT_801ef618;
    (&DAT_801ef61c + param * 8) — needs contiguous space. */
 extern undefined4 DAT_801ef61c[256];
 #define DAT_801ef630  (DAT_801ef61c[5])   /* PS1: 0x801ef630, offset +0x14 */
-extern undefined4 DAT_801e18e6;
-extern undefined4 DAT_801e18e8;
-extern undefined4 DAT_801e18e4;
+/* DAT_801e18e0: contiguous buffer for CD-loaded track data.
+   Fields DAT_801e18e4/e6/e8 are at known offsets within it. */
+extern undefined4 DAT_801e18e0_buffer[0x1400 / 4];
+#define DAT_801e18e0 DAT_801e18e0_buffer[0]
+#define DAT_801e18e4 (*(undefined4 *)((char *)DAT_801e18e0_buffer + 4))
+#define DAT_801e18e6 (*(undefined4 *)((char *)DAT_801e18e0_buffer + 6))
+#define DAT_801e18e8 (*(undefined4 *)((char *)DAT_801e18e0_buffer + 8))
+#define UNK_801e18e4 DAT_801e18e4
 extern undefined4 DAT_8009160c;
 extern undefined4 DAT_80091660;
 extern undefined4 DAT_800915a0;
@@ -434,7 +439,7 @@ extern undefined4 DAT_801c93cc;
 #define DAT_800a97d4  (DAT_800a97d0[1])
 extern undefined4 DAT_801df5d0;
 extern undefined4 DAT_801df5d4;
-extern undefined4 DAT_801e18e0;
+// extern undefined4 DAT_801e18e0;  -- now macro into DAT_801e18e0_buffer
 extern undefined4 DAT_801e2cf0;
 extern undefined4 DAT_801c9464;
 extern undefined4 DAT_801c9468;
