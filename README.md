@@ -12,24 +12,75 @@ The original PlayStation 1 executable (`scus_944.88`) was analyzed and decompile
 
 ## Building
 
-This project can be compiled for Linux using CMake. See [BUILD.md](BUILD.md) for detailed build instructions.
-
-### Quick Start
-
-```bash
-mkdir -p build
-cd build
-cmake ..
-make
-```
-
-The executable will be created as `build/gt2` (or `build/src/gt2` depending on your CMake setup).
+This project can be compiled for Linux (or WSL on Windows) using CMake. See [BUILD.md](BUILD.md) for detailed build instructions.
 
 ### Requirements
 
 - CMake 3.20+
-- GCC or Clang with C11 support
+- GCC / G++ with C11 support and **32-bit multilib** (`gcc-multilib`, `g++-multilib`)
 - Make or Ninja
+- SDL3 dependencies (X11, ALSA, OpenGL ES) — **32-bit versions required** (`:i386`)
+
+### Building on Linux / WSL (Ubuntu 24.04)
+
+#### 1. Install dependencies
+
+```bash
+# Add i386 (32-bit) architecture support
+sudo dpkg --add-architecture i386
+sudo apt-get update
+
+# Build tools
+sudo apt-get install -y gcc g++ gcc-multilib g++-multilib cmake make
+
+# SDL3 / X11 / audio / graphics — 32-bit versions
+sudo apt-get install -y \
+  libx11-dev:i386 libxext-dev:i386 libxrandr-dev:i386 \
+  libxcursor-dev:i386 libxfixes-dev:i386 libxi-dev:i386 \
+  libxss-dev:i386 libxkbcommon-dev:i386 \
+  libasound2-dev:i386 \
+  libwayland-dev:i386 \
+  libgles2-mesa-dev:i386
+```
+
+> **Why i386?** The project compiles in 32-bit mode (`-m32`) to match the PS1's ILP32
+> architecture, so all linked libraries must also be 32-bit.
+
+#### 2. Configure and build
+
+> **Important (WSL users):** Always create the build directory inside the WSL
+> filesystem (e.g. `~/gt2-build`), **not** under `/mnt/c/...`. CMake's
+> `try_compile` steps fail on Windows-mounted paths.
+
+```bash
+# Create build directory in the native Linux filesystem
+mkdir -p ~/gt2-build
+cd ~/gt2-build
+
+# Configure — pass 32-bit OpenGL paths explicitly so SDL3 enables GLX support
+cmake \
+  -DOPENGL_opengl_LIBRARY=/usr/lib/i386-linux-gnu/libOpenGL.so \
+  -DOPENGL_glx_LIBRARY=/usr/lib/i386-linux-gnu/libGLX.so \
+  -DOPENGL_INCLUDE_DIR=/usr/include \
+  /path/to/gt2-decompiled
+  # e.g.: /mnt/c/Users/<you>/Documents/Projects/gt2-decompiled
+
+# Compile (use all available CPU cores)
+make -j$(nproc)
+```
+
+> **Why explicit OpenGL paths?** CMake's `find_package(OpenGL)` defaults to 64-bit
+> library paths. Without these overrides SDL3 silently disables desktop OpenGL (GLX)
+> and falls back to EGL-only, which fails at runtime on WSL.
+
+The executable is generated at `~/gt2-build/src/gt2`.
+
+#### 3. Build types
+
+```bash
+cmake -DCMAKE_BUILD_TYPE=Debug   ..   # debug symbols, no optimisation (default)
+cmake -DCMAKE_BUILD_TYPE=Release ..   # -O2, no debug symbols
+```
 
 ## Usage (disk image / ISO)
 

@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l \"C:/Users/inmor/Documents/Projects/gt2-decompiled/src/decompiled\"/*.c)",
+      "Bash(wsl --list --verbose)",
+      "Bash(wsl -e ls /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/)",
+      "Bash(wsl -d Ubuntu -- ls /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/)",
+      "Bash(cmd.exe /c \"wsl -d Ubuntu -- ls /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/\")",
+      "Bash(cmd.exe /c wsl -d Ubuntu -- ls /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/)",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- ls /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/)",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- git -C /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled submodule status)",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- ls /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/external/psyz/)",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"gcc --version 2>&1; cmake --version 2>&1; make --version 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"dpkg -l gcc-multilib 2>/dev/null | grep -E ''^ii'' || echo ''gcc-multilib not installed''\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"cd /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled && mkdir -p build && cd build && cmake .. 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"dpkg -l g++ 2>/dev/null | grep -E ''^ii'' || echo ''g++ not installed''\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"sudo apt-get install -y g++ g++-multilib 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"cd /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled && rm -rf build && mkdir build && cd build && cmake .. 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"ls -la /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/build/ 2>&1 | head -5\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"cd /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/build && cmake .. 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"mkdir -p ~/gt2-build && cd ~/gt2-build && cmake /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"rm -rf ~/gt2-build && mkdir -p ~/gt2-build && cd ~/gt2-build && cmake /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''GL_CONTEXT\\\\|EGL\\\\|OpenGL\\\\|SDL_GL\\\\|eglCreate\\\\|SDL_WINDOW'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/external/psyz/psyz/src/platform/sdl3_gl.c 2>&1 | head -60\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''glVer_required\\\\|GL_CONTEXT_MAJOR\\\\|GL_CONTEXT_MINOR\\\\|PROFILE'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/src/external/psyz/psyz/src/platform/sdl3_gl.c 2>&1 | head -30\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"dpkg -l ''libgl1*:i386'' ''libglu1*:i386'' ''libglx*:i386'' 2>/dev/null | grep ''^ii''\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"ls /usr/lib/i386-linux-gnu/libGL*.so* /usr/lib/i386-linux-gnu/libOpenGL*.so* /usr/lib/i386-linux-gnu/libGLX*.so* 2>&1\")",
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \":*)"
+    ]
+  }
+}
