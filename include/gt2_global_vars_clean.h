@@ -178,7 +178,7 @@ extern undefined4 LAB_80082574;
 extern undefined4 LAB_8007d2d4;
 extern undefined4 LAB_80090526_2;
 extern undefined4 LAB_8009051e_2;
-extern func LAB_8007eacc;
+void LAB_8007eacc(void);
 extern func LAB_8007f6e8;
 extern func LAB_8007f900;
 extern func LAB_8007f978;
@@ -534,8 +534,8 @@ extern undefined4 DAT_801f0680_buffer[10];
 #define DAT_801f068c (DAT_801f0680_buffer[3])
 extern undefined4 DAT_801f0690;
 extern undefined4 DAT_801f06a0;
-extern undefined4 DAT_801f0724;
-extern undefined4 DAT_801f0984;
+// extern undefined4 DAT_801f0724;
+// extern undefined4 DAT_801f0984;
 extern undefined4 DAT_801c94e8;
 extern undefined4 DAT_801f06c8;
 extern undefined4 DAT_801f06d4;
@@ -635,10 +635,10 @@ extern undefined4 DAT_80091ed8;
 extern undefined4 DAT_80091edc;
 extern undefined4 DAT_80091ee4;
 extern undefined4 DAT_801d58b8;
-extern undefined4 DAT_801f06e0;
-extern undefined4 DAT_801f0714;
-extern undefined4 DAT_801f0718;
-extern undefined4 DAT_801f0708;
+// extern undefined4 DAT_801f06e0;
+// extern undefined4 DAT_801f0714;
+// extern undefined4 DAT_801f0718;
+// extern undefined4 DAT_801f0708;
 extern undefined4 DAT_800a0a68;
 extern undefined4 DAT_801f0c70;
 extern undefined4 DAT_801c93f8;
@@ -1425,16 +1425,19 @@ extern undefined4 *DAT_801f06b0;
 extern undefined4 DAT_801f06b5;
 extern undefined4 DAT_801f06dd;
 extern undefined4 DAT_801f06de;
-extern undefined4 DAT_801f06e0;
-extern undefined4 DAT_801f0708;
-extern func *DAT_801f0710;
-extern undefined4 DAT_801f0714;
-extern undefined4 DAT_801f0718;
-extern undefined4 DAT_801f097e;
-extern undefined4 DAT_801f097f;
-extern undefined4 DAT_801f0981;
-extern undefined4 DAT_801f0be3;
-extern undefined4 DAT_801f0be5;
+extern undefined4 DAT_801f06e0_buffer[0x58c / 4];
+#define DAT_801f06e0 DAT_801f06e0_buffer[0]
+#define DAT_801f0708 DAT_801f06e0_buffer[10]
+#define DAT_801f0710 (*(func **)&DAT_801f06e0_buffer[12])
+#define DAT_801f0714 DAT_801f06e0_buffer[13]
+#define DAT_801f0718 DAT_801f06e0_buffer[14]
+#define DAT_801f0724 DAT_801f06e0_buffer[17]
+#define DAT_801f097e (*(undefined4 *)((char *)DAT_801f06e0_buffer + 0x29E))
+#define DAT_801f097f (*(undefined4 *)((char *)DAT_801f06e0_buffer + 0x29F))
+#define DAT_801f0981 (*(undefined4 *)((char *)DAT_801f06e0_buffer + 0x2A1))
+#define DAT_801f0984 DAT_801f06e0_buffer[169]
+#define DAT_801f0be3 (*(undefined4 *)((char *)DAT_801f06e0_buffer + 0x503))
+#define DAT_801f0be5 (*(undefined4 *)((char *)DAT_801f06e0_buffer + 0x505))
 extern undefined4 DAT_801f0c70;
 extern undefined4 DAT_801f0c78;
 extern undefined4 DAT_801f0c7c;

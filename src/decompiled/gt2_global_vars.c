@@ -371,10 +371,10 @@ undefined4 LAB_80082574 = 0;
 undefined4 LAB_8007d2d4 = 0;
 undefined4 LAB_80090526_2 = 0;
 undefined4 LAB_8009051e_2 = 0;
-undefined4 DAT_801f0724 = 0;
-undefined4 DAT_801f0981 = 0;
-undefined4 DAT_801f0984 = 0;
-undefined4 DAT_801f097e = 0;
+// undefined4 DAT_801f0724 = 0;
+// undefined4 DAT_801f0981 = 0;
+// undefined4 DAT_801f0984 = 0;
+// undefined4 DAT_801f097e = 0;
 undefined4 DAT_801c94e8 = 0;
 undefined4 DAT_801f06c8 = 0;
 undefined4 DAT_801f06de = 0;
@@ -553,20 +553,24 @@ undefined4 DAT_801efdb7 = 0;
 undefined4 DAT_801efdc4 = 0;
 undefined4 *PTR_LAB_800921d4 = NULL;
 undefined4 DAT_801d58b8 = 0;
-undefined4 DAT_801f06e0 = 0;  // System data array/structure
+undefined4 DAT_801f06e0_buffer[0x58c / 4] = {0};  // System data array/structure & related variables
 undefined4 DAT_80090530[] = {0};  // Source buffer data (array)
-func *DAT_801f0710 = NULL;  // Function pointer
-undefined4 DAT_801f0714 = 0;  // Value
-undefined4 DAT_801f0718 = 0;  // Value (used with bitwise operations)
-undefined4 DAT_801f0708 = 0;  // Pointer/value
-func LAB_8007eacc = NULL;  // Function label
+// func *DAT_801f0710 = NULL;  // Function pointer
+// undefined4 DAT_801f0714 = 0;  // Value
+// undefined4 DAT_801f0718 = 0;  // Value (used with bitwise operations)
+// undefined4 DAT_801f0708 = 0;  // Pointer/value
+/* LAB_8007eacc: On PS1 this was a code address (0x8007eacc, inside RotNMD_SV_G3)
+   used as a VSync callback registered in the priority list DAT_801f0688.
+   FUN_80083134 calls it as a function pointer. It must be real executable code,
+   not a variable.  The original PS1 callback body is unknown; treat as no-op. */
+void LAB_8007eacc(void) { return; }
 func LAB_8007f6e8 = NULL;  // Function label
 func LAB_8007f900 = NULL;  // Function label
 func LAB_8007f978 = NULL;  // Function label
 func LAB_80090630 = NULL;  // Function label
-undefined4 DAT_801f097f = 0;
-undefined4 DAT_801f0be3 = 0;
-undefined4 DAT_801f0be5 = 0;
+// undefined4 DAT_801f097f = 0;
+// undefined4 DAT_801f0be3 = 0;
+// undefined4 DAT_801f0be5 = 0;
 undefined4 DAT_800a0a68 = 0;  // Data pointer
 undefined4 DAT_801f0c70 = 0;  // Data
 undefined4 DAT_801f0c78 = 0;  // Data
