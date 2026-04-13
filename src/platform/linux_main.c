@@ -21,10 +21,19 @@ extern undefined4 start(undefined4 param_1, undefined4 param_2);
 static void dma_callback_noop(void) {}
 static code dma_callback_storage = (code)dma_callback_noop;
 
+
 /* #region agent log - use syscall(SYS_write) so handler is async-signal-safe and avoids psyz write macro */
 static int g_debug_log_fd = -1;
+static volatile int g_game_finished = 0;  /* set after start() returns */
 static void segv_handler(int sig, siginfo_t *si, void *uc) {
     (void)uc;
+    /* If the game already finished, this SIGSEGV is from corrupted cleanup —
+       just exit immediately instead of crashing. */
+    if (g_game_finished) {
+        const char bye[] = "GT2: clean exit (post-game SIGSEGV caught)\n";
+        syscall(SYS_write, 2, bye, sizeof(bye) - 1);
+        syscall(SYS_exit_group, 0);  /* raw syscall — _exit() crashes if GOT is corrupted */
+    }
     if (g_debug_log_fd >= 0 && si && sig == SIGSEGV) {
         const char msg[] = "{\"event\":\"SIGSEGV\",\"fault_addr\":\"0x";
         syscall(SYS_write, g_debug_log_fd, msg, sizeof(msg) - 1);
@@ -153,15 +162,14 @@ int main(int argc, char *argv[]) {
 
     /* Call the original start() function */
     undefined4 result = start(param_1, param_2);
-    
+    g_game_finished = 1;
+
     fprintf(stderr, "GT2 Linux Port - Exited with code: %u\n", (unsigned int)result);
     
     // Cleanup
     gt2_cd_reader_close();
-    free(saved_800a8d5c);
-    if (context) SDL_GL_DestroyContext(context);
-    if (window) SDL_DestroyWindow(window);
-    SDL_Quit();
-    
-    return (int)result;
+    /* Use _exit() to skip atexit handlers / C++ destructors — the decompiled
+       code corrupts heap metadata, so libc exit() crashes in SDL/Mesa teardown.
+       The kernel reclaims all resources regardless. */
+    _exit((int)result);
 }

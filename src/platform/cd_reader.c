@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
 
 /* Raw CD sector layout (Mode 2 XA Form 1):
  *   12 bytes sync, 4 bytes header, 8 bytes sub-header,
@@ -14,6 +15,7 @@
 
 static FILE *g_bin_file = NULL;
 static long  g_bin_size = 0;
+static int   g_bin_fd   = -1;   /* saved fd to validate g_bin_file at close time */
 
 /* ------------------------------------------------------------------ */
 /* CUE parser: extract the first FILE "..." line to find the BIN path */
@@ -97,6 +99,7 @@ int gt2_cd_reader_init(const char *cue_path)
         fprintf(stderr, "[cd_reader] Failed to open BIN file: %s\n", bin_path);
         return -1;
     }
+    g_bin_fd = fileno(g_bin_file);
 
     /* Determine file size */
     fseek(g_bin_file, 0, SEEK_END);
@@ -161,8 +164,11 @@ int gt2_cd_reader_is_ready(void)
 
 void gt2_cd_reader_close(void)
 {
-    if (g_bin_file) {
-        fclose(g_bin_file);
+    if (g_bin_fd >= 0) {
+        /* Close using the saved fd instead of g_bin_file, which may have been
+           corrupted by decompiled code writing to overlapping global addresses. */
+        close(g_bin_fd);
+        g_bin_fd = -1;
         g_bin_file = NULL;
         g_bin_size = 0;
     }

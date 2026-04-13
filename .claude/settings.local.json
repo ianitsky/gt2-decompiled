@@ -41,7 +41,12 @@
       "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''8007e8a0\\\\|8007e8'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/GT2.dis | head -5\")",
       "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"head -20 /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/GT2.dis\")",
       "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c \"grep -n ''8007E8A0\\\\|8007e8a0'' /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled/GT2.dis | head -5\")",
-      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c 'LIBGL_ALWAYS_SOFTWARE=1 MESA_GL_VERSION_OVERRIDE=3.3 gdb -batch -ex \"\"set args -cue \\\\\"\"/mnt/c/Users/inmor/Documents/My Games/PSX/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\)/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\).cue\\\\\"\"\"\" -ex run -ex backtrace -ex \"\"info locals\"\" ~/gt2-build/src/gt2 2>&1 | tail -30')"
+      "Bash(MSYS_NO_PATHCONV=1 wsl -d Ubuntu -- bash -c 'LIBGL_ALWAYS_SOFTWARE=1 MESA_GL_VERSION_OVERRIDE=3.3 gdb -batch -ex \"\"set args -cue \\\\\"\"/mnt/c/Users/inmor/Documents/My Games/PSX/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\)/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\).cue\\\\\"\"\"\" -ex run -ex backtrace -ex \"\"info locals\"\" ~/gt2-build/src/gt2 2>&1 | tail -30')",
+      "Bash(MSYS_NO_PATHCONV=1 wsl bash -c 'cd ~/gt2-build && rm -rf * && cmake -DOPENGL_opengl_LIBRARY=/usr/lib/i386-linux-gnu/libOpenGL.so -DOPENGL_glx_LIBRARY=/usr/lib/i386-linux-gnu/libGLX.so -DOPENGL_INCLUDE_DIR=/usr/include /mnt/c/Users/inmor/Documents/Projects/gt2-decompiled && make -j$\\(nproc\\)')",
+      "Bash(MSYS_NO_PATHCONV=1 wsl bash -c 'cd ~/gt2-build && make -j$\\(nproc\\) 2>&1 | grep -E \"error:|Error|fatal\" | head -20')",
+      "Bash(MSYS_NO_PATHCONV=1 wsl bash -c 'cd ~/gt2-build && LIBGL_ALWAYS_SOFTWARE=1 MESA_GL_VERSION_OVERRIDE=3.3 gdb -batch -ex \"set args -cue \\\\\"/mnt/c/Users/inmor/Documents/My Games/PSX/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\)/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\).cue\\\\\"\" -ex run -ex backtrace ~/gt2-build/src/gt2 2>&1')",
+      "Bash(MSYS_NO_PATHCONV=1 wsl bash -c 'cd ~/gt2-build && make -j$\\(nproc\\) 2>&1 | tail -5')",
+      "Bash(MSYS_NO_PATHCONV=1 wsl bash -c 'cd ~/gt2-build && LIBGL_ALWAYS_SOFTWARE=1 MESA_GL_VERSION_OVERRIDE=3.3 gdb -batch -ex \"set args -cue \\\\\"/mnt/c/Users/inmor/Documents/My Games/PSX/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\)/Gran Turismo 2 \\(Arcade Mode\\) \\(v1.1\\).cue\\\\\"\" -ex run ~/gt2-build/src/gt2 2>&1')"
     ]
   }
 }
