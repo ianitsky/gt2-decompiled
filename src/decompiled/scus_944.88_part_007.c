@@ -106,37 +106,37 @@ int FUN_8007e864(int commandBuffer,uint commandType,uint commandData)
 void FUN_8007e8a0(void)
 
 {
-  func **callbackArray;
   ulong *destinationBuffer;
   ulong *sourceBuffer;
   long *systemData;
   ulong *currentDestination;
-  func *callbackFunction;
   ulong value1;
   ulong value2;
   ulong value3;
-  func **callbackArray2;
   ulong *currentSource;
-  ulong localBuffer [2];
-  func *localCallback;
-  ulong localData [24];
-  ulong stackValue;
+
+  /* On PS1 the local variables formed a single contiguous block on the
+     stack (sp+0x10 .. sp+0x7B = 27 words = 108 bytes).  The OpenEvent
+     loop relied on pointer arithmetic across this block.  On Linux/x86
+     the compiler is free to reorder locals, breaking that assumption
+     and causing an infinite loop / segfault.
+     Fix: use a single contiguous array that matches the original PS1
+     stack layout exactly. */
+  ulong eventBuffer[27];
+
   func **ppfVar10;
-  func *local_80[4];
   long *plVar6;
-  func **ppfVar1;
   func *callbackFunc;
   uint uVar7;
   uint *puVar11;
   long lVar4;
-  ulong uStack_1c[12];
 
   systemData = (long *)&DAT_801f06e0;
   currentSource = &DAT_80090530;
-  destinationBuffer = localBuffer;
-  /* Original loop: while (sourceBuffer + 4 != 0x80090590)
-     0x80090590 - 0x80090530 = 0x60 bytes = 3 iterations of 0x20 bytes each.
-     Fixed: use iteration count instead of PS1 address comparison. */
+  destinationBuffer = eventBuffer;
+  /* Original MIPS loop: copies 0x10 bytes (4 words) per iteration from
+     DAT_80090530..DAT_80090590.  0x60 / 0x10 = 6 iterations.
+     (The previous decompilation incorrectly used 3 iterations.) */
   {
     int _copy_iter = 0;
     do {
@@ -152,11 +152,13 @@ void FUN_8007e8a0(void)
       currentSource = sourceBuffer + 4;
       destinationBuffer = currentDestination + 4;
       _copy_iter++;
-    } while (_copy_iter < 3);
+    } while (_copy_iter < 6);
   }
-  value1 = sourceBuffer[5];
-  value2 = sourceBuffer[6];
-  currentDestination[4] = 0xf0000011;
+  /* After the copy loop, 3 more words are appended from the source
+     (addresses 0x80090590, 0x80090594, 0x80090598). */
+  value1 = currentSource[1];
+  value2 = currentSource[2];
+  currentDestination[4] = *currentSource;
   currentDestination[5] = value1;
   currentDestination[6] = value2;
   FUN_8008ce30(&DAT_801f06e0,0,0x58c);
@@ -167,21 +169,33 @@ void FUN_8007e8a0(void)
   DAT_801f0be3 = 0x10;
   DAT_801f0be5 = 1;
   FUN_8008c918();
-  currentSource = localBuffer;
-  ppfVar10 = (func **)local_80;
+  /* Original MIPS registers:
+       r17 (puVar11)  = sp+0x10  = eventBuffer[0]   (desc pointer)
+       r16 (ppfVar10) = sp+0x18  = eventBuffer[2]   (callback pointer)
+       r20 (stop)     = sp+0x7C
+     Each iteration reads {desc, spec, callback} from the buffer:
+       desc     = puVar11[0]     = eventBuffer[i*3]
+       spec     = ppfVar10[-1]   = eventBuffer[i*3 + 1]
+       callback = ppfVar10[0]    = eventBuffer[i*3 + 2]
+     Iterations: (0x7C - 0x10) / 0x0C = 9
+     Bug fix: ppfVar10[-1] for spec, NOT ppfVar10[-2] as Ghidra emitted. */
+  ppfVar10 = (func **)(eventBuffer + 2);
   plVar6 = systemData;
-  puVar11 = (uint *)localBuffer;
-  do {
-    plVar6 = plVar6 + 1;
-    ppfVar1 = ppfVar10 + -1;
-    callbackFunc = *ppfVar10;
-    ppfVar10 = ppfVar10 + 3;
-    uVar7 = *puVar11;
-    puVar11 = puVar11 + 3;
-    lVar4 = OpenEvent(uVar7,(long)ppfVar1[-1],0x1000,callbackFunc);
-    *plVar6 = lVar4;
-    EnableEvent(lVar4);
-  } while (puVar11 != (uint *)&uStack_1c[12]);
+  puVar11 = (uint *)eventBuffer;
+  {
+    int _event_iter = 0;
+    do {
+      plVar6 = plVar6 + 1;
+      callbackFunc = *ppfVar10;
+      uVar7 = *puVar11;
+      lVar4 = OpenEvent(uVar7,(long)*(ppfVar10 - 1),0x1000,callbackFunc);
+      *plVar6 = lVar4;
+      EnableEvent(lVar4);
+      ppfVar10 = ppfVar10 + 3;
+      puVar11 = puVar11 + 3;
+      _event_iter++;
+    } while (_event_iter < 9);
+  }
   FUN_8008c948();
   FUN_80083030(&DAT_801f0688,&DAT_801f0708);
   return;
